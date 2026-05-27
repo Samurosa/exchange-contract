@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "../generated";
+
+import "google/protobuf/timestamp.proto";
+
+service OrderService {
+
+    rpc CreateOrder(CreateOrderRequest)
+        returns (CreateOrderResponse);
+
+    rpc GetOrderStatus(GetOrderStatusRequest)
+        returns (GetOrderStatusResponse);
+}
+
+enum OrderType {
+    ORDER_TYPE_UNSPECIFIED = 0;
+    BUY = 1;
+    SELL = 2;
+}
+
+enum OrderStatus {
+    ORDER_STATUS_UNSPECIFIED = 0;
+    CREATED = 1;
+    CANCELED = 2;
+    REJECTED = 3;
+    COMPLETED = 4;
+}
+
+message Order {
+
+    string id = 1;
+
+    string user_id = 2;
+
+    string spot_id = 3;
+
+    OrderType order_type = 4;
+
+    string price = 5;
+
+    string quantity = 6;
+
+    OrderStatus order_status = 7;
+
+    google.protobuf.Timestamp created_at = 8;
+
+    google.protobuf.Timestamp updated_at = 9;
+}
+
+message CreateOrderRequest {
+
+    string user_id = 1;
+
+    string spot_id = 2;
+
+    OrderType order_type = 3;
+
+    string price = 4;
+
+    string quantity = 5;
+}
+
+message CreateOrderResponse {
+
+    Order order = 1;
+}
+
+message GetOrderStatusRequest {
+
+    string order_id = 1;
+
+    string user_id = 2;
+}
+
+message GetOrderStatusResponse {
+
+    OrderStatus order_status = 1;
+}

@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "../generated";
+
+import "google/protobuf/timestamp.proto";
+
+
+service SpotInstrumentService {
+
+    rpc CreateSpot(SetSpotRequest)
+        returns (SetSpotResponse);
+        
+    rpc GetSpot(GetSpotRequest)
+        returns (GetSpotResponse);
+    
+    rpc ViewMarkets(ViewMarketsRequest)
+        returns (ViewMarketsResponse);
+
+    rpc DeleteSpot(DeleteSpotRequest)
+        returns (DeleteSpotResponse);
+
+}
+
+enum SpotStatus {
+    SPOT_STATUS_UNSPECIFIED = 0;
+    SPOT_STATUS_ACTIVE = 1;
+    SPOT_STATUS_DISABLED = 2;
+}
+
+message Spot {
+
+    string id     = 1; //уникальный идентификатор
+    string symbol = 2; //идентификатор спота (BTC/USDT)
+
+    string base_asset  = 3; //актив который продают или покупаеют 
+    string quote_asset = 4; //в чем выражается цена
+
+    int32  price_precision    = 5; // количество знаков после запятой у цены
+    int32  quantity_precision = 6; // количество знаков после запятой у актива
+    string min_order_size     = 7; // минимальное возможное количество покупки/продажи
+    string max_order_size     = 8; // максимальное количество покупки актива
+
+    SpotStatus status = 10; // статус спота
+    repeated string allowed_roles = 11; //разрешенные роли у пользователей
+
+    string name        = 12; // название спота
+    string description = 13; // описание спота
+
+    google.protobuf.Timestamp created_at = 14; // время создания
+    google.protobuf.Timestamp updated_at = 15; // время обновления
+    google.protobuf.Timestamp deleted_at = 16; // время удаления
+
+}
+
+message SetSpotRequest {
+    
+    string symbol = 1;
+
+    string base_asset  = 2;
+    string quote_asset = 3;
+
+    int32  price_precision    = 4;
+    int32  quantity_precision = 5;
+    string min_order_size     = 6;
+    string max_order_size     = 7;
+
+    repeated string allowed_roles = 8;
+
+    string name        = 9;
+    string description = 10;
+
+}
+
+message SetSpotResponse {
+    
+    Spot spot = 1;
+}
+
+
+message GetSpotRequest{
+
+    string id = 1;
+
+}
+
+message GetSpotResponse{
+
+    Spot spot = 1;
+    
+}
+
+message DeleteSpotRequest {
+
+    string id = 1;
+
+}
+
+message DeleteSpotResponse {
+
+    bool success = 1;
+    google.protobuf.Timestamp deleted_at = 2;
+
+}
+
+message ViewMarketsRequest {
+
+    repeated string user_roles = 1;
+
+}
+
+message ViewMarketsResponse {
+
+    repeated Spot spots = 1;
+
+}

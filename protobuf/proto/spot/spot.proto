@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package spot;
+
+option go_package = "github.com/Truncklin/exchange-contract/gen/go/spot;spot";
+
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+
+service SpotInstrumentService {
+
+    rpc CreateSpot(CreateSpotRequest)
+        returns (CreateSpotResponse);
+        
+    rpc GetSpot(GetSpotRequest)
+        returns (GetSpotResponse);
+    
+    rpc ViewMarkets(ViewMarketsRequest)
+        returns (ViewMarketsResponse);
+
+    rpc DeleteSpot(DeleteSpotRequest)
+        returns (DeleteSpotResponse);
+
+    rpc DescribeMarket(DescribeMarketRequest)
+        returns (DescribeMarketResponse);
+
+}
+
+enum SpotStatus {
+    SPOT_STATUS_UNSPECIFIED = 0;
+    SPOT_STATUS_ACTIVE = 1;
+    SPOT_STATUS_DISABLED = 2;
+}
+
+message CreateSpotRequest {
+    string base_asset  = 2 [
+        (validate.rules).string = {
+            min_len: 2,
+            max_len: 10,
+            pattern: "^[A-Z]+$"
+        }
+    ];
+
+    string quote_asset = 3 [
+        (validate.rules).string = {
+            min_len: 2,
+            max_len: 10,
+            pattern: "^[A-Z]+$"
+        }
+    ];
+
+    int32  price_precision = 4 [
+        (validate.rules).int32 = {
+            gte: 0,
+            lte: 10,
+        }
+    ];
+
+    int32  quantity_precision = 5 [
+            (validate.rules).int32 = {
+            gte: 0,
+            lte: 10,
+        }
+    ];
+
+    string min_order_size = 6 [
+        (validate.rules).string = {
+            min_len: 1,
+            pattern: "^[0-9]+(\\.[0-9]+)?$",
+        }
+    ];
+
+    string max_order_size = 7 [
+        (validate.rules).string = {
+            min_len: 1,
+            pattern: "^[0-9]+(\\.[0-9]+)?$",
+        }
+    ];
+
+    repeated string allowed_roles = 8 [
+        (validate.rules).repeated = {
+            min_items: 1,
+            unique: true,
+        }
+    ];
+
+    string name = 9 [
+        (validate.rules).string = {
+            min_len: 1,
+            max_len: 50,
+        }
+    ];
+
+    string description = 10 [
+        (validate.rules).string = {
+            max_len: 200,
+        }
+    ];
+
+}
+
+message CreateSpotResponse {
+    string id     = 1;
+
+    google.protobuf.Timestamp created_at = 14;
+}
+
+
+message GetSpotRequest{
+    string id = 1 [
+        (validate.rules).string.uuid = true
+    ];
+}
+
+message GetSpotResponse{
+    string id     = 1; //уникальный идентификатор
+    string symbol = 2; //идентификатор спота (BTC/USDT)
+
+    string base_asset  = 3; //актив который продают или покупаеют 
+    string quote_asset = 4; //в чем выражается цена
+
+    int32  price_precision    = 5; // количество знаков после запятой у цены
+    int32  quantity_precision = 6; // количество знаков после запятой у актива
+    string min_order_size     = 7; // минимальное возможное количество покупки/продажи
+    string max_order_size     = 8; // максимальное количество покупки актива
+
+    SpotStatus status = 10; // статус спота
+    repeated string allowed_roles = 11; //разрешенные роли у пользователей
+
+    string name        = 12; // название спота
+    string description = 13; // описание спота
+
+    google.protobuf.Timestamp created_at = 14; // время создания
+    google.protobuf.Timestamp updated_at = 15; // время обновления
+}
+
+message DeleteSpotRequest {
+    string id = 1 [
+        (validate.rules).string.uuid = true
+    ];
+}
+
+message DeleteSpotResponse {
+    bool success = 1;
+}
+
+message ViewMarketsRequest {
+    repeated string user_roles = 1 [
+        (validate.rules).repeated = {
+            min_items: 1,
+            unique: true,
+        }
+    ];
+}
+
+message ViewMarketsResponse {
+    repeated string spotsID = 1;
+}
+
+message DescribeMarketRequest {
+    string spot_id = 1 [
+        (validate.rules).string.uuid = true
+    ];
+}
+
+message DescribeMarketResponse {
+    string base_asset = 1;
+    string quote_asset = 2;
+
+    string name = 3;
+    string description = 4;
+}

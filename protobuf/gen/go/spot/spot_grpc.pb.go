@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.34.1
-// source: spotInstrumentApi.proto
+// source: spot/spot.proto
 
-package generated
+package spot
 
 import (
 	context "context"
@@ -19,20 +19,22 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SpotInstrumentService_CreateSpot_FullMethodName  = "/proto.SpotInstrumentService/CreateSpot"
-	SpotInstrumentService_GetSpot_FullMethodName     = "/proto.SpotInstrumentService/GetSpot"
-	SpotInstrumentService_ViewMarkets_FullMethodName = "/proto.SpotInstrumentService/ViewMarkets"
-	SpotInstrumentService_DeleteSpot_FullMethodName  = "/proto.SpotInstrumentService/DeleteSpot"
+	SpotInstrumentService_CreateSpot_FullMethodName     = "/spot.SpotInstrumentService/CreateSpot"
+	SpotInstrumentService_GetSpot_FullMethodName        = "/spot.SpotInstrumentService/GetSpot"
+	SpotInstrumentService_ViewMarkets_FullMethodName    = "/spot.SpotInstrumentService/ViewMarkets"
+	SpotInstrumentService_DeleteSpot_FullMethodName     = "/spot.SpotInstrumentService/DeleteSpot"
+	SpotInstrumentService_DescribeMarket_FullMethodName = "/spot.SpotInstrumentService/DescribeMarket"
 )
 
 // SpotInstrumentServiceClient is the client API for SpotInstrumentService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SpotInstrumentServiceClient interface {
-	CreateSpot(ctx context.Context, in *SetSpotRequest, opts ...grpc.CallOption) (*SetSpotResponse, error)
+	CreateSpot(ctx context.Context, in *CreateSpotRequest, opts ...grpc.CallOption) (*CreateSpotResponse, error)
 	GetSpot(ctx context.Context, in *GetSpotRequest, opts ...grpc.CallOption) (*GetSpotResponse, error)
 	ViewMarkets(ctx context.Context, in *ViewMarketsRequest, opts ...grpc.CallOption) (*ViewMarketsResponse, error)
 	DeleteSpot(ctx context.Context, in *DeleteSpotRequest, opts ...grpc.CallOption) (*DeleteSpotResponse, error)
+	DescribeMarket(ctx context.Context, in *DescribeMarketRequest, opts ...grpc.CallOption) (*DescribeMarketResponse, error)
 }
 
 type spotInstrumentServiceClient struct {
@@ -43,9 +45,9 @@ func NewSpotInstrumentServiceClient(cc grpc.ClientConnInterface) SpotInstrumentS
 	return &spotInstrumentServiceClient{cc}
 }
 
-func (c *spotInstrumentServiceClient) CreateSpot(ctx context.Context, in *SetSpotRequest, opts ...grpc.CallOption) (*SetSpotResponse, error) {
+func (c *spotInstrumentServiceClient) CreateSpot(ctx context.Context, in *CreateSpotRequest, opts ...grpc.CallOption) (*CreateSpotResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SetSpotResponse)
+	out := new(CreateSpotResponse)
 	err := c.cc.Invoke(ctx, SpotInstrumentService_CreateSpot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -83,14 +85,25 @@ func (c *spotInstrumentServiceClient) DeleteSpot(ctx context.Context, in *Delete
 	return out, nil
 }
 
+func (c *spotInstrumentServiceClient) DescribeMarket(ctx context.Context, in *DescribeMarketRequest, opts ...grpc.CallOption) (*DescribeMarketResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DescribeMarketResponse)
+	err := c.cc.Invoke(ctx, SpotInstrumentService_DescribeMarket_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SpotInstrumentServiceServer is the server API for SpotInstrumentService service.
 // All implementations must embed UnimplementedSpotInstrumentServiceServer
 // for forward compatibility.
 type SpotInstrumentServiceServer interface {
-	CreateSpot(context.Context, *SetSpotRequest) (*SetSpotResponse, error)
+	CreateSpot(context.Context, *CreateSpotRequest) (*CreateSpotResponse, error)
 	GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error)
 	ViewMarkets(context.Context, *ViewMarketsRequest) (*ViewMarketsResponse, error)
 	DeleteSpot(context.Context, *DeleteSpotRequest) (*DeleteSpotResponse, error)
+	DescribeMarket(context.Context, *DescribeMarketRequest) (*DescribeMarketResponse, error)
 	mustEmbedUnimplementedSpotInstrumentServiceServer()
 }
 
@@ -101,7 +114,7 @@ type SpotInstrumentServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedSpotInstrumentServiceServer struct{}
 
-func (UnimplementedSpotInstrumentServiceServer) CreateSpot(context.Context, *SetSpotRequest) (*SetSpotResponse, error) {
+func (UnimplementedSpotInstrumentServiceServer) CreateSpot(context.Context, *CreateSpotRequest) (*CreateSpotResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateSpot not implemented")
 }
 func (UnimplementedSpotInstrumentServiceServer) GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error) {
@@ -112,6 +125,9 @@ func (UnimplementedSpotInstrumentServiceServer) ViewMarkets(context.Context, *Vi
 }
 func (UnimplementedSpotInstrumentServiceServer) DeleteSpot(context.Context, *DeleteSpotRequest) (*DeleteSpotResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteSpot not implemented")
+}
+func (UnimplementedSpotInstrumentServiceServer) DescribeMarket(context.Context, *DescribeMarketRequest) (*DescribeMarketResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DescribeMarket not implemented")
 }
 func (UnimplementedSpotInstrumentServiceServer) mustEmbedUnimplementedSpotInstrumentServiceServer() {}
 func (UnimplementedSpotInstrumentServiceServer) testEmbeddedByValue()                               {}
@@ -135,7 +151,7 @@ func RegisterSpotInstrumentServiceServer(s grpc.ServiceRegistrar, srv SpotInstru
 }
 
 func _SpotInstrumentService_CreateSpot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetSpotRequest)
+	in := new(CreateSpotRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -147,7 +163,7 @@ func _SpotInstrumentService_CreateSpot_Handler(srv interface{}, ctx context.Cont
 		FullMethod: SpotInstrumentService_CreateSpot_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SpotInstrumentServiceServer).CreateSpot(ctx, req.(*SetSpotRequest))
+		return srv.(SpotInstrumentServiceServer).CreateSpot(ctx, req.(*CreateSpotRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -206,11 +222,29 @@ func _SpotInstrumentService_DeleteSpot_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SpotInstrumentService_DescribeMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DescribeMarketRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SpotInstrumentServiceServer).DescribeMarket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SpotInstrumentService_DescribeMarket_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SpotInstrumentServiceServer).DescribeMarket(ctx, req.(*DescribeMarketRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SpotInstrumentService_ServiceDesc is the grpc.ServiceDesc for SpotInstrumentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var SpotInstrumentService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.SpotInstrumentService",
+	ServiceName: "spot.SpotInstrumentService",
 	HandlerType: (*SpotInstrumentServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -229,7 +263,11 @@ var SpotInstrumentService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteSpot",
 			Handler:    _SpotInstrumentService_DeleteSpot_Handler,
 		},
+		{
+			MethodName: "DescribeMarket",
+			Handler:    _SpotInstrumentService_DescribeMarket_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "spotInstrumentApi.proto",
+	Metadata: "spot/spot.proto",
 }

@@ -140,7 +140,7 @@ message DepositRequest  {
 }
 
 message DepositResponse {
-    string id = 1;
+    bool success = 1;
     Balance balance = 2;
 }
 

@@ -635,7 +635,7 @@ func (x *DepositRequest) GetAmount() string {
 
 type DepositResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Balance       *Balance               `protobuf:"bytes,2,opt,name=balance,proto3" json:"balance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -671,11 +671,11 @@ func (*DepositResponse) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *DepositResponse) GetId() string {
+func (x *DepositResponse) GetSuccess() bool {
 	if x != nil {
-		return x.Id
+		return x.Success
 	}
-	return ""
+	return false
 }
 
 func (x *DepositResponse) GetBalance() *Balance {
@@ -825,9 +825,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\x0eDepositRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\x12*\n" +
 	"\x05asset\x18\x02 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\x142\t^[A-Z_]+$R\x05asset\x12*\n" +
-	"\x06amount\x18\x03 \x01(\tB\x12\xfaB\x0fr\r\x10\x012\t^[0-9_]+$R\x06amount\"J\n" +
-	"\x0fDepositResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
+	"\x06amount\x18\x03 \x01(\tB\x12\xfaB\x0fr\r\x10\x012\t^[0-9_]+$R\x06amount\"T\n" +
+	"\x0fDepositResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12'\n" +
 	"\abalance\x18\x02 \x01(\v2\r.user.BalanceR\abalance\"o\n" +
 	"\x14AuthorizationRequest\x120\n" +
 	"\x05login\x18\x01 \x01(\tB\x1a\xfaB\x17r\x15\x10\x03\x18\x142\x0f^[a-zA-Z0-9_]+$R\x05login\x12%\n" +

@@ -1,4 +1,4 @@
-module github.com/Truncklin/exchange-contract
+module github.com/Samurosa/exchange-contract
 
 go 1.25.4
 

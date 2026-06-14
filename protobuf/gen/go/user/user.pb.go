@@ -838,9 +838,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\x10ROLE_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tROLE_USER\x10\x01\x12\x0e\n" +
 	"\n" +
-	"ROLE_ADMIN\x10\x022\x8c\x03\n" +
-	"\vUserService\x12A\n" +
-	"\bRegister\x12\x19.user.RegisterUserRequest\x1a\x1a.user.RegisterUserResponse\x126\n" +
+	"ROLE_ADMIN\x10\x022\x90\x03\n" +
+	"\vUserService\x12E\n" +
+	"\fRegistration\x12\x19.user.RegisterUserRequest\x1a\x1a.user.RegisterUserResponse\x126\n" +
 	"\aGetUser\x12\x14.user.GetUserRequest\x1a\x15.user.GetUserResponse\x12?\n" +
 	"\n" +
 	"UpdateUser\x12\x17.user.UpdateUserRequest\x1a\x18.user.UpdateUserResponse\x12?\n" +
@@ -892,13 +892,13 @@ var file_user_user_proto_depIdxs = []int32{
 	15, // 7: user.UpdateUserRequest.password:type_name -> google.protobuf.StringValue
 	14, // 8: user.UpdateUserResponse.updated_at:type_name -> google.protobuf.Timestamp
 	1,  // 9: user.DepositResponse.balance:type_name -> user.Balance
-	2,  // 10: user.UserService.Register:input_type -> user.RegisterUserRequest
+	2,  // 10: user.UserService.Registration:input_type -> user.RegisterUserRequest
 	4,  // 11: user.UserService.GetUser:input_type -> user.GetUserRequest
 	6,  // 12: user.UserService.UpdateUser:input_type -> user.UpdateUserRequest
 	8,  // 13: user.UserService.DeleteUser:input_type -> user.DeleteUserRequest
 	10, // 14: user.UserService.Deposit:input_type -> user.DepositRequest
 	12, // 15: user.UserService.Authorization:input_type -> user.AuthorizationRequest
-	3,  // 16: user.UserService.Register:output_type -> user.RegisterUserResponse
+	3,  // 16: user.UserService.Registration:output_type -> user.RegisterUserResponse
 	5,  // 17: user.UserService.GetUser:output_type -> user.GetUserResponse
 	7,  // 18: user.UserService.UpdateUser:output_type -> user.UpdateUserResponse
 	9,  // 19: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse

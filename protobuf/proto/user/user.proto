@@ -19,7 +19,7 @@ enum Role {
 }
 
 service UserService {
-    rpc Register(RegisterUserRequest)
+    rpc Registration(RegisterUserRequest)
         returns (RegisterUserResponse);
 
     rpc GetUser(GetUserRequest)

@@ -17,6 +17,9 @@ service OrderService {
 
     rpc StreamOrderUpdate(StreamOrderUpdateRequest)
         returns (StreamOrderUpdateResponse);
+
+        //listorder по пользователю
+        //
 }
 
 enum OrderType {

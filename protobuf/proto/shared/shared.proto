@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package shared;
+
+option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared;shared";
+
+message Money {
+  string currency = 1;
+  int64 units = 2;
+  int32 nanos = 3;
+}

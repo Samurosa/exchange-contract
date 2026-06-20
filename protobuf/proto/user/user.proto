@@ -2,19 +2,23 @@ syntax = "proto3";
 
 package user;
 
-option go_package = "gen/go/user;user";
+option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/user;user";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/wrappers.proto";
 import "validate/validate.proto";
+import "shared/shared.proto";
 
 enum Role {
 
     ROLE_UNSPECIFIED = 0;
 
     ROLE_USER = 1;
+    
+    ROLE_GUEST = 2;
+    
+    ROLE_PREMIUM = 3;
 
-    ROLE_ADMIN = 2;
+    ROLE_ADMIN = 4;
 
 }
 
@@ -22,20 +26,32 @@ service UserService {
     rpc Registration(RegisterUserRequest)
         returns (RegisterUserResponse);
 
-    rpc GetUser(GetUserRequest)
-        returns (GetUserResponse);
+    rpc GetUser(UserIDRequest)
+        returns (UserInfoResponse);
 
-    rpc UpdateUser(UpdateUserRequest)
-        returns (UpdateUserResponse);
+    rpc UpdateUserInfo(UpdateUserInfoRequest)
+        returns (UpdateUserInfoResponse);
 
-    rpc DeleteUser(DeleteUserRequest)
+    rpc DeleteUser(UserIDRequest)
         returns (DeleteUserResponse);
+
+    rpc ChangePassword(ChangeUserRequest)
+        returns (ChangeUserResponse);
 
     rpc Deposit(DepositRequest)
         returns (DepositResponse);
 
-    rpc Authorization(AuthorizationRequest)
-        returns (AuthorizationResponse);
+    rpc Login(LoginRequest)
+        returns (TokenPairResponse);
+
+    rpc Logout(RefreshTokenRequest)
+        returns (LogoutResponse);
+
+    rpc GetBalance(UserIDRequest)
+        returns(UserBalanceInfoResponse);
+    
+    rpc RefreshToken(RefreshTokenRequest)
+        returns (TokenPairResponse);
 }
 
 message Balance {
@@ -49,33 +65,38 @@ message Balance {
 }
 
 message RegisterUserRequest  {
-    string login = 1 [
-        (validate.rules).string = {
-            min_len: 3,
-            max_len: 20,
-            pattern: "^[a-zA-Z0-9_]+$",
-        }
+        string email = 1 [
+        (validate.rules).string.email = true
     ];
+
     string password = 2 [
         (validate.rules).string = {
             min_len: 6,
             max_len: 64,
         }
     ];
+    string name = 3 [
+    (validate.rules).string = {
+            min_len: 2,
+            max_len: 64,
+        }
+    ];
 }
 message RegisterUserResponse { 
     string id = 1;
-    google.protobuf.Timestamp created_at = 2;
+    TokenPairResponse tokens = 2;
+    google.protobuf.Timestamp created_at = 3;
 }
 
-message GetUserRequest{
+message UserIDRequest{
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
 }
-message GetUserResponse {
+message UserInfoResponse {
+    string id = 1;
     string name = 2;
-    string login = 3;
+    string email = 3;
 
     repeated Balance balances = 4;
 
@@ -85,58 +106,52 @@ message GetUserResponse {
     google.protobuf.Timestamp updated_at = 7;
 }
 
-message UpdateUserRequest{
+message UpdateUserInfoRequest{
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
+    
 
-    google.protobuf.StringValue name = 2 [
-        (validate.rules).message = {
-            required: false,
+    optional string name = 2  [
+    (validate.rules).string = {
+            min_len: 2,
+            max_len: 64,
         }
     ];
-    google.protobuf.StringValue login = 3 [
-        (validate.rules).message = {
-            required: false,
-        }
-    ];
-    google.protobuf.StringValue password = 4 [
-        (validate.rules).message = {
-            required: true,
-        }
+    optional string email = 3 [
+        (validate.rules).string.email = true
     ];
 }
-message UpdateUserResponse{
+message UpdateUserInfoResponse{
     bool updated = 1;
-    google.protobuf.Timestamp updated_at = 2;
+
+    google.protobuf.Timestamp updated_info_at = 2;
 }
 
-message DeleteUserRequest{
-    string id = 1 [
-        (validate.rules).string.uuid = true
-    ];
-}
 message DeleteUserResponse{
     bool success = 1;
+
+    google.protobuf.Timestamp deleted_user_at = 2;
 }
 
 message DepositRequest  {
-    string id = 1 [
+    string id = 1[
         (validate.rules).string.uuid = true
     ];
-    string asset = 2 [
+
+    string asset = 2[
         (validate.rules).string = {
-            min_len: 1,
-            max_len: 20,
-            pattern: "^[A-Z_]+$",
+        min_len: 1,
+        max_len: 20,
+        pattern: "^[A-Z_]+$"
         }
     ];
-    string amount = 3 [
-        (validate.rules).string = {
-            min_len: 1,
-            pattern: "^[0-9_]+$",
-        }
-    ];
+
+    shared.Money amount = 3 [
+    (validate.rules).message = {
+        required: true
+    }
+];
 }
 
 message DepositResponse {
@@ -144,14 +159,11 @@ message DepositResponse {
     Balance balance = 2;
 }
 
-message AuthorizationRequest{
-    string login = 1 [
-        (validate.rules).string = {
-            min_len: 3,
-            max_len: 20,
-            pattern: "^[a-zA-Z0-9_]+$",
-        }
+message LoginRequest{
+    string email = 1 [
+        (validate.rules).string.email = true
     ];
+
     string password = 2 [
         (validate.rules).string = {
             min_len: 6,
@@ -160,6 +172,51 @@ message AuthorizationRequest{
     ];
 }
 
-message AuthorizationResponse {
-    string token = 1;
+message TokenPairResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+
+    google.protobuf.Timestamp access_expires_at = 3;
+    google.protobuf.Timestamp refresh_expires_at = 4;
+}
+
+message UserBalanceInfoResponse{
+    repeated Balance balances = 1;
+}
+
+message RefreshTokenRequest{
+    string refresh_token = 1;
+
+    string device_id = 2;
+}
+
+message LogoutResponse{
+    bool success = 1;
+
+    google.protobuf.Timestamp logged_out_at = 2;
+}
+
+message ChangeUserRequest {
+    string id = 1 [
+        (validate.rules).string.uuid = true
+    ];
+
+    string old_password = 2 [
+        (validate.rules).string = {
+            min_len: 6,
+            max_len: 64
+        }
+    ];
+    string new_password = 3 [
+        (validate.rules).string = {
+            min_len: 6,
+            max_len: 64
+        }
+    ];
+}
+
+message ChangeUserResponse {
+    bool success = 1;
+
+    google.protobuf.Timestamp user_password_changed_at = 2;
 }

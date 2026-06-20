@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package spot;
 
-option go_package = "gen/go/spot;spot";
+option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spot";
 
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";

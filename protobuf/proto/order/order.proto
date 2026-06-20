@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package order;
 
-option go_package = "gen/go/order;order";
+option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/order;order";
 
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
@@ -22,10 +22,10 @@ service OrderService {
         //
 }
 
-enum OrderType {
-    ORDER_TYPE_UNSPECIFIED = 0;
-    ORDER_TYPE_BUY = 1;
-    ORDER_TYPE_SELL = 2;
+enum OrderSide {
+    ORDER_SIDE_UNSPECIFIED = 0;
+    ORDER_SIDE_BUY = 1;
+    ORDER_SIDE_SELL = 2;
 }
 
 enum OrderStatus {
@@ -38,13 +38,13 @@ enum OrderStatus {
 
 message Order {
 
-    string id = 1;
+    string order_id = 1;
 
     string user_id = 2;
 
-    string spot_id = 3;
+    string market_id = 3;
 
-    OrderType order_type = 4;
+    OrderSide order_side = 4;
 
     string price = 5;
 
@@ -62,11 +62,11 @@ message CreateOrderRequest {
         (validate.rules).string.uuid = true
     ];
 
-    string spot_id = 2  [
+    string market_id = 2  [
         (validate.rules).string.uuid = true
     ];
 
-    OrderType order_type = 3 [
+    OrderSide order_side = 3 [
         (validate.rules).enum = {
             defined_only: true
         }
@@ -77,18 +77,18 @@ message CreateOrderRequest {
             min_len: 1,
             pattern: "^[0-9]+(\\.[0-9]+)?$",
         }
-    ];
+    ]; // money
 
     string quantity = 5 [
         (validate.rules).string = {
             min_len: 1,
             pattern: "^[0-9]+(\\.[0-9]+)?$",
         }    
-    ];           
+    ]; //decimal
 }
 
 message CreateOrderResponse {
-    string id = 1;
+    string order_id = 1;
 
      OrderStatus order_status = 2;
 
@@ -103,10 +103,10 @@ message GetOrderStatusRequest {
 
 message GetOrderStatusResponse {
     string user_id = 2;
-    string spot_id = 3;
+    string market_id = 3;
 
-    OrderType order_type = 4;
-
+    OrderSide order_side = 4;
+    //OrderType
     string price = 5;
     string quantity = 6;
 
@@ -131,4 +131,10 @@ message StreamOrderUpdateRequest {
 
 message StreamOrderUpdateResponse {
     bool update_status_success = 1;
+
+    string order_id =2;
+
+    string order_status =3;
+
+    google.protobuf.Timestamp updated_at = 4;
 }

@@ -792,7 +792,7 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\vViewMarkets\x12\x18.spot.ViewMarketsRequest\x1a\x19.spot.ViewMarketsResponse\x12?\n" +
 	"\n" +
 	"DeleteSpot\x12\x17.spot.DeleteSpotRequest\x1a\x18.spot.DeleteSpotResponse\x12K\n" +
-	"\x0eDescribeMarket\x12\x1b.spot.DescribeMarketRequest\x1a\x1c.spot.DescribeMarketResponseB\x12Z\x10gen/go/spot;spotb\x06proto3"
+	"\x0eDescribeMarket\x12\x1b.spot.DescribeMarketRequest\x1a\x1c.spot.DescribeMarketResponseBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spotb\x06proto3"
 
 var (
 	file_spot_spot_proto_rawDescOnce sync.Once

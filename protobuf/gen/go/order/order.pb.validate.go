@@ -59,13 +59,13 @@ func (m *Order) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for OrderId
 
 	// no validation rules for UserId
 
-	// no validation rules for SpotId
+	// no validation rules for MarketId
 
-	// no validation rules for OrderType
+	// no validation rules for OrderSide
 
 	// no validation rules for Price
 
@@ -242,9 +242,9 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetSpotId()); err != nil {
+	if err := m._validateUuid(m.GetMarketId()); err != nil {
 		err = CreateOrderRequestValidationError{
-			field:  "SpotId",
+			field:  "MarketId",
 			reason: "value must be a valid UUID",
 			cause:  err,
 		}
@@ -254,9 +254,9 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if _, ok := OrderType_name[int32(m.GetOrderType())]; !ok {
+	if _, ok := OrderSide_name[int32(m.GetOrderSide())]; !ok {
 		err := CreateOrderRequestValidationError{
-			field:  "OrderType",
+			field:  "OrderSide",
 			reason: "value must be one of the defined enum values",
 		}
 		if !all {
@@ -423,7 +423,7 @@ func (m *CreateOrderResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for OrderId
 
 	// no validation rules for OrderStatus
 
@@ -682,9 +682,9 @@ func (m *GetOrderStatusResponse) validate(all bool) error {
 
 	// no validation rules for UserId
 
-	// no validation rules for SpotId
+	// no validation rules for MarketId
 
-	// no validation rules for OrderType
+	// no validation rules for OrderSide
 
 	// no validation rules for Price
 
@@ -988,6 +988,39 @@ func (m *StreamOrderUpdateResponse) validate(all bool) error {
 	var errors []error
 
 	// no validation rules for UpdateStatusSuccess
+
+	// no validation rules for OrderId
+
+	// no validation rules for OrderStatus
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StreamOrderUpdateResponseValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StreamOrderUpdateResponseValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamOrderUpdateResponseValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return StreamOrderUpdateResponseMultiError(errors)

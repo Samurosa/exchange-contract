@@ -675,6 +675,7 @@ type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	DeviceId      string                 `protobuf:"bytes,3,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -719,6 +720,13 @@ func (x *LoginRequest) GetEmail() string {
 func (x *LoginRequest) GetPassword() string {
 	if x != nil {
 		return x.Password
+	}
+	return ""
+}
+
+func (x *LoginRequest) GetDeviceId() string {
+	if x != nil {
+		return x.DeviceId
 	}
 	return ""
 }
@@ -1100,20 +1108,21 @@ const file_user_user_proto_rawDesc = "" +
 	"\x06amount\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\"T\n" +
 	"\x0fDepositResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12'\n" +
-	"\abalance\x18\x02 \x01(\v2\r.user.BalanceR\abalance\"T\n" +
+	"\abalance\x18\x02 \x01(\v2\r.user.BalanceR\abalance\"|\n" +
 	"\fLoginRequest\x12\x1d\n" +
 	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
-	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\bpassword\"\xed\x01\n" +
+	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\bpassword\x12&\n" +
+	"\tdevice_id\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\"\xed\x01\n" +
 	"\x11TokenPairResponse\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12F\n" +
 	"\x11access_expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x0faccessExpiresAt\x12H\n" +
 	"\x12refresh_expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x10refreshExpiresAt\"D\n" +
 	"\x17UserBalanceInfoResponse\x12)\n" +
-	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"W\n" +
+	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"b\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12\x1b\n" +
-	"\tdevice_id\x18\x02 \x01(\tR\bdeviceId\"j\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12&\n" +
+	"\tdevice_id\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\"j\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +
 	"\rlogged_out_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\vloggedOutAt\"\x89\x01\n" +

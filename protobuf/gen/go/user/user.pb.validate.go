@@ -1639,6 +1639,17 @@ func (m *LoginRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if l := utf8.RuneCountInString(m.GetDeviceId()); l < 1 || l > 64 {
+		err := LoginRequestValidationError{
+			field:  "DeviceId",
+			reason: "value length must be between 1 and 64 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return LoginRequestMultiError(errors)
 	}
@@ -2090,7 +2101,16 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	// no validation rules for RefreshToken
 
-	// no validation rules for DeviceId
+	if l := utf8.RuneCountInString(m.GetDeviceId()); l < 1 || l > 64 {
+		err := RefreshTokenRequestValidationError{
+			field:  "DeviceId",
+			reason: "value length must be between 1 and 64 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return RefreshTokenRequestMultiError(errors)

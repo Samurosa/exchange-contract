@@ -201,7 +201,7 @@ func (x *RegisterUserRequest) GetName() string {
 
 type RegisterUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Tokens        *TokenPairResponse     `protobuf:"bytes,2,opt,name=tokens,proto3" json:"tokens,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -238,9 +238,9 @@ func (*RegisterUserResponse) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *RegisterUserResponse) GetId() string {
+func (x *RegisterUserResponse) GetUserId() string {
 	if x != nil {
-		return x.Id
+		return x.UserId
 	}
 	return ""
 }
@@ -261,7 +261,7 @@ func (x *RegisterUserResponse) GetCreatedAt() *timestamppb.Timestamp {
 
 type UserIDRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -296,16 +296,16 @@ func (*UserIDRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *UserIDRequest) GetId() string {
+func (x *UserIDRequest) GetUserId() string {
 	if x != nil {
-		return x.Id
+		return x.UserId
 	}
 	return ""
 }
 
 type UserInfoResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
 	Balances      []*Balance             `protobuf:"bytes,4,rep,name=balances,proto3" json:"balances,omitempty"`
@@ -346,9 +346,9 @@ func (*UserInfoResponse) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *UserInfoResponse) GetId() string {
+func (x *UserInfoResponse) GetUserId() string {
 	if x != nil {
-		return x.Id
+		return x.UserId
 	}
 	return ""
 }
@@ -397,7 +397,7 @@ func (x *UserInfoResponse) GetUpdatedAt() *timestamppb.Timestamp {
 
 type UpdateUserInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Email         *string                `protobuf:"bytes,3,opt,name=email,proto3,oneof" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -434,9 +434,9 @@ func (*UpdateUserInfoRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UpdateUserInfoRequest) GetId() string {
+func (x *UpdateUserInfoRequest) GetUserId() string {
 	if x != nil {
-		return x.Id
+		return x.UserId
 	}
 	return ""
 }
@@ -561,7 +561,7 @@ func (x *DeleteUserResponse) GetDeletedUserAt() *timestamppb.Timestamp {
 
 type DepositRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Asset         string                 `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 	Amount        *shared.Money          `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -598,9 +598,9 @@ func (*DepositRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *DepositRequest) GetId() string {
+func (x *DepositRequest) GetUserId() string {
 	if x != nil {
-		return x.Id
+		return x.UserId
 	}
 	return ""
 }
@@ -846,7 +846,8 @@ func (x *UserBalanceInfoResponse) GetBalances() []*Balance {
 type RefreshTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	DeviceId      string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	DeviceId      string                 `protobuf:"bytes,3,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -884,6 +885,13 @@ func (*RefreshTokenRequest) Descriptor() ([]byte, []int) {
 func (x *RefreshTokenRequest) GetRefreshToken() string {
 	if x != nil {
 		return x.RefreshToken
+	}
+	return ""
+}
+
+func (x *RefreshTokenRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
 	}
 	return ""
 }
@@ -949,7 +957,7 @@ func (x *LogoutResponse) GetLoggedOutAt() *timestamppb.Timestamp {
 
 type ChangeUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	OldPassword   string                 `protobuf:"bytes,2,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
 	NewPassword   string                 `protobuf:"bytes,3,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -986,9 +994,9 @@ func (*ChangeUserRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{15}
 }
 
-func (x *ChangeUserRequest) GetId() string {
+func (x *ChangeUserRequest) GetUserId() string {
 	if x != nil {
-		return x.Id
+		return x.UserId
 	}
 	return ""
 }
@@ -1071,16 +1079,16 @@ const file_user_user_proto_rawDesc = "" +
 	"\x13RegisterUserRequest\x12\x1d\n" +
 	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\bpassword\x12\x1d\n" +
-	"\x04name\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@R\x04name\"\x92\x01\n" +
-	"\x14RegisterUserResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
+	"\x04name\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@R\x04name\"\x9b\x01\n" +
+	"\x14RegisterUserResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12/\n" +
 	"\x06tokens\x18\x02 \x01(\v2\x17.user.TokenPairResponseR\x06tokens\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\")\n" +
-	"\rUserIDRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\x8d\x02\n" +
-	"\x10UserInfoResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"2\n" +
+	"\rUserIDRequest\x12!\n" +
+	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\"\x96\x02\n" +
+	"\x10UserInfoResponse\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12)\n" +
 	"\bbalances\x18\x04 \x03(\v2\r.user.BalanceR\bbalances\x12\x1e\n" +
@@ -1089,9 +1097,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8c\x01\n" +
-	"\x15UpdateUserInfoRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\x12\"\n" +
+	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x95\x01\n" +
+	"\x15UpdateUserInfoRequest\x12!\n" +
+	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12\"\n" +
 	"\x04name\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@H\x00R\x04name\x88\x01\x01\x12\"\n" +
 	"\x05email\x18\x03 \x01(\tB\a\xfaB\x04r\x02`\x01H\x01R\x05email\x88\x01\x01B\a\n" +
 	"\x05_nameB\b\n" +
@@ -1101,9 +1109,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\x0fupdated_info_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rupdatedInfoAt\"r\n" +
 	"\x12DeleteUserResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
-	"\x0fdeleted_user_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rdeletedUserAt\"\x87\x01\n" +
-	"\x0eDepositRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\x12*\n" +
+	"\x0fdeleted_user_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rdeletedUserAt\"\x90\x01\n" +
+	"\x0eDepositRequest\x12!\n" +
+	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12*\n" +
 	"\x05asset\x18\x02 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\x142\t^[A-Z_]+$R\x05asset\x12/\n" +
 	"\x06amount\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\"T\n" +
 	"\x0fDepositResponse\x12\x18\n" +
@@ -1119,15 +1127,16 @@ const file_user_user_proto_rawDesc = "" +
 	"\x11access_expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x0faccessExpiresAt\x12H\n" +
 	"\x12refresh_expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x10refreshExpiresAt\"D\n" +
 	"\x17UserBalanceInfoResponse\x12)\n" +
-	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"b\n" +
+	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"\x85\x01\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12&\n" +
-	"\tdevice_id\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\"j\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12!\n" +
+	"\auser_id\x18\x02 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12&\n" +
+	"\tdevice_id\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\"j\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +
-	"\rlogged_out_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\vloggedOutAt\"\x89\x01\n" +
-	"\x11ChangeUserRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\x12,\n" +
+	"\rlogged_out_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\vloggedOutAt\"\x92\x01\n" +
+	"\x11ChangeUserRequest\x12!\n" +
+	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12,\n" +
 	"\fold_password\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\voldPassword\x12,\n" +
 	"\fnew_password\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\vnewPassword\"\x83\x01\n" +
 	"\x12ChangeUserResponse\x12\x18\n" +

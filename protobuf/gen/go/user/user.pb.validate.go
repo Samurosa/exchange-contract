@@ -350,7 +350,7 @@ func (m *RegisterUserResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for UserId
 
 	if all {
 		switch v := interface{}(m.GetTokens()).(type) {
@@ -512,9 +512,9 @@ func (m *UserIDRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetId()); err != nil {
+	if err := m._validateUuid(m.GetUserId()); err != nil {
 		err = UserIDRequestValidationError{
-			field:  "Id",
+			field:  "UserId",
 			reason: "value must be a valid UUID",
 			cause:  err,
 		}
@@ -632,7 +632,7 @@ func (m *UserInfoResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
+	// no validation rules for UserId
 
 	// no validation rules for Name
 
@@ -832,9 +832,9 @@ func (m *UpdateUserInfoRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetId()); err != nil {
+	if err := m._validateUuid(m.GetUserId()); err != nil {
 		err = UpdateUserInfoRequestValidationError{
-			field:  "Id",
+			field:  "UserId",
 			reason: "value must be a valid UUID",
 			cause:  err,
 		}
@@ -1301,9 +1301,9 @@ func (m *DepositRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetId()); err != nil {
+	if err := m._validateUuid(m.GetUserId()); err != nil {
 		err = DepositRequestValidationError{
-			field:  "Id",
+			field:  "UserId",
 			reason: "value must be a valid UUID",
 			cause:  err,
 		}
@@ -2101,6 +2101,18 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	// no validation rules for RefreshToken
 
+	if err := m._validateUuid(m.GetUserId()); err != nil {
+		err = RefreshTokenRequestValidationError{
+			field:  "UserId",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if l := utf8.RuneCountInString(m.GetDeviceId()); l < 1 || l > 64 {
 		err := RefreshTokenRequestValidationError{
 			field:  "DeviceId",
@@ -2114,6 +2126,14 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return RefreshTokenRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *RefreshTokenRequest) _validateUuid(uuid string) error {
+	if matched := _user_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -2345,9 +2365,9 @@ func (m *ChangeUserRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetId()); err != nil {
+	if err := m._validateUuid(m.GetUserId()); err != nil {
 		err = ChangeUserRequestValidationError{
-			field:  "Id",
+			field:  "UserId",
 			reason: "value must be a valid UUID",
 			cause:  err,
 		}

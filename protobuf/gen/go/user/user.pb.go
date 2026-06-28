@@ -139,6 +139,7 @@ func (x *Balance) GetLocked() string {
 	return ""
 }
 
+// creates a new user
 type RegisterUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
@@ -202,8 +203,7 @@ func (x *RegisterUserRequest) GetName() string {
 type RegisterUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Tokens        *TokenPairResponse     `protobuf:"bytes,2,opt,name=tokens,proto3" json:"tokens,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -243,13 +243,6 @@ func (x *RegisterUserResponse) GetUserId() string {
 		return x.UserId
 	}
 	return ""
-}
-
-func (x *RegisterUserResponse) GetTokens() *TokenPairResponse {
-	if x != nil {
-		return x.Tokens
-	}
-	return nil
 }
 
 func (x *RegisterUserResponse) GetCreatedAt() *timestamppb.Timestamp {
@@ -1079,12 +1072,11 @@ const file_user_user_proto_rawDesc = "" +
 	"\x13RegisterUserRequest\x12\x1d\n" +
 	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\bpassword\x12\x1d\n" +
-	"\x04name\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@R\x04name\"\x9b\x01\n" +
+	"\x04name\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@R\x04name\"j\n" +
 	"\x14RegisterUserResponse\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\x12/\n" +
-	"\x06tokens\x18\x02 \x01(\v2\x17.user.TokenPairResponseR\x06tokens\x129\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x129\n" +
 	"\n" +
-	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"2\n" +
+	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"2\n" +
 	"\rUserIDRequest\x12!\n" +
 	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\"\x96\x02\n" +
 	"\x10UserInfoResponse\x12\x17\n" +
@@ -1201,46 +1193,45 @@ var file_user_user_proto_goTypes = []any{
 	(*shared.Money)(nil),            // 19: shared.Money
 }
 var file_user_user_proto_depIdxs = []int32{
-	12, // 0: user.RegisterUserResponse.tokens:type_name -> user.TokenPairResponse
-	18, // 1: user.RegisterUserResponse.created_at:type_name -> google.protobuf.Timestamp
-	1,  // 2: user.UserInfoResponse.balances:type_name -> user.Balance
-	0,  // 3: user.UserInfoResponse.role:type_name -> user.Role
-	18, // 4: user.UserInfoResponse.created_at:type_name -> google.protobuf.Timestamp
-	18, // 5: user.UserInfoResponse.updated_at:type_name -> google.protobuf.Timestamp
-	18, // 6: user.UpdateUserInfoResponse.updated_info_at:type_name -> google.protobuf.Timestamp
-	18, // 7: user.DeleteUserResponse.deleted_user_at:type_name -> google.protobuf.Timestamp
-	19, // 8: user.DepositRequest.amount:type_name -> shared.Money
-	1,  // 9: user.DepositResponse.balance:type_name -> user.Balance
-	18, // 10: user.TokenPairResponse.access_expires_at:type_name -> google.protobuf.Timestamp
-	18, // 11: user.TokenPairResponse.refresh_expires_at:type_name -> google.protobuf.Timestamp
-	1,  // 12: user.UserBalanceInfoResponse.balances:type_name -> user.Balance
-	18, // 13: user.LogoutResponse.logged_out_at:type_name -> google.protobuf.Timestamp
-	18, // 14: user.ChangeUserResponse.user_password_changed_at:type_name -> google.protobuf.Timestamp
-	2,  // 15: user.UserService.Registration:input_type -> user.RegisterUserRequest
-	4,  // 16: user.UserService.GetUser:input_type -> user.UserIDRequest
-	6,  // 17: user.UserService.UpdateUserInfo:input_type -> user.UpdateUserInfoRequest
-	4,  // 18: user.UserService.DeleteUser:input_type -> user.UserIDRequest
-	16, // 19: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
-	9,  // 20: user.UserService.Deposit:input_type -> user.DepositRequest
-	11, // 21: user.UserService.Login:input_type -> user.LoginRequest
-	14, // 22: user.UserService.Logout:input_type -> user.RefreshTokenRequest
-	4,  // 23: user.UserService.GetBalance:input_type -> user.UserIDRequest
-	14, // 24: user.UserService.RefreshToken:input_type -> user.RefreshTokenRequest
-	3,  // 25: user.UserService.Registration:output_type -> user.RegisterUserResponse
-	5,  // 26: user.UserService.GetUser:output_type -> user.UserInfoResponse
-	7,  // 27: user.UserService.UpdateUserInfo:output_type -> user.UpdateUserInfoResponse
-	8,  // 28: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
-	17, // 29: user.UserService.ChangePassword:output_type -> user.ChangeUserResponse
-	10, // 30: user.UserService.Deposit:output_type -> user.DepositResponse
-	12, // 31: user.UserService.Login:output_type -> user.TokenPairResponse
-	15, // 32: user.UserService.Logout:output_type -> user.LogoutResponse
-	13, // 33: user.UserService.GetBalance:output_type -> user.UserBalanceInfoResponse
-	12, // 34: user.UserService.RefreshToken:output_type -> user.TokenPairResponse
-	25, // [25:35] is the sub-list for method output_type
-	15, // [15:25] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	18, // 0: user.RegisterUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	1,  // 1: user.UserInfoResponse.balances:type_name -> user.Balance
+	0,  // 2: user.UserInfoResponse.role:type_name -> user.Role
+	18, // 3: user.UserInfoResponse.created_at:type_name -> google.protobuf.Timestamp
+	18, // 4: user.UserInfoResponse.updated_at:type_name -> google.protobuf.Timestamp
+	18, // 5: user.UpdateUserInfoResponse.updated_info_at:type_name -> google.protobuf.Timestamp
+	18, // 6: user.DeleteUserResponse.deleted_user_at:type_name -> google.protobuf.Timestamp
+	19, // 7: user.DepositRequest.amount:type_name -> shared.Money
+	1,  // 8: user.DepositResponse.balance:type_name -> user.Balance
+	18, // 9: user.TokenPairResponse.access_expires_at:type_name -> google.protobuf.Timestamp
+	18, // 10: user.TokenPairResponse.refresh_expires_at:type_name -> google.protobuf.Timestamp
+	1,  // 11: user.UserBalanceInfoResponse.balances:type_name -> user.Balance
+	18, // 12: user.LogoutResponse.logged_out_at:type_name -> google.protobuf.Timestamp
+	18, // 13: user.ChangeUserResponse.user_password_changed_at:type_name -> google.protobuf.Timestamp
+	2,  // 14: user.UserService.Registration:input_type -> user.RegisterUserRequest
+	4,  // 15: user.UserService.GetUser:input_type -> user.UserIDRequest
+	6,  // 16: user.UserService.UpdateUserInfo:input_type -> user.UpdateUserInfoRequest
+	4,  // 17: user.UserService.DeleteUser:input_type -> user.UserIDRequest
+	16, // 18: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
+	9,  // 19: user.UserService.Deposit:input_type -> user.DepositRequest
+	11, // 20: user.UserService.Login:input_type -> user.LoginRequest
+	14, // 21: user.UserService.Logout:input_type -> user.RefreshTokenRequest
+	4,  // 22: user.UserService.GetBalance:input_type -> user.UserIDRequest
+	14, // 23: user.UserService.RefreshToken:input_type -> user.RefreshTokenRequest
+	3,  // 24: user.UserService.Registration:output_type -> user.RegisterUserResponse
+	5,  // 25: user.UserService.GetUser:output_type -> user.UserInfoResponse
+	7,  // 26: user.UserService.UpdateUserInfo:output_type -> user.UpdateUserInfoResponse
+	8,  // 27: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
+	17, // 28: user.UserService.ChangePassword:output_type -> user.ChangeUserResponse
+	10, // 29: user.UserService.Deposit:output_type -> user.DepositResponse
+	12, // 30: user.UserService.Login:output_type -> user.TokenPairResponse
+	15, // 31: user.UserService.Logout:output_type -> user.LogoutResponse
+	13, // 32: user.UserService.GetBalance:output_type -> user.UserBalanceInfoResponse
+	12, // 33: user.UserService.RefreshToken:output_type -> user.TokenPairResponse
+	24, // [24:34] is the sub-list for method output_type
+	14, // [14:24] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_user_user_proto_init() }

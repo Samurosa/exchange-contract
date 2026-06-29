@@ -609,40 +609,6 @@ func (m *UserInfoResponse) validate(all bool) error {
 
 	// no validation rules for Email
 
-	for idx, item := range m.GetBalances() {
-		_, _ = idx, item
-
-		if all {
-			switch v := interface{}(item).(type) {
-			case interface{ ValidateAll() error }:
-				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, UserInfoResponseValidationError{
-						field:  fmt.Sprintf("Balances[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			case interface{ Validate() error }:
-				if err := v.Validate(); err != nil {
-					errors = append(errors, UserInfoResponseValidationError{
-						field:  fmt.Sprintf("Balances[%v]", idx),
-						reason: "embedded message failed validation",
-						cause:  err,
-					})
-				}
-			}
-		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
-			if err := v.Validate(); err != nil {
-				return UserInfoResponseValidationError{
-					field:  fmt.Sprintf("Balances[%v]", idx),
-					reason: "embedded message failed validation",
-					cause:  err,
-				}
-			}
-		}
-
-	}
-
 	// no validation rules for Role
 
 	if all {
@@ -1912,22 +1878,22 @@ var _ interface {
 	ErrorName() string
 } = TokenPairResponseValidationError{}
 
-// Validate checks the field values on UserBalanceInfoResponse with the rules
+// Validate checks the field values on UserBalancesInfoResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *UserBalanceInfoResponse) Validate() error {
+func (m *UserBalancesInfoResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on UserBalanceInfoResponse with the
+// ValidateAll checks the field values on UserBalancesInfoResponse with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// UserBalanceInfoResponseMultiError, or nil if none found.
-func (m *UserBalanceInfoResponse) ValidateAll() error {
+// UserBalancesInfoResponseMultiError, or nil if none found.
+func (m *UserBalancesInfoResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *UserBalanceInfoResponse) validate(all bool) error {
+func (m *UserBalancesInfoResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1941,7 +1907,7 @@ func (m *UserBalanceInfoResponse) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, UserBalanceInfoResponseValidationError{
+					errors = append(errors, UserBalancesInfoResponseValidationError{
 						field:  fmt.Sprintf("Balances[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1949,7 +1915,7 @@ func (m *UserBalanceInfoResponse) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, UserBalanceInfoResponseValidationError{
+					errors = append(errors, UserBalancesInfoResponseValidationError{
 						field:  fmt.Sprintf("Balances[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -1958,7 +1924,7 @@ func (m *UserBalanceInfoResponse) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return UserBalanceInfoResponseValidationError{
+				return UserBalancesInfoResponseValidationError{
 					field:  fmt.Sprintf("Balances[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -1969,19 +1935,19 @@ func (m *UserBalanceInfoResponse) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return UserBalanceInfoResponseMultiError(errors)
+		return UserBalancesInfoResponseMultiError(errors)
 	}
 
 	return nil
 }
 
-// UserBalanceInfoResponseMultiError is an error wrapping multiple validation
-// errors returned by UserBalanceInfoResponse.ValidateAll() if the designated
+// UserBalancesInfoResponseMultiError is an error wrapping multiple validation
+// errors returned by UserBalancesInfoResponse.ValidateAll() if the designated
 // constraints aren't met.
-type UserBalanceInfoResponseMultiError []error
+type UserBalancesInfoResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m UserBalanceInfoResponseMultiError) Error() string {
+func (m UserBalancesInfoResponseMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1990,11 +1956,11 @@ func (m UserBalanceInfoResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m UserBalanceInfoResponseMultiError) AllErrors() []error { return m }
+func (m UserBalancesInfoResponseMultiError) AllErrors() []error { return m }
 
-// UserBalanceInfoResponseValidationError is the validation error returned by
-// UserBalanceInfoResponse.Validate if the designated constraints aren't met.
-type UserBalanceInfoResponseValidationError struct {
+// UserBalancesInfoResponseValidationError is the validation error returned by
+// UserBalancesInfoResponse.Validate if the designated constraints aren't met.
+type UserBalancesInfoResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -2002,24 +1968,24 @@ type UserBalanceInfoResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e UserBalanceInfoResponseValidationError) Field() string { return e.field }
+func (e UserBalancesInfoResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UserBalanceInfoResponseValidationError) Reason() string { return e.reason }
+func (e UserBalancesInfoResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UserBalanceInfoResponseValidationError) Cause() error { return e.cause }
+func (e UserBalancesInfoResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UserBalanceInfoResponseValidationError) Key() bool { return e.key }
+func (e UserBalancesInfoResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UserBalanceInfoResponseValidationError) ErrorName() string {
-	return "UserBalanceInfoResponseValidationError"
+func (e UserBalancesInfoResponseValidationError) ErrorName() string {
+	return "UserBalancesInfoResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e UserBalanceInfoResponseValidationError) Error() string {
+func (e UserBalancesInfoResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -2031,14 +1997,14 @@ func (e UserBalanceInfoResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUserBalanceInfoResponse.%s: %s%s",
+		"invalid %sUserBalancesInfoResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UserBalanceInfoResponseValidationError{}
+var _ error = UserBalancesInfoResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -2046,7 +2012,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UserBalanceInfoResponseValidationError{}
+} = UserBalancesInfoResponseValidationError{}
 
 // Validate checks the field values on RefreshTokenRequest with the rules
 // defined in the proto definition for this message. If any rules are

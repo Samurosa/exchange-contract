@@ -6,6 +6,5 @@ option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/share
 
 message Money {
   string currency = 1;
-  int64 units = 2;
-  int32 nanos = 3;
+  string amount = 2;
 }

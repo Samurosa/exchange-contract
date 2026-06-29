@@ -47,8 +47,8 @@ service UserService {
     rpc Logout(RefreshTokenRequest)
         returns (LogoutResponse);
 
-    rpc GetBalance(UserIDRequest)
-        returns(UserBalanceInfoResponse);
+    rpc GetBalances(UserIDRequest)
+        returns(UserBalancesInfoResponse);
     
     rpc RefreshToken(RefreshTokenRequest)
         returns (TokenPairResponse);
@@ -96,8 +96,6 @@ message UserInfoResponse {
     string user_id = 1;
     string name = 2;
     string email = 3;
-
-    repeated Balance balances = 4;
 
     Role role = 5;
 
@@ -186,7 +184,7 @@ message TokenPairResponse {
     google.protobuf.Timestamp refresh_expires_at = 4;
 }
 
-message UserBalanceInfoResponse{
+message UserBalancesInfoResponse{
     repeated Balance balances = 1;
 }
 

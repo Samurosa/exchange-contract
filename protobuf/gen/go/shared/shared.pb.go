@@ -24,8 +24,7 @@ const (
 type Money struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Currency      string                 `protobuf:"bytes,1,opt,name=currency,proto3" json:"currency,omitempty"`
-	Units         int64                  `protobuf:"varint,2,opt,name=units,proto3" json:"units,omitempty"`
-	Nanos         int32                  `protobuf:"varint,3,opt,name=nanos,proto3" json:"nanos,omitempty"`
+	Amount        string                 `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -67,29 +66,21 @@ func (x *Money) GetCurrency() string {
 	return ""
 }
 
-func (x *Money) GetUnits() int64 {
+func (x *Money) GetAmount() string {
 	if x != nil {
-		return x.Units
+		return x.Amount
 	}
-	return 0
-}
-
-func (x *Money) GetNanos() int32 {
-	if x != nil {
-		return x.Nanos
-	}
-	return 0
+	return ""
 }
 
 var File_shared_shared_proto protoreflect.FileDescriptor
 
 const file_shared_shared_proto_rawDesc = "" +
 	"\n" +
-	"\x13shared/shared.proto\x12\x06shared\"O\n" +
+	"\x13shared/shared.proto\x12\x06shared\";\n" +
 	"\x05Money\x12\x1a\n" +
-	"\bcurrency\x18\x01 \x01(\tR\bcurrency\x12\x14\n" +
-	"\x05units\x18\x02 \x01(\x03R\x05units\x12\x14\n" +
-	"\x05nanos\x18\x03 \x01(\x05R\x05nanosBEZCgithub.com/Samurosa/exchange-contract/protobuf/gen/go/shared;sharedb\x06proto3"
+	"\bcurrency\x18\x01 \x01(\tR\bcurrency\x12\x16\n" +
+	"\x06amount\x18\x02 \x01(\tR\x06amountBEZCgithub.com/Samurosa/exchange-contract/protobuf/gen/go/shared;sharedb\x06proto3"
 
 var (
 	file_shared_shared_proto_rawDescOnce sync.Once

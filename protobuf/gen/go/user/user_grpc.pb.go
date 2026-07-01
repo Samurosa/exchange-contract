@@ -27,7 +27,7 @@ const (
 	UserService_Deposit_FullMethodName        = "/user.UserService/Deposit"
 	UserService_Login_FullMethodName          = "/user.UserService/Login"
 	UserService_Logout_FullMethodName         = "/user.UserService/Logout"
-	UserService_GetBalance_FullMethodName     = "/user.UserService/GetBalance"
+	UserService_GetBalances_FullMethodName    = "/user.UserService/GetBalances"
 	UserService_RefreshToken_FullMethodName   = "/user.UserService/RefreshToken"
 )
 
@@ -43,7 +43,7 @@ type UserServiceClient interface {
 	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
 	Logout(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
-	GetBalance(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserBalanceInfoResponse, error)
+	GetBalances(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
 }
 
@@ -135,10 +135,10 @@ func (c *userServiceClient) Logout(ctx context.Context, in *RefreshTokenRequest,
 	return out, nil
 }
 
-func (c *userServiceClient) GetBalance(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserBalanceInfoResponse, error) {
+func (c *userServiceClient) GetBalances(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UserBalanceInfoResponse)
-	err := c.cc.Invoke(ctx, UserService_GetBalance_FullMethodName, in, out, cOpts...)
+	out := new(UserBalancesInfoResponse)
+	err := c.cc.Invoke(ctx, UserService_GetBalances_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ type UserServiceServer interface {
 	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
 	Login(context.Context, *LoginRequest) (*TokenPairResponse, error)
 	Logout(context.Context, *RefreshTokenRequest) (*LogoutResponse, error)
-	GetBalance(context.Context, *UserIDRequest) (*UserBalanceInfoResponse, error)
+	GetBalances(context.Context, *UserIDRequest) (*UserBalancesInfoResponse, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -203,8 +203,8 @@ func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*To
 func (UnimplementedUserServiceServer) Logout(context.Context, *RefreshTokenRequest) (*LogoutResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
 }
-func (UnimplementedUserServiceServer) GetBalance(context.Context, *UserIDRequest) (*UserBalanceInfoResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetBalance not implemented")
+func (UnimplementedUserServiceServer) GetBalances(context.Context, *UserIDRequest) (*UserBalancesInfoResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetBalances not implemented")
 }
 func (UnimplementedUserServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RefreshToken not implemented")
@@ -374,20 +374,20 @@ func _UserService_Logout_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_GetBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserService_GetBalances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).GetBalance(ctx, in)
+		return srv.(UserServiceServer).GetBalances(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_GetBalance_FullMethodName,
+		FullMethod: UserService_GetBalances_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetBalance(ctx, req.(*UserIDRequest))
+		return srv.(UserServiceServer).GetBalances(ctx, req.(*UserIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -450,8 +450,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_Logout_Handler,
 		},
 		{
-			MethodName: "GetBalance",
-			Handler:    _UserService_GetBalance_Handler,
+			MethodName: "GetBalances",
+			Handler:    _UserService_GetBalances_Handler,
 		},
 		{
 			MethodName: "RefreshToken",

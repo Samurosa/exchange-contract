@@ -58,9 +58,7 @@ func (m *Money) validate(all bool) error {
 
 	// no validation rules for Currency
 
-	// no validation rules for Units
-
-	// no validation rules for Nanos
+	// no validation rules for Amount
 
 	if len(errors) > 0 {
 		return MoneyMultiError(errors)

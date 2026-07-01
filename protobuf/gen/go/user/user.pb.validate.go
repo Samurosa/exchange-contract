@@ -2038,18 +2038,6 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	// no validation rules for RefreshToken
 
-	if err := m._validateUuid(m.GetUserId()); err != nil {
-		err = RefreshTokenRequestValidationError{
-			field:  "UserId",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if l := utf8.RuneCountInString(m.GetDeviceId()); l < 1 || l > 64 {
 		err := RefreshTokenRequestValidationError{
 			field:  "DeviceId",
@@ -2063,14 +2051,6 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return RefreshTokenRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *RefreshTokenRequest) _validateUuid(uuid string) error {
-	if matched := _user_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil

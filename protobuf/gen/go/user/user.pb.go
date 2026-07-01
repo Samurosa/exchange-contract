@@ -831,7 +831,6 @@ func (x *UserBalancesInfoResponse) GetBalances() []*Balance {
 type RefreshTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	DeviceId      string                 `protobuf:"bytes,3,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -870,13 +869,6 @@ func (*RefreshTokenRequest) Descriptor() ([]byte, []int) {
 func (x *RefreshTokenRequest) GetRefreshToken() string {
 	if x != nil {
 		return x.RefreshToken
-	}
-	return ""
-}
-
-func (x *RefreshTokenRequest) GetUserId() string {
-	if x != nil {
-		return x.UserId
 	}
 	return ""
 }
@@ -1110,10 +1102,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\x11access_expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x0faccessExpiresAt\x12H\n" +
 	"\x12refresh_expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x10refreshExpiresAt\"E\n" +
 	"\x18UserBalancesInfoResponse\x12)\n" +
-	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"\x85\x01\n" +
+	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"b\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12!\n" +
-	"\auser_id\x18\x02 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12&\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12&\n" +
 	"\tdevice_id\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\"j\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +

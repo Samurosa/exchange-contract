@@ -191,10 +191,6 @@ message UserBalancesInfoResponse{
 message RefreshTokenRequest{
     string refresh_token = 1;
 
-    string user_id = 2 [
-        (validate.rules).string.uuid = true
-    ];
-
     string device_id = 3 [
         (validate.rules).string = {
             min_len: 1,

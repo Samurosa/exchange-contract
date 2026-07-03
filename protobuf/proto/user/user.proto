@@ -47,7 +47,7 @@ service UserService {
     rpc Logout(RefreshTokenRequest)
         returns (LogoutResponse);
 
-    rpc LogoutAllDevices(LogoutAllDevicesRequest)
+    rpc LogoutAllDevices(RefreshTokenRequest)
         returns (LogoutResponse);
 
     rpc GetBalances(UserIDRequest)
@@ -200,10 +200,6 @@ message RefreshTokenRequest{
             max_len: 64,
         }
     ];
-}
-
-message LogoutAllDevicesRequest{
-    string refresh_token = 1;
 }
 
 message LogoutResponse{

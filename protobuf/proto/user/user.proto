@@ -47,6 +47,9 @@ service UserService {
     rpc Logout(RefreshTokenRequest)
         returns (LogoutResponse);
 
+    rpc LogoutAllDevices(LogoutAllDevicesRequest)
+        returns (LogoutResponse);
+
     rpc GetBalances(UserIDRequest)
         returns(UserBalancesInfoResponse);
     
@@ -191,12 +194,16 @@ message UserBalancesInfoResponse{
 message RefreshTokenRequest{
     string refresh_token = 1;
 
-    string device_id = 3 [
+    string device_id = 2 [
         (validate.rules).string = {
             min_len: 1,
             max_len: 64,
         }
     ];
+}
+
+message LogoutAllDevicesRequest{
+    string refresh_token = 1;
 }
 
 message LogoutResponse{

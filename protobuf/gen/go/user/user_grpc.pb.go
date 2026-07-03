@@ -19,16 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_Registration_FullMethodName   = "/user.UserService/Registration"
-	UserService_GetUser_FullMethodName        = "/user.UserService/GetUser"
-	UserService_UpdateUserInfo_FullMethodName = "/user.UserService/UpdateUserInfo"
-	UserService_DeleteUser_FullMethodName     = "/user.UserService/DeleteUser"
-	UserService_ChangePassword_FullMethodName = "/user.UserService/ChangePassword"
-	UserService_Deposit_FullMethodName        = "/user.UserService/Deposit"
-	UserService_Login_FullMethodName          = "/user.UserService/Login"
-	UserService_Logout_FullMethodName         = "/user.UserService/Logout"
-	UserService_GetBalances_FullMethodName    = "/user.UserService/GetBalances"
-	UserService_RefreshToken_FullMethodName   = "/user.UserService/RefreshToken"
+	UserService_Registration_FullMethodName     = "/user.UserService/Registration"
+	UserService_GetUser_FullMethodName          = "/user.UserService/GetUser"
+	UserService_UpdateUserInfo_FullMethodName   = "/user.UserService/UpdateUserInfo"
+	UserService_DeleteUser_FullMethodName       = "/user.UserService/DeleteUser"
+	UserService_ChangePassword_FullMethodName   = "/user.UserService/ChangePassword"
+	UserService_Deposit_FullMethodName          = "/user.UserService/Deposit"
+	UserService_Login_FullMethodName            = "/user.UserService/Login"
+	UserService_Logout_FullMethodName           = "/user.UserService/Logout"
+	UserService_LogoutAllDevices_FullMethodName = "/user.UserService/LogoutAllDevices"
+	UserService_GetBalances_FullMethodName      = "/user.UserService/GetBalances"
+	UserService_RefreshToken_FullMethodName     = "/user.UserService/RefreshToken"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -43,6 +44,7 @@ type UserServiceClient interface {
 	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
 	Logout(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
+	LogoutAllDevices(ctx context.Context, in *LogoutAllDevicesRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
 	GetBalances(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
 }
@@ -135,6 +137,16 @@ func (c *userServiceClient) Logout(ctx context.Context, in *RefreshTokenRequest,
 	return out, nil
 }
 
+func (c *userServiceClient) LogoutAllDevices(ctx context.Context, in *LogoutAllDevicesRequest, opts ...grpc.CallOption) (*LogoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogoutResponse)
+	err := c.cc.Invoke(ctx, UserService_LogoutAllDevices_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userServiceClient) GetBalances(ctx context.Context, in *UserIDRequest, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserBalancesInfoResponse)
@@ -167,6 +179,7 @@ type UserServiceServer interface {
 	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
 	Login(context.Context, *LoginRequest) (*TokenPairResponse, error)
 	Logout(context.Context, *RefreshTokenRequest) (*LogoutResponse, error)
+	LogoutAllDevices(context.Context, *LogoutAllDevicesRequest) (*LogoutResponse, error)
 	GetBalances(context.Context, *UserIDRequest) (*UserBalancesInfoResponse, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
@@ -202,6 +215,9 @@ func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*To
 }
 func (UnimplementedUserServiceServer) Logout(context.Context, *RefreshTokenRequest) (*LogoutResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedUserServiceServer) LogoutAllDevices(context.Context, *LogoutAllDevicesRequest) (*LogoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LogoutAllDevices not implemented")
 }
 func (UnimplementedUserServiceServer) GetBalances(context.Context, *UserIDRequest) (*UserBalancesInfoResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetBalances not implemented")
@@ -374,6 +390,24 @@ func _UserService_Logout_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_LogoutAllDevices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogoutAllDevicesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).LogoutAllDevices(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_LogoutAllDevices_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).LogoutAllDevices(ctx, req.(*LogoutAllDevicesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_GetBalances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserIDRequest)
 	if err := dec(in); err != nil {
@@ -448,6 +482,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Logout",
 			Handler:    _UserService_Logout_Handler,
+		},
+		{
+			MethodName: "LogoutAllDevices",
+			Handler:    _UserService_LogoutAllDevices_Handler,
 		},
 		{
 			MethodName: "GetBalances",

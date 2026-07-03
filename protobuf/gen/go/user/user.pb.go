@@ -831,7 +831,7 @@ func (x *UserBalancesInfoResponse) GetBalances() []*Balance {
 type RefreshTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	DeviceId      string                 `protobuf:"bytes,3,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	DeviceId      string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -880,6 +880,50 @@ func (x *RefreshTokenRequest) GetDeviceId() string {
 	return ""
 }
 
+type LogoutAllDevicesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LogoutAllDevicesRequest) Reset() {
+	*x = LogoutAllDevicesRequest{}
+	mi := &file_user_user_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LogoutAllDevicesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogoutAllDevicesRequest) ProtoMessage() {}
+
+func (x *LogoutAllDevicesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_user_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogoutAllDevicesRequest.ProtoReflect.Descriptor instead.
+func (*LogoutAllDevicesRequest) Descriptor() ([]byte, []int) {
+	return file_user_user_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *LogoutAllDevicesRequest) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
+}
+
 type LogoutResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -890,7 +934,7 @@ type LogoutResponse struct {
 
 func (x *LogoutResponse) Reset() {
 	*x = LogoutResponse{}
-	mi := &file_user_user_proto_msgTypes[14]
+	mi := &file_user_user_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -902,7 +946,7 @@ func (x *LogoutResponse) String() string {
 func (*LogoutResponse) ProtoMessage() {}
 
 func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_user_proto_msgTypes[14]
+	mi := &file_user_user_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -915,7 +959,7 @@ func (x *LogoutResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogoutResponse.ProtoReflect.Descriptor instead.
 func (*LogoutResponse) Descriptor() ([]byte, []int) {
-	return file_user_user_proto_rawDescGZIP(), []int{14}
+	return file_user_user_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *LogoutResponse) GetSuccess() bool {
@@ -943,7 +987,7 @@ type ChangeUserRequest struct {
 
 func (x *ChangeUserRequest) Reset() {
 	*x = ChangeUserRequest{}
-	mi := &file_user_user_proto_msgTypes[15]
+	mi := &file_user_user_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -955,7 +999,7 @@ func (x *ChangeUserRequest) String() string {
 func (*ChangeUserRequest) ProtoMessage() {}
 
 func (x *ChangeUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_user_proto_msgTypes[15]
+	mi := &file_user_user_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -968,7 +1012,7 @@ func (x *ChangeUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeUserRequest.ProtoReflect.Descriptor instead.
 func (*ChangeUserRequest) Descriptor() ([]byte, []int) {
-	return file_user_user_proto_rawDescGZIP(), []int{15}
+	return file_user_user_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ChangeUserRequest) GetUserId() string {
@@ -1002,7 +1046,7 @@ type ChangeUserResponse struct {
 
 func (x *ChangeUserResponse) Reset() {
 	*x = ChangeUserResponse{}
-	mi := &file_user_user_proto_msgTypes[16]
+	mi := &file_user_user_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1014,7 +1058,7 @@ func (x *ChangeUserResponse) String() string {
 func (*ChangeUserResponse) ProtoMessage() {}
 
 func (x *ChangeUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_user_user_proto_msgTypes[16]
+	mi := &file_user_user_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1027,7 +1071,7 @@ func (x *ChangeUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeUserResponse.ProtoReflect.Descriptor instead.
 func (*ChangeUserResponse) Descriptor() ([]byte, []int) {
-	return file_user_user_proto_rawDescGZIP(), []int{16}
+	return file_user_user_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ChangeUserResponse) GetSuccess() bool {
@@ -1105,7 +1149,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"b\n" +
 	"\x13RefreshTokenRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\x12&\n" +
-	"\tdevice_id\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\"j\n" +
+	"\tdevice_id\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x18@R\bdeviceId\">\n" +
+	"\x17LogoutAllDevicesRequest\x12#\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"j\n" +
 	"\x0eLogoutResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +
 	"\rlogged_out_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\vloggedOutAt\"\x92\x01\n" +
@@ -1123,7 +1169,7 @@ const file_user_user_proto_rawDesc = "" +
 	"ROLE_GUEST\x10\x02\x12\x10\n" +
 	"\fROLE_PREMIUM\x10\x03\x12\x0e\n" +
 	"\n" +
-	"ROLE_ADMIN\x10\x042\x8c\x05\n" +
+	"ROLE_ADMIN\x10\x042\xd5\x05\n" +
 	"\vUserService\x12E\n" +
 	"\fRegistration\x12\x19.user.RegisterUserRequest\x1a\x1a.user.RegisterUserResponse\x126\n" +
 	"\aGetUser\x12\x13.user.UserIDRequest\x1a\x16.user.UserInfoResponse\x12K\n" +
@@ -1133,7 +1179,8 @@ const file_user_user_proto_rawDesc = "" +
 	"\x0eChangePassword\x12\x17.user.ChangeUserRequest\x1a\x18.user.ChangeUserResponse\x126\n" +
 	"\aDeposit\x12\x14.user.DepositRequest\x1a\x15.user.DepositResponse\x124\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x17.user.TokenPairResponse\x129\n" +
-	"\x06Logout\x12\x19.user.RefreshTokenRequest\x1a\x14.user.LogoutResponse\x12B\n" +
+	"\x06Logout\x12\x19.user.RefreshTokenRequest\x1a\x14.user.LogoutResponse\x12G\n" +
+	"\x10LogoutAllDevices\x12\x1d.user.LogoutAllDevicesRequest\x1a\x14.user.LogoutResponse\x12B\n" +
 	"\vGetBalances\x12\x13.user.UserIDRequest\x1a\x1e.user.UserBalancesInfoResponse\x12B\n" +
 	"\fRefreshToken\x12\x19.user.RefreshTokenRequest\x1a\x17.user.TokenPairResponseBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/user;userb\x06proto3"
 
@@ -1150,7 +1197,7 @@ func file_user_user_proto_rawDescGZIP() []byte {
 }
 
 var file_user_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_user_user_proto_goTypes = []any{
 	(Role)(0),                        // 0: user.Role
 	(*Balance)(nil),                  // 1: user.Balance
@@ -1167,48 +1214,51 @@ var file_user_user_proto_goTypes = []any{
 	(*TokenPairResponse)(nil),        // 12: user.TokenPairResponse
 	(*UserBalancesInfoResponse)(nil), // 13: user.UserBalancesInfoResponse
 	(*RefreshTokenRequest)(nil),      // 14: user.RefreshTokenRequest
-	(*LogoutResponse)(nil),           // 15: user.LogoutResponse
-	(*ChangeUserRequest)(nil),        // 16: user.ChangeUserRequest
-	(*ChangeUserResponse)(nil),       // 17: user.ChangeUserResponse
-	(*timestamppb.Timestamp)(nil),    // 18: google.protobuf.Timestamp
-	(*shared.Money)(nil),             // 19: shared.Money
+	(*LogoutAllDevicesRequest)(nil),  // 15: user.LogoutAllDevicesRequest
+	(*LogoutResponse)(nil),           // 16: user.LogoutResponse
+	(*ChangeUserRequest)(nil),        // 17: user.ChangeUserRequest
+	(*ChangeUserResponse)(nil),       // 18: user.ChangeUserResponse
+	(*timestamppb.Timestamp)(nil),    // 19: google.protobuf.Timestamp
+	(*shared.Money)(nil),             // 20: shared.Money
 }
 var file_user_user_proto_depIdxs = []int32{
-	18, // 0: user.RegisterUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	19, // 0: user.RegisterUserResponse.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 1: user.UserInfoResponse.role:type_name -> user.Role
-	18, // 2: user.UserInfoResponse.created_at:type_name -> google.protobuf.Timestamp
-	18, // 3: user.UserInfoResponse.updated_at:type_name -> google.protobuf.Timestamp
-	18, // 4: user.UpdateUserInfoResponse.updated_info_at:type_name -> google.protobuf.Timestamp
-	18, // 5: user.DeleteUserResponse.deleted_user_at:type_name -> google.protobuf.Timestamp
-	19, // 6: user.DepositRequest.amount:type_name -> shared.Money
+	19, // 2: user.UserInfoResponse.created_at:type_name -> google.protobuf.Timestamp
+	19, // 3: user.UserInfoResponse.updated_at:type_name -> google.protobuf.Timestamp
+	19, // 4: user.UpdateUserInfoResponse.updated_info_at:type_name -> google.protobuf.Timestamp
+	19, // 5: user.DeleteUserResponse.deleted_user_at:type_name -> google.protobuf.Timestamp
+	20, // 6: user.DepositRequest.amount:type_name -> shared.Money
 	1,  // 7: user.DepositResponse.balance:type_name -> user.Balance
-	18, // 8: user.TokenPairResponse.access_expires_at:type_name -> google.protobuf.Timestamp
-	18, // 9: user.TokenPairResponse.refresh_expires_at:type_name -> google.protobuf.Timestamp
+	19, // 8: user.TokenPairResponse.access_expires_at:type_name -> google.protobuf.Timestamp
+	19, // 9: user.TokenPairResponse.refresh_expires_at:type_name -> google.protobuf.Timestamp
 	1,  // 10: user.UserBalancesInfoResponse.balances:type_name -> user.Balance
-	18, // 11: user.LogoutResponse.logged_out_at:type_name -> google.protobuf.Timestamp
-	18, // 12: user.ChangeUserResponse.user_password_changed_at:type_name -> google.protobuf.Timestamp
+	19, // 11: user.LogoutResponse.logged_out_at:type_name -> google.protobuf.Timestamp
+	19, // 12: user.ChangeUserResponse.user_password_changed_at:type_name -> google.protobuf.Timestamp
 	2,  // 13: user.UserService.Registration:input_type -> user.RegisterUserRequest
 	4,  // 14: user.UserService.GetUser:input_type -> user.UserIDRequest
 	6,  // 15: user.UserService.UpdateUserInfo:input_type -> user.UpdateUserInfoRequest
 	4,  // 16: user.UserService.DeleteUser:input_type -> user.UserIDRequest
-	16, // 17: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
+	17, // 17: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
 	9,  // 18: user.UserService.Deposit:input_type -> user.DepositRequest
 	11, // 19: user.UserService.Login:input_type -> user.LoginRequest
 	14, // 20: user.UserService.Logout:input_type -> user.RefreshTokenRequest
-	4,  // 21: user.UserService.GetBalances:input_type -> user.UserIDRequest
-	14, // 22: user.UserService.RefreshToken:input_type -> user.RefreshTokenRequest
-	3,  // 23: user.UserService.Registration:output_type -> user.RegisterUserResponse
-	5,  // 24: user.UserService.GetUser:output_type -> user.UserInfoResponse
-	7,  // 25: user.UserService.UpdateUserInfo:output_type -> user.UpdateUserInfoResponse
-	8,  // 26: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
-	17, // 27: user.UserService.ChangePassword:output_type -> user.ChangeUserResponse
-	10, // 28: user.UserService.Deposit:output_type -> user.DepositResponse
-	12, // 29: user.UserService.Login:output_type -> user.TokenPairResponse
-	15, // 30: user.UserService.Logout:output_type -> user.LogoutResponse
-	13, // 31: user.UserService.GetBalances:output_type -> user.UserBalancesInfoResponse
-	12, // 32: user.UserService.RefreshToken:output_type -> user.TokenPairResponse
-	23, // [23:33] is the sub-list for method output_type
-	13, // [13:23] is the sub-list for method input_type
+	15, // 21: user.UserService.LogoutAllDevices:input_type -> user.LogoutAllDevicesRequest
+	4,  // 22: user.UserService.GetBalances:input_type -> user.UserIDRequest
+	14, // 23: user.UserService.RefreshToken:input_type -> user.RefreshTokenRequest
+	3,  // 24: user.UserService.Registration:output_type -> user.RegisterUserResponse
+	5,  // 25: user.UserService.GetUser:output_type -> user.UserInfoResponse
+	7,  // 26: user.UserService.UpdateUserInfo:output_type -> user.UpdateUserInfoResponse
+	8,  // 27: user.UserService.DeleteUser:output_type -> user.DeleteUserResponse
+	18, // 28: user.UserService.ChangePassword:output_type -> user.ChangeUserResponse
+	10, // 29: user.UserService.Deposit:output_type -> user.DepositResponse
+	12, // 30: user.UserService.Login:output_type -> user.TokenPairResponse
+	16, // 31: user.UserService.Logout:output_type -> user.LogoutResponse
+	16, // 32: user.UserService.LogoutAllDevices:output_type -> user.LogoutResponse
+	13, // 33: user.UserService.GetBalances:output_type -> user.UserBalancesInfoResponse
+	12, // 34: user.UserService.RefreshToken:output_type -> user.TokenPairResponse
+	24, // [24:35] is the sub-list for method output_type
+	13, // [13:24] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name
 	13, // [13:13] is the sub-list for extension extendee
 	0,  // [0:13] is the sub-list for field type_name
@@ -1226,7 +1276,7 @@ func file_user_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_user_proto_rawDesc), len(file_user_user_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   17,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

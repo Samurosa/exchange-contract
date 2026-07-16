@@ -1729,6 +1729,35 @@ func (m *TokenPairResponse) validate(all bool) error {
 	}
 
 	if all {
+		switch v := interface{}(m.GetAccessCreatesAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, TokenPairResponseValidationError{
+					field:  "AccessCreatesAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, TokenPairResponseValidationError{
+					field:  "AccessCreatesAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetAccessCreatesAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TokenPairResponseValidationError{
+				field:  "AccessCreatesAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
 		switch v := interface{}(m.GetRefreshExpiresAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
@@ -1751,6 +1780,35 @@ func (m *TokenPairResponse) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return TokenPairResponseValidationError{
 				field:  "RefreshExpiresAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetRefreshCreatesAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, TokenPairResponseValidationError{
+					field:  "RefreshCreatesAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, TokenPairResponseValidationError{
+					field:  "RefreshCreatesAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRefreshCreatesAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return TokenPairResponseValidationError{
+				field:  "RefreshCreatesAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

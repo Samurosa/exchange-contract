@@ -177,7 +177,9 @@ message TokenPairResponse {
     string refresh_token = 2;
 
     google.protobuf.Timestamp access_expires_at = 3;
-    google.protobuf.Timestamp refresh_expires_at = 4;
+    google.protobuf.Timestamp access_creates_at = 4;
+    google.protobuf.Timestamp refresh_expires_at = 5;
+    google.protobuf.Timestamp refresh_creates_at = 6;
 }
 
 message UserBalancesInfoResponse{

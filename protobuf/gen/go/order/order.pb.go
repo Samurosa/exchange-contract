@@ -237,11 +237,10 @@ func (x *Order) GetUpdatedAt() *timestamppb.Timestamp {
 
 type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	MarketId      string                 `protobuf:"bytes,2,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`
-	OrderSide     OrderSide              `protobuf:"varint,3,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
-	Price         string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`       // money
-	Quantity      string                 `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"` //decimal
+	MarketId      string                 `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`
+	OrderSide     OrderSide              `protobuf:"varint,2,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
+	Price         string                 `protobuf:"bytes,3,opt,name=price,proto3" json:"price,omitempty"`       // money
+	Quantity      string                 `protobuf:"bytes,4,opt,name=quantity,proto3" json:"quantity,omitempty"` //decimal
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -274,13 +273,6 @@ func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateOrderRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *CreateOrderRequest) GetUserId() string {
-	if x != nil {
-		return x.UserId
-	}
-	return ""
 }
 
 func (x *CreateOrderRequest) GetMarketId() string {
@@ -416,11 +408,10 @@ func (x *GetOrderStatusRequest) GetOrderId() string {
 }
 
 type GetOrderStatusResponse struct {
-	state     protoimpl.MessageState `protogen:"open.v1"`
-	UserId    string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	MarketId  string                 `protobuf:"bytes,3,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`
-	OrderSide OrderSide              `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
-	// OrderType
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	MarketId      string                 `protobuf:"bytes,3,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`
+	OrderSide     OrderSide              `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
 	Price         string                 `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
 	Quantity      string                 `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	OrderStatus   OrderStatus            `protobuf:"varint,7,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
@@ -519,7 +510,6 @@ func (x *GetOrderStatusResponse) GetUpdatedAt() *timestamppb.Timestamp {
 type StreamOrderUpdateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	OrderStatus   string                 `protobuf:"bytes,2,opt,name=order_status,json=orderStatus,proto3" json:"order_status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -557,13 +547,6 @@ func (*StreamOrderUpdateRequest) Descriptor() ([]byte, []int) {
 func (x *StreamOrderUpdateRequest) GetOrderId() string {
 	if x != nil {
 		return x.OrderId
-	}
-	return ""
-}
-
-func (x *StreamOrderUpdateRequest) GetOrderStatus() string {
-	if x != nil {
-		return x.OrderStatus
 	}
 	return ""
 }
@@ -653,14 +636,13 @@ const file_order_order_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x87\x02\n" +
-	"\x12CreateOrderRequest\x12!\n" +
-	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12%\n" +
-	"\tmarket_id\x18\x02 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\bmarketId\x129\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xe4\x01\n" +
+	"\x12CreateOrderRequest\x12%\n" +
+	"\tmarket_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\bmarketId\x129\n" +
 	"\n" +
-	"order_side\x18\x03 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x122\n" +
-	"\x05price\x18\x04 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\x05price\x128\n" +
-	"\bquantity\x18\x05 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
+	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x122\n" +
+	"\x05price\x18\x03 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\x05price\x128\n" +
+	"\bquantity\x18\x04 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
 	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x129\n" +
@@ -679,10 +661,9 @@ const file_order_order_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x92\x01\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"?\n" +
 	"\x18StreamOrderUpdateRequest\x12#\n" +
-	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\x12Q\n" +
-	"\forder_status\x18\x02 \x01(\tB.\xfaB+r)2'^(CREATED|CANCELED|REJECTED|COMPLETED)$R\vorderStatus\"\xc8\x01\n" +
+	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xc8\x01\n" +
 	"\x19StreamOrderUpdateResponse\x122\n" +
 	"\x15update_status_success\x18\x01 \x01(\bR\x13updateStatusSuccess\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\tR\aorderId\x12!\n" +

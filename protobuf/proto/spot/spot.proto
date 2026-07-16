@@ -101,9 +101,9 @@ message CreateSpotRequest {
 }
 
 message CreateSpotResponse {
-    string id     = 1;
+    string id = 1;
 
-    google.protobuf.Timestamp created_at = 14;
+    google.protobuf.Timestamp created_at = 2;
 }
 
 
@@ -156,6 +156,8 @@ message ViewMarketsRequest {
 
 message ViewMarketsResponse {
     repeated string spotsID = 1;
+
+    //добавить
 }
 
 message DescribeMarketRequest {
@@ -171,3 +173,5 @@ message DescribeMarketResponse {
     string name = 3;
     string description = 4;
 }
+
+// нумерация

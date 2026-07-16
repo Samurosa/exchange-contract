@@ -26,13 +26,13 @@ service UserService {
     rpc Registration(RegisterUserRequest)
         returns (RegisterUserResponse);
 
-    rpc GetUser(UserIDRequest)
+    rpc GetUser(EmptyRequest)
         returns (UserInfoResponse);
 
     rpc UpdateUserInfo(UpdateUserInfoRequest)
         returns (UpdateUserInfoResponse);
 
-    rpc DeleteUser(UserIDRequest)
+    rpc DeleteUser(EmptyRequest)
         returns (DeleteUserResponse);
 
     rpc ChangePassword(ChangeUserRequest)
@@ -44,13 +44,13 @@ service UserService {
     rpc Login(LoginRequest)
         returns (TokenPairResponse);
 
-    rpc Logout(RefreshTokenRequest)
+    rpc Logout(LogoutRequest)
         returns (LogoutResponse);
 
-    rpc LogoutAllDevices(RefreshTokenRequest)
+    rpc LogoutAllDevices(LogoutAllRequest)
         returns (LogoutResponse);
 
-    rpc GetBalances(UserIDRequest)
+    rpc GetBalances(EmptyRequest)
         returns(UserBalancesInfoResponse);
     
     rpc RefreshToken(RefreshTokenRequest)
@@ -90,10 +90,8 @@ message RegisterUserResponse {
     google.protobuf.Timestamp created_at = 2;
 }
 
-message UserIDRequest{
-    string user_id = 1 [
-        (validate.rules).string.uuid = true
-    ];
+message EmptyRequest{
+
 }
 message UserInfoResponse {
     string user_id = 1;
@@ -107,18 +105,13 @@ message UserInfoResponse {
 }
 
 message UpdateUserInfoRequest{
-    string user_id = 1 [
-        (validate.rules).string.uuid = true
-    ];
-    
-
-    optional string name = 2  [
+    optional string name = 1  [
     (validate.rules).string = {
             min_len: 2,
             max_len: 64,
         }
     ];
-    optional string email = 3 [
+    optional string email = 2 [
         (validate.rules).string.email = true
     ];
 }
@@ -191,15 +184,16 @@ message UserBalancesInfoResponse{
     repeated Balance balances = 1;
 }
 
+message LogoutRequest{
+    string refresh_token = 1;
+}
+
+message LogoutAllRequest{
+    string refresh_token = 1;
+}
+
 message RefreshTokenRequest{
     string refresh_token = 1;
-
-    string device_id = 2 [
-        (validate.rules).string = {
-            min_len: 1,
-            max_len: 64,
-        }
-    ];
 }
 
 message LogoutResponse{
@@ -209,17 +203,13 @@ message LogoutResponse{
 }
 
 message ChangeUserRequest {
-    string user_id = 1 [
-        (validate.rules).string.uuid = true
-    ];
-
-    string old_password = 2 [
+    string old_password = 1 [
         (validate.rules).string = {
             min_len: 6,
             max_len: 64
         }
     ];
-    string new_password = 3 [
+    string new_password = 2 [
         (validate.rules).string = {
             min_len: 6,
             max_len: 64

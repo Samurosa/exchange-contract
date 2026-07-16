@@ -230,18 +230,6 @@ func (m *CreateOrderRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetUserId()); err != nil {
-		err = CreateOrderRequestValidationError{
-			field:  "UserId",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if err := m._validateUuid(m.GetMarketId()); err != nil {
 		err = CreateOrderRequestValidationError{
 			field:  "MarketId",
@@ -864,17 +852,6 @@ func (m *StreamOrderUpdateRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if !_StreamOrderUpdateRequest_OrderStatus_Pattern.MatchString(m.GetOrderStatus()) {
-		err := StreamOrderUpdateRequestValidationError{
-			field:  "OrderStatus",
-			reason: "value does not match regex pattern \"^(CREATED|CANCELED|REJECTED|COMPLETED)$\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if len(errors) > 0 {
 		return StreamOrderUpdateRequestMultiError(errors)
 	}
@@ -962,8 +939,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = StreamOrderUpdateRequestValidationError{}
-
-var _StreamOrderUpdateRequest_OrderStatus_Pattern = regexp.MustCompile("^(CREATED|CANCELED|REJECTED|COMPLETED)$")
 
 // Validate checks the field values on StreamOrderUpdateResponse with the rules
 // defined in the proto definition for this message. If any rules are

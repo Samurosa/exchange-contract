@@ -461,62 +461,41 @@ var _ interface {
 	ErrorName() string
 } = RegisterUserResponseValidationError{}
 
-// Validate checks the field values on UserIDRequest with the rules defined in
+// Validate checks the field values on EmptyRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *UserIDRequest) Validate() error {
+func (m *EmptyRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on UserIDRequest with the rules defined
+// ValidateAll checks the field values on EmptyRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in UserIDRequestMultiError, or
+// result is a list of violation errors wrapped in EmptyRequestMultiError, or
 // nil if none found.
-func (m *UserIDRequest) ValidateAll() error {
+func (m *EmptyRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *UserIDRequest) validate(all bool) error {
+func (m *EmptyRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetUserId()); err != nil {
-		err = UserIDRequestValidationError{
-			field:  "UserId",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if len(errors) > 0 {
-		return UserIDRequestMultiError(errors)
+		return EmptyRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-func (m *UserIDRequest) _validateUuid(uuid string) error {
-	if matched := _user_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
-	}
-
-	return nil
-}
-
-// UserIDRequestMultiError is an error wrapping multiple validation errors
-// returned by UserIDRequest.ValidateAll() if the designated constraints
-// aren't met.
-type UserIDRequestMultiError []error
+// EmptyRequestMultiError is an error wrapping multiple validation errors
+// returned by EmptyRequest.ValidateAll() if the designated constraints aren't met.
+type EmptyRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m UserIDRequestMultiError) Error() string {
+func (m EmptyRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -525,11 +504,11 @@ func (m UserIDRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m UserIDRequestMultiError) AllErrors() []error { return m }
+func (m EmptyRequestMultiError) AllErrors() []error { return m }
 
-// UserIDRequestValidationError is the validation error returned by
-// UserIDRequest.Validate if the designated constraints aren't met.
-type UserIDRequestValidationError struct {
+// EmptyRequestValidationError is the validation error returned by
+// EmptyRequest.Validate if the designated constraints aren't met.
+type EmptyRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -537,22 +516,22 @@ type UserIDRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e UserIDRequestValidationError) Field() string { return e.field }
+func (e EmptyRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e UserIDRequestValidationError) Reason() string { return e.reason }
+func (e EmptyRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e UserIDRequestValidationError) Cause() error { return e.cause }
+func (e EmptyRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e UserIDRequestValidationError) Key() bool { return e.key }
+func (e EmptyRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e UserIDRequestValidationError) ErrorName() string { return "UserIDRequestValidationError" }
+func (e EmptyRequestValidationError) ErrorName() string { return "EmptyRequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e UserIDRequestValidationError) Error() string {
+func (e EmptyRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -564,14 +543,14 @@ func (e UserIDRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sUserIDRequest.%s: %s%s",
+		"invalid %sEmptyRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = UserIDRequestValidationError{}
+var _ error = EmptyRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -579,7 +558,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = UserIDRequestValidationError{}
+} = EmptyRequestValidationError{}
 
 // Validate checks the field values on UserInfoResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -769,18 +748,6 @@ func (m *UpdateUserInfoRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetUserId()); err != nil {
-		err = UpdateUserInfoRequestValidationError{
-			field:  "UserId",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if m.Name != nil {
 
 		if l := utf8.RuneCountInString(m.GetName()); l < 2 || l > 64 {
@@ -867,14 +834,6 @@ func (m *UpdateUserInfoRequest) _validateEmail(addr string) error {
 	}
 
 	return m._validateHostname(parts[1])
-}
-
-func (m *UpdateUserInfoRequest) _validateUuid(uuid string) error {
-	if matched := _user_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
-	}
-
-	return nil
 }
 
 // UpdateUserInfoRequestMultiError is an error wrapping multiple validation
@@ -2014,6 +1973,210 @@ var _ interface {
 	ErrorName() string
 } = UserBalancesInfoResponseValidationError{}
 
+// Validate checks the field values on LogoutRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *LogoutRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LogoutRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in LogoutRequestMultiError, or
+// nil if none found.
+func (m *LogoutRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LogoutRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for RefreshToken
+
+	if len(errors) > 0 {
+		return LogoutRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// LogoutRequestMultiError is an error wrapping multiple validation errors
+// returned by LogoutRequest.ValidateAll() if the designated constraints
+// aren't met.
+type LogoutRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LogoutRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LogoutRequestMultiError) AllErrors() []error { return m }
+
+// LogoutRequestValidationError is the validation error returned by
+// LogoutRequest.Validate if the designated constraints aren't met.
+type LogoutRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LogoutRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LogoutRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LogoutRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LogoutRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LogoutRequestValidationError) ErrorName() string { return "LogoutRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LogoutRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLogoutRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LogoutRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LogoutRequestValidationError{}
+
+// Validate checks the field values on LogoutAllRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *LogoutAllRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LogoutAllRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// LogoutAllRequestMultiError, or nil if none found.
+func (m *LogoutAllRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LogoutAllRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for RefreshToken
+
+	if len(errors) > 0 {
+		return LogoutAllRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// LogoutAllRequestMultiError is an error wrapping multiple validation errors
+// returned by LogoutAllRequest.ValidateAll() if the designated constraints
+// aren't met.
+type LogoutAllRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LogoutAllRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LogoutAllRequestMultiError) AllErrors() []error { return m }
+
+// LogoutAllRequestValidationError is the validation error returned by
+// LogoutAllRequest.Validate if the designated constraints aren't met.
+type LogoutAllRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LogoutAllRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LogoutAllRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LogoutAllRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LogoutAllRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LogoutAllRequestValidationError) ErrorName() string { return "LogoutAllRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LogoutAllRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLogoutAllRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LogoutAllRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LogoutAllRequestValidationError{}
+
 // Validate checks the field values on RefreshTokenRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -2037,17 +2200,6 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 	var errors []error
 
 	// no validation rules for RefreshToken
-
-	if l := utf8.RuneCountInString(m.GetDeviceId()); l < 1 || l > 64 {
-		err := RefreshTokenRequestValidationError{
-			field:  "DeviceId",
-			reason: "value length must be between 1 and 64 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
 
 	if len(errors) > 0 {
 		return RefreshTokenRequestMultiError(errors)
@@ -2282,18 +2434,6 @@ func (m *ChangeUserRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetUserId()); err != nil {
-		err = ChangeUserRequestValidationError{
-			field:  "UserId",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if l := utf8.RuneCountInString(m.GetOldPassword()); l < 6 || l > 64 {
 		err := ChangeUserRequestValidationError{
 			field:  "OldPassword",
@@ -2318,14 +2458,6 @@ func (m *ChangeUserRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return ChangeUserRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *ChangeUserRequest) _validateUuid(uuid string) error {
-	if matched := _user_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil

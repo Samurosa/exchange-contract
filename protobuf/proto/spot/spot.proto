@@ -19,8 +19,8 @@ service SpotInstrumentService {
     rpc ViewMarkets(ViewMarketsRequest)
         returns (ViewMarketsResponse);
 
-    rpc DeleteSpot(DeleteSpotRequest)
-        returns (DeleteSpotResponse);
+    rpc DisableSpot(DisableSpotRequest)
+        returns (DisableSpotResponse);
 
     rpc DescribeMarket(DescribeMarketRequest)
         returns (DescribeMarketResponse);
@@ -33,7 +33,32 @@ enum SpotStatus {
     SPOT_STATUS_DISABLED = 2;
 }
 
+message Market {
+    string spot_id = 1;
+
+    string symbol = 2;
+
+    string base_asset = 3;
+    string quote_asset = 4;
+
+    SpotStatus status = 5;
+
+    string last_price = 6;
+    string price_change_24h = 7;
+    string price_change_percent_24h = 8;
+
+    google.protobuf.Timestamp updated_at = 9;
+}
+
 message CreateSpotRequest {
+    string symbol  = 1 [
+        (validate.rules).string = {
+            min_len: 2,
+            max_len: 10,
+            pattern: "^[A-Z]+$"
+        }
+    ];
+
     string base_asset  = 2 [
         (validate.rules).string = {
             min_len: 2,
@@ -117,7 +142,7 @@ message GetSpotResponse{
     string id     = 1; //уникальный идентификатор
     string symbol = 2; //идентификатор спота (BTC/USDT)
 
-    string base_asset  = 3; //актив который продают или покупаеют 
+    string base_asset  = 3; //актив который продают или покупают
     string quote_asset = 4; //в чем выражается цена
 
     int32  price_precision    = 5; // количество знаков после запятой у цены
@@ -135,14 +160,16 @@ message GetSpotResponse{
     google.protobuf.Timestamp updated_at = 15; // время обновления
 }
 
-message DeleteSpotRequest {
+message DisableSpotRequest {
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
 }
 
-message DeleteSpotResponse {
+message DisableSpotResponse {
     bool success = 1;
+
+    google.protobuf.Timestamp disable_spot_at = 2;
 }
 
 message ViewMarketsRequest {
@@ -152,12 +179,28 @@ message ViewMarketsRequest {
             unique: true,
         }
     ];
+
+    int32 page = 2 [
+        (validate.rules).int32 = {
+            gte: 1
+        }
+    ];
+
+    int32 page_size = 3 [
+        (validate.rules).int32 = {
+            gte: 1,
+            lte: 100
+        }
+    ];
 }
 
 message ViewMarketsResponse {
-    repeated string spotsID = 1;
+    repeated Market markets = 1;
 
-    //добавить
+    int32 page = 2;
+    int32 page_size = 3;
+    int64 total = 4;
+    int32 total_pages = 5;
 }
 
 message DescribeMarketRequest {
@@ -173,5 +216,3 @@ message DescribeMarketResponse {
     string name = 3;
     string description = 4;
 }
-
-// нумерация

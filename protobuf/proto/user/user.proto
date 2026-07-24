@@ -66,7 +66,7 @@ message Balance {
     string locked = 3;
 
 }
-//creates a new user
+
 message RegisterUserRequest  {
     string email = 1 [
         (validate.rules).string.email = true
@@ -93,6 +93,7 @@ message RegisterUserResponse {
 message EmptyRequest{
 
 }
+
 message UserInfoResponse {
     string user_id = 1;
     string name = 2;

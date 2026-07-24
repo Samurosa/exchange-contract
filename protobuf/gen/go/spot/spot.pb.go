@@ -72,8 +72,117 @@ func (SpotStatus) EnumDescriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{0}
 }
 
+type Market struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	SpotId                 string                 `protobuf:"bytes,1,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
+	Symbol                 string                 `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	BaseAsset              string                 `protobuf:"bytes,3,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
+	QuoteAsset             string                 `protobuf:"bytes,4,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
+	Status                 SpotStatus             `protobuf:"varint,5,opt,name=status,proto3,enum=spot.SpotStatus" json:"status,omitempty"`
+	LastPrice              string                 `protobuf:"bytes,6,opt,name=last_price,json=lastPrice,proto3" json:"last_price,omitempty"`
+	PriceChange_24H        string                 `protobuf:"bytes,7,opt,name=price_change_24h,json=priceChange24h,proto3" json:"price_change_24h,omitempty"`
+	PriceChangePercent_24H string                 `protobuf:"bytes,8,opt,name=price_change_percent_24h,json=priceChangePercent24h,proto3" json:"price_change_percent_24h,omitempty"`
+	UpdatedAt              *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *Market) Reset() {
+	*x = Market{}
+	mi := &file_spot_spot_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Market) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Market) ProtoMessage() {}
+
+func (x *Market) ProtoReflect() protoreflect.Message {
+	mi := &file_spot_spot_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Market.ProtoReflect.Descriptor instead.
+func (*Market) Descriptor() ([]byte, []int) {
+	return file_spot_spot_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Market) GetSpotId() string {
+	if x != nil {
+		return x.SpotId
+	}
+	return ""
+}
+
+func (x *Market) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *Market) GetBaseAsset() string {
+	if x != nil {
+		return x.BaseAsset
+	}
+	return ""
+}
+
+func (x *Market) GetQuoteAsset() string {
+	if x != nil {
+		return x.QuoteAsset
+	}
+	return ""
+}
+
+func (x *Market) GetStatus() SpotStatus {
+	if x != nil {
+		return x.Status
+	}
+	return SpotStatus_SPOT_STATUS_UNSPECIFIED
+}
+
+func (x *Market) GetLastPrice() string {
+	if x != nil {
+		return x.LastPrice
+	}
+	return ""
+}
+
+func (x *Market) GetPriceChange_24H() string {
+	if x != nil {
+		return x.PriceChange_24H
+	}
+	return ""
+}
+
+func (x *Market) GetPriceChangePercent_24H() string {
+	if x != nil {
+		return x.PriceChangePercent_24H
+	}
+	return ""
+}
+
+func (x *Market) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
 type CreateSpotRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
+	Symbol            string                 `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
 	BaseAsset         string                 `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
 	QuoteAsset        string                 `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
 	PricePrecision    int32                  `protobuf:"varint,4,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
@@ -89,7 +198,7 @@ type CreateSpotRequest struct {
 
 func (x *CreateSpotRequest) Reset() {
 	*x = CreateSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[0]
+	mi := &file_spot_spot_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -101,7 +210,7 @@ func (x *CreateSpotRequest) String() string {
 func (*CreateSpotRequest) ProtoMessage() {}
 
 func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[0]
+	mi := &file_spot_spot_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -114,7 +223,14 @@ func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpotRequest.ProtoReflect.Descriptor instead.
 func (*CreateSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{0}
+	return file_spot_spot_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CreateSpotRequest) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
 }
 
 func (x *CreateSpotRequest) GetBaseAsset() string {
@@ -190,7 +306,7 @@ type CreateSpotResponse struct {
 
 func (x *CreateSpotResponse) Reset() {
 	*x = CreateSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[1]
+	mi := &file_spot_spot_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -202,7 +318,7 @@ func (x *CreateSpotResponse) String() string {
 func (*CreateSpotResponse) ProtoMessage() {}
 
 func (x *CreateSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[1]
+	mi := &file_spot_spot_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -215,7 +331,7 @@ func (x *CreateSpotResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpotResponse.ProtoReflect.Descriptor instead.
 func (*CreateSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{1}
+	return file_spot_spot_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateSpotResponse) GetId() string {
@@ -241,7 +357,7 @@ type GetSpotRequest struct {
 
 func (x *GetSpotRequest) Reset() {
 	*x = GetSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[2]
+	mi := &file_spot_spot_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -253,7 +369,7 @@ func (x *GetSpotRequest) String() string {
 func (*GetSpotRequest) ProtoMessage() {}
 
 func (x *GetSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[2]
+	mi := &file_spot_spot_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -266,7 +382,7 @@ func (x *GetSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpotRequest.ProtoReflect.Descriptor instead.
 func (*GetSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{2}
+	return file_spot_spot_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetSpotRequest) GetId() string {
@@ -280,7 +396,7 @@ type GetSpotResponse struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                         //уникальный идентификатор
 	Symbol            string                 `protobuf:"bytes,2,opt,name=symbol,proto3" json:"symbol,omitempty"`                                                 //идентификатор спота (BTC/USDT)
-	BaseAsset         string                 `protobuf:"bytes,3,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`                          //актив который продают или покупаеют
+	BaseAsset         string                 `protobuf:"bytes,3,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`                          //актив который продают или покупают
 	QuoteAsset        string                 `protobuf:"bytes,4,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`                       //в чем выражается цена
 	PricePrecision    int32                  `protobuf:"varint,5,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`          // количество знаков после запятой у цены
 	QuantityPrecision int32                  `protobuf:"varint,6,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"` // количество знаков после запятой у актива
@@ -298,7 +414,7 @@ type GetSpotResponse struct {
 
 func (x *GetSpotResponse) Reset() {
 	*x = GetSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[3]
+	mi := &file_spot_spot_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -310,7 +426,7 @@ func (x *GetSpotResponse) String() string {
 func (*GetSpotResponse) ProtoMessage() {}
 
 func (x *GetSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[3]
+	mi := &file_spot_spot_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -323,7 +439,7 @@ func (x *GetSpotResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpotResponse.ProtoReflect.Descriptor instead.
 func (*GetSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{3}
+	return file_spot_spot_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetSpotResponse) GetId() string {
@@ -424,28 +540,28 @@ func (x *GetSpotResponse) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-type DeleteSpotRequest struct {
+type DisableSpotRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteSpotRequest) Reset() {
-	*x = DeleteSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[4]
+func (x *DisableSpotRequest) Reset() {
+	*x = DisableSpotRequest{}
+	mi := &file_spot_spot_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteSpotRequest) String() string {
+func (x *DisableSpotRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteSpotRequest) ProtoMessage() {}
+func (*DisableSpotRequest) ProtoMessage() {}
 
-func (x *DeleteSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[4]
+func (x *DisableSpotRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_spot_spot_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -456,40 +572,41 @@ func (x *DeleteSpotRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteSpotRequest.ProtoReflect.Descriptor instead.
-func (*DeleteSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{4}
+// Deprecated: Use DisableSpotRequest.ProtoReflect.Descriptor instead.
+func (*DisableSpotRequest) Descriptor() ([]byte, []int) {
+	return file_spot_spot_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *DeleteSpotRequest) GetId() string {
+func (x *DisableSpotRequest) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-type DeleteSpotResponse struct {
+type DisableSpotResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	DisableSpotAt *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=disable_spot_at,json=disableSpotAt,proto3" json:"disable_spot_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteSpotResponse) Reset() {
-	*x = DeleteSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[5]
+func (x *DisableSpotResponse) Reset() {
+	*x = DisableSpotResponse{}
+	mi := &file_spot_spot_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteSpotResponse) String() string {
+func (x *DisableSpotResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteSpotResponse) ProtoMessage() {}
+func (*DisableSpotResponse) ProtoMessage() {}
 
-func (x *DeleteSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[5]
+func (x *DisableSpotResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_spot_spot_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -500,28 +617,37 @@ func (x *DeleteSpotResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteSpotResponse.ProtoReflect.Descriptor instead.
-func (*DeleteSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{5}
+// Deprecated: Use DisableSpotResponse.ProtoReflect.Descriptor instead.
+func (*DisableSpotResponse) Descriptor() ([]byte, []int) {
+	return file_spot_spot_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *DeleteSpotResponse) GetSuccess() bool {
+func (x *DisableSpotResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
+func (x *DisableSpotResponse) GetDisableSpotAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DisableSpotAt
+	}
+	return nil
+}
+
 type ViewMarketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserRoles     []string               `protobuf:"bytes,1,rep,name=user_roles,json=userRoles,proto3" json:"user_roles,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ViewMarketsRequest) Reset() {
 	*x = ViewMarketsRequest{}
-	mi := &file_spot_spot_proto_msgTypes[6]
+	mi := &file_spot_spot_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -533,7 +659,7 @@ func (x *ViewMarketsRequest) String() string {
 func (*ViewMarketsRequest) ProtoMessage() {}
 
 func (x *ViewMarketsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[6]
+	mi := &file_spot_spot_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -546,7 +672,7 @@ func (x *ViewMarketsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ViewMarketsRequest.ProtoReflect.Descriptor instead.
 func (*ViewMarketsRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{6}
+	return file_spot_spot_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ViewMarketsRequest) GetUserRoles() []string {
@@ -556,16 +682,34 @@ func (x *ViewMarketsRequest) GetUserRoles() []string {
 	return nil
 }
 
+func (x *ViewMarketsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ViewMarketsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
 type ViewMarketsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	SpotsID       []string               `protobuf:"bytes,1,rep,name=spotsID,proto3" json:"spotsID,omitempty"`
+	Markets       []*Market              `protobuf:"bytes,1,rep,name=markets,proto3" json:"markets,omitempty"`
+	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	Total         int64                  `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
+	TotalPages    int32                  `protobuf:"varint,5,opt,name=total_pages,json=totalPages,proto3" json:"total_pages,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ViewMarketsResponse) Reset() {
 	*x = ViewMarketsResponse{}
-	mi := &file_spot_spot_proto_msgTypes[7]
+	mi := &file_spot_spot_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -577,7 +721,7 @@ func (x *ViewMarketsResponse) String() string {
 func (*ViewMarketsResponse) ProtoMessage() {}
 
 func (x *ViewMarketsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[7]
+	mi := &file_spot_spot_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -590,14 +734,42 @@ func (x *ViewMarketsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ViewMarketsResponse.ProtoReflect.Descriptor instead.
 func (*ViewMarketsResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{7}
+	return file_spot_spot_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *ViewMarketsResponse) GetSpotsID() []string {
+func (x *ViewMarketsResponse) GetMarkets() []*Market {
 	if x != nil {
-		return x.SpotsID
+		return x.Markets
 	}
 	return nil
+}
+
+func (x *ViewMarketsResponse) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ViewMarketsResponse) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ViewMarketsResponse) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ViewMarketsResponse) GetTotalPages() int32 {
+	if x != nil {
+		return x.TotalPages
+	}
+	return 0
 }
 
 type DescribeMarketRequest struct {
@@ -609,7 +781,7 @@ type DescribeMarketRequest struct {
 
 func (x *DescribeMarketRequest) Reset() {
 	*x = DescribeMarketRequest{}
-	mi := &file_spot_spot_proto_msgTypes[8]
+	mi := &file_spot_spot_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -621,7 +793,7 @@ func (x *DescribeMarketRequest) String() string {
 func (*DescribeMarketRequest) ProtoMessage() {}
 
 func (x *DescribeMarketRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[8]
+	mi := &file_spot_spot_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -634,7 +806,7 @@ func (x *DescribeMarketRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeMarketRequest.ProtoReflect.Descriptor instead.
 func (*DescribeMarketRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{8}
+	return file_spot_spot_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DescribeMarketRequest) GetSpotId() string {
@@ -656,7 +828,7 @@ type DescribeMarketResponse struct {
 
 func (x *DescribeMarketResponse) Reset() {
 	*x = DescribeMarketResponse{}
-	mi := &file_spot_spot_proto_msgTypes[9]
+	mi := &file_spot_spot_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -668,7 +840,7 @@ func (x *DescribeMarketResponse) String() string {
 func (*DescribeMarketResponse) ProtoMessage() {}
 
 func (x *DescribeMarketResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[9]
+	mi := &file_spot_spot_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -681,7 +853,7 @@ func (x *DescribeMarketResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DescribeMarketResponse.ProtoReflect.Descriptor instead.
 func (*DescribeMarketResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{9}
+	return file_spot_spot_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DescribeMarketResponse) GetBaseAsset() string {
@@ -716,8 +888,24 @@ var File_spot_spot_proto protoreflect.FileDescriptor
 
 const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
-	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\"\xef\x03\n" +
-	"\x11CreateSpotRequest\x122\n" +
+	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\"\xe0\x02\n" +
+	"\x06Market\x12\x17\n" +
+	"\aspot_id\x18\x01 \x01(\tR\x06spotId\x12\x16\n" +
+	"\x06symbol\x18\x02 \x01(\tR\x06symbol\x12\x1d\n" +
+	"\n" +
+	"base_asset\x18\x03 \x01(\tR\tbaseAsset\x12\x1f\n" +
+	"\vquote_asset\x18\x04 \x01(\tR\n" +
+	"quoteAsset\x12(\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x10.spot.SpotStatusR\x06status\x12\x1d\n" +
+	"\n" +
+	"last_price\x18\x06 \x01(\tR\tlastPrice\x12(\n" +
+	"\x10price_change_24h\x18\a \x01(\tR\x0epriceChange24h\x127\n" +
+	"\x18price_change_percent_24h\x18\b \x01(\tR\x15priceChangePercent24h\x129\n" +
+	"\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9c\x04\n" +
+	"\x11CreateSpotRequest\x12+\n" +
+	"\x06symbol\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
+	"2\b^[A-Z]+$R\x06symbol\x122\n" +
 	"\n" +
 	"base_asset\x18\x02 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
 	"2\b^[A-Z]+$R\tbaseAsset\x124\n" +
@@ -760,17 +948,25 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"-\n" +
-	"\x11DeleteSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\".\n" +
-	"\x12DeleteSpotResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"?\n" +
+	"updated_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\".\n" +
+	"\x12DisableSpotRequest\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"s\n" +
+	"\x13DisableSpotResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
+	"\x0fdisable_spot_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rdisableSpotAt\"\x84\x01\n" +
 	"\x12ViewMarketsRequest\x12)\n" +
 	"\n" +
 	"user_roles\x18\x01 \x03(\tB\n" +
-	"\xfaB\a\x92\x01\x04\b\x01\x18\x01R\tuserRoles\"/\n" +
-	"\x13ViewMarketsResponse\x12\x18\n" +
-	"\aspotsID\x18\x01 \x03(\tR\aspotsID\":\n" +
+	"\xfaB\a\x92\x01\x04\b\x01\x18\x01R\tuserRoles\x12\x1b\n" +
+	"\x04page\x18\x02 \x01(\x05B\a\xfaB\x04\x1a\x02(\x01R\x04page\x12&\n" +
+	"\tpage_size\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\"\xa5\x01\n" +
+	"\x13ViewMarketsResponse\x12&\n" +
+	"\amarkets\x18\x01 \x03(\v2\f.spot.MarketR\amarkets\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
+	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x12\x14\n" +
+	"\x05total\x18\x04 \x01(\x03R\x05total\x12\x1f\n" +
+	"\vtotal_pages\x18\x05 \x01(\x05R\n" +
+	"totalPages\":\n" +
 	"\x15DescribeMarketRequest\x12!\n" +
 	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\"\x8e\x01\n" +
 	"\x16DescribeMarketResponse\x12\x1d\n" +
@@ -784,14 +980,13 @@ const file_spot_spot_proto_rawDesc = "" +
 	"SpotStatus\x12\x1b\n" +
 	"\x17SPOT_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12SPOT_STATUS_ACTIVE\x10\x01\x12\x18\n" +
-	"\x14SPOT_STATUS_DISABLED\x10\x022\xe2\x02\n" +
+	"\x14SPOT_STATUS_DISABLED\x10\x022\xe5\x02\n" +
 	"\x15SpotInstrumentService\x12?\n" +
 	"\n" +
 	"CreateSpot\x12\x17.spot.CreateSpotRequest\x1a\x18.spot.CreateSpotResponse\x126\n" +
 	"\aGetSpot\x12\x14.spot.GetSpotRequest\x1a\x15.spot.GetSpotResponse\x12B\n" +
-	"\vViewMarkets\x12\x18.spot.ViewMarketsRequest\x1a\x19.spot.ViewMarketsResponse\x12?\n" +
-	"\n" +
-	"DeleteSpot\x12\x17.spot.DeleteSpotRequest\x1a\x18.spot.DeleteSpotResponse\x12K\n" +
+	"\vViewMarkets\x12\x18.spot.ViewMarketsRequest\x1a\x19.spot.ViewMarketsResponse\x12B\n" +
+	"\vDisableSpot\x12\x18.spot.DisableSpotRequest\x1a\x19.spot.DisableSpotResponse\x12K\n" +
 	"\x0eDescribeMarket\x12\x1b.spot.DescribeMarketRequest\x1a\x1c.spot.DescribeMarketResponseBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spotb\x06proto3"
 
 var (
@@ -807,41 +1002,46 @@ func file_spot_spot_proto_rawDescGZIP() []byte {
 }
 
 var file_spot_spot_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_spot_spot_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_spot_spot_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_spot_spot_proto_goTypes = []any{
 	(SpotStatus)(0),                // 0: spot.SpotStatus
-	(*CreateSpotRequest)(nil),      // 1: spot.CreateSpotRequest
-	(*CreateSpotResponse)(nil),     // 2: spot.CreateSpotResponse
-	(*GetSpotRequest)(nil),         // 3: spot.GetSpotRequest
-	(*GetSpotResponse)(nil),        // 4: spot.GetSpotResponse
-	(*DeleteSpotRequest)(nil),      // 5: spot.DeleteSpotRequest
-	(*DeleteSpotResponse)(nil),     // 6: spot.DeleteSpotResponse
-	(*ViewMarketsRequest)(nil),     // 7: spot.ViewMarketsRequest
-	(*ViewMarketsResponse)(nil),    // 8: spot.ViewMarketsResponse
-	(*DescribeMarketRequest)(nil),  // 9: spot.DescribeMarketRequest
-	(*DescribeMarketResponse)(nil), // 10: spot.DescribeMarketResponse
-	(*timestamppb.Timestamp)(nil),  // 11: google.protobuf.Timestamp
+	(*Market)(nil),                 // 1: spot.Market
+	(*CreateSpotRequest)(nil),      // 2: spot.CreateSpotRequest
+	(*CreateSpotResponse)(nil),     // 3: spot.CreateSpotResponse
+	(*GetSpotRequest)(nil),         // 4: spot.GetSpotRequest
+	(*GetSpotResponse)(nil),        // 5: spot.GetSpotResponse
+	(*DisableSpotRequest)(nil),     // 6: spot.DisableSpotRequest
+	(*DisableSpotResponse)(nil),    // 7: spot.DisableSpotResponse
+	(*ViewMarketsRequest)(nil),     // 8: spot.ViewMarketsRequest
+	(*ViewMarketsResponse)(nil),    // 9: spot.ViewMarketsResponse
+	(*DescribeMarketRequest)(nil),  // 10: spot.DescribeMarketRequest
+	(*DescribeMarketResponse)(nil), // 11: spot.DescribeMarketResponse
+	(*timestamppb.Timestamp)(nil),  // 12: google.protobuf.Timestamp
 }
 var file_spot_spot_proto_depIdxs = []int32{
-	11, // 0: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
-	0,  // 1: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
-	11, // 2: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
-	11, // 3: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 4: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
-	3,  // 5: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
-	7,  // 6: spot.SpotInstrumentService.ViewMarkets:input_type -> spot.ViewMarketsRequest
-	5,  // 7: spot.SpotInstrumentService.DeleteSpot:input_type -> spot.DeleteSpotRequest
-	9,  // 8: spot.SpotInstrumentService.DescribeMarket:input_type -> spot.DescribeMarketRequest
-	2,  // 9: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
-	4,  // 10: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
-	8,  // 11: spot.SpotInstrumentService.ViewMarkets:output_type -> spot.ViewMarketsResponse
-	6,  // 12: spot.SpotInstrumentService.DeleteSpot:output_type -> spot.DeleteSpotResponse
-	10, // 13: spot.SpotInstrumentService.DescribeMarket:output_type -> spot.DescribeMarketResponse
-	9,  // [9:14] is the sub-list for method output_type
-	4,  // [4:9] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	0,  // 0: spot.Market.status:type_name -> spot.SpotStatus
+	12, // 1: spot.Market.updated_at:type_name -> google.protobuf.Timestamp
+	12, // 2: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	0,  // 3: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
+	12, // 4: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	12, // 5: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
+	12, // 6: spot.DisableSpotResponse.disable_spot_at:type_name -> google.protobuf.Timestamp
+	1,  // 7: spot.ViewMarketsResponse.markets:type_name -> spot.Market
+	2,  // 8: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
+	4,  // 9: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
+	8,  // 10: spot.SpotInstrumentService.ViewMarkets:input_type -> spot.ViewMarketsRequest
+	6,  // 11: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
+	10, // 12: spot.SpotInstrumentService.DescribeMarket:input_type -> spot.DescribeMarketRequest
+	3,  // 13: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
+	5,  // 14: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
+	9,  // 15: spot.SpotInstrumentService.ViewMarkets:output_type -> spot.ViewMarketsResponse
+	7,  // 16: spot.SpotInstrumentService.DisableSpot:output_type -> spot.DisableSpotResponse
+	11, // 17: spot.SpotInstrumentService.DescribeMarket:output_type -> spot.DescribeMarketResponse
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_spot_spot_proto_init() }
@@ -855,7 +1055,7 @@ func file_spot_spot_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_spot_spot_proto_rawDesc), len(file_spot_spot_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   10,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

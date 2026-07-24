@@ -38,6 +38,149 @@ var (
 // define the regex for a UUID once up-front
 var _spot_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on Market with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Market) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Market with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in MarketMultiError, or nil if none found.
+func (m *Market) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Market) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for SpotId
+
+	// no validation rules for Symbol
+
+	// no validation rules for BaseAsset
+
+	// no validation rules for QuoteAsset
+
+	// no validation rules for Status
+
+	// no validation rules for LastPrice
+
+	// no validation rules for PriceChange_24H
+
+	// no validation rules for PriceChangePercent_24H
+
+	if all {
+		switch v := interface{}(m.GetUpdatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, MarketValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, MarketValidationError{
+					field:  "UpdatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetUpdatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return MarketValidationError{
+				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return MarketMultiError(errors)
+	}
+
+	return nil
+}
+
+// MarketMultiError is an error wrapping multiple validation errors returned by
+// Market.ValidateAll() if the designated constraints aren't met.
+type MarketMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m MarketMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m MarketMultiError) AllErrors() []error { return m }
+
+// MarketValidationError is the validation error returned by Market.Validate if
+// the designated constraints aren't met.
+type MarketValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MarketValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MarketValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MarketValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MarketValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MarketValidationError) ErrorName() string { return "MarketValidationError" }
+
+// Error satisfies the builtin error interface
+func (e MarketValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMarket.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MarketValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MarketValidationError{}
+
 // Validate checks the field values on CreateSpotRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -59,6 +202,28 @@ func (m *CreateSpotRequest) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if l := utf8.RuneCountInString(m.GetSymbol()); l < 2 || l > 10 {
+		err := CreateSpotRequestValidationError{
+			field:  "Symbol",
+			reason: "value length must be between 2 and 10 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if !_CreateSpotRequest_Symbol_Pattern.MatchString(m.GetSymbol()) {
+		err := CreateSpotRequestValidationError{
+			field:  "Symbol",
+			reason: "value does not match regex pattern \"^[A-Z]+$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if l := utf8.RuneCountInString(m.GetBaseAsset()); l < 2 || l > 10 {
 		err := CreateSpotRequestValidationError{
@@ -303,6 +468,8 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateSpotRequestValidationError{}
+
+var _CreateSpotRequest_Symbol_Pattern = regexp.MustCompile("^[A-Z]+$")
 
 var _CreateSpotRequest_BaseAsset_Pattern = regexp.MustCompile("^[A-Z]+$")
 
@@ -745,22 +912,22 @@ var _ interface {
 	ErrorName() string
 } = GetSpotResponseValidationError{}
 
-// Validate checks the field values on DeleteSpotRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *DeleteSpotRequest) Validate() error {
+// Validate checks the field values on DisableSpotRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DisableSpotRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DeleteSpotRequest with the rules
+// ValidateAll checks the field values on DisableSpotRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// DeleteSpotRequestMultiError, or nil if none found.
-func (m *DeleteSpotRequest) ValidateAll() error {
+// DisableSpotRequestMultiError, or nil if none found.
+func (m *DisableSpotRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DeleteSpotRequest) validate(all bool) error {
+func (m *DisableSpotRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -768,7 +935,7 @@ func (m *DeleteSpotRequest) validate(all bool) error {
 	var errors []error
 
 	if err := m._validateUuid(m.GetId()); err != nil {
-		err = DeleteSpotRequestValidationError{
+		err = DisableSpotRequestValidationError{
 			field:  "Id",
 			reason: "value must be a valid UUID",
 			cause:  err,
@@ -780,13 +947,13 @@ func (m *DeleteSpotRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return DeleteSpotRequestMultiError(errors)
+		return DisableSpotRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-func (m *DeleteSpotRequest) _validateUuid(uuid string) error {
+func (m *DisableSpotRequest) _validateUuid(uuid string) error {
 	if matched := _spot_uuidPattern.MatchString(uuid); !matched {
 		return errors.New("invalid uuid format")
 	}
@@ -794,13 +961,13 @@ func (m *DeleteSpotRequest) _validateUuid(uuid string) error {
 	return nil
 }
 
-// DeleteSpotRequestMultiError is an error wrapping multiple validation errors
-// returned by DeleteSpotRequest.ValidateAll() if the designated constraints
+// DisableSpotRequestMultiError is an error wrapping multiple validation errors
+// returned by DisableSpotRequest.ValidateAll() if the designated constraints
 // aren't met.
-type DeleteSpotRequestMultiError []error
+type DisableSpotRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DeleteSpotRequestMultiError) Error() string {
+func (m DisableSpotRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -809,11 +976,11 @@ func (m DeleteSpotRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DeleteSpotRequestMultiError) AllErrors() []error { return m }
+func (m DisableSpotRequestMultiError) AllErrors() []error { return m }
 
-// DeleteSpotRequestValidationError is the validation error returned by
-// DeleteSpotRequest.Validate if the designated constraints aren't met.
-type DeleteSpotRequestValidationError struct {
+// DisableSpotRequestValidationError is the validation error returned by
+// DisableSpotRequest.Validate if the designated constraints aren't met.
+type DisableSpotRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -821,24 +988,24 @@ type DeleteSpotRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e DeleteSpotRequestValidationError) Field() string { return e.field }
+func (e DisableSpotRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DeleteSpotRequestValidationError) Reason() string { return e.reason }
+func (e DisableSpotRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DeleteSpotRequestValidationError) Cause() error { return e.cause }
+func (e DisableSpotRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DeleteSpotRequestValidationError) Key() bool { return e.key }
+func (e DisableSpotRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DeleteSpotRequestValidationError) ErrorName() string {
-	return "DeleteSpotRequestValidationError"
+func (e DisableSpotRequestValidationError) ErrorName() string {
+	return "DisableSpotRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e DeleteSpotRequestValidationError) Error() string {
+func (e DisableSpotRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -850,14 +1017,14 @@ func (e DeleteSpotRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDeleteSpotRequest.%s: %s%s",
+		"invalid %sDisableSpotRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DeleteSpotRequestValidationError{}
+var _ error = DisableSpotRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -865,24 +1032,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DeleteSpotRequestValidationError{}
+} = DisableSpotRequestValidationError{}
 
-// Validate checks the field values on DeleteSpotResponse with the rules
+// Validate checks the field values on DisableSpotResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *DeleteSpotResponse) Validate() error {
+func (m *DisableSpotResponse) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on DeleteSpotResponse with the rules
+// ValidateAll checks the field values on DisableSpotResponse with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// DeleteSpotResponseMultiError, or nil if none found.
-func (m *DeleteSpotResponse) ValidateAll() error {
+// DisableSpotResponseMultiError, or nil if none found.
+func (m *DisableSpotResponse) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *DeleteSpotResponse) validate(all bool) error {
+func (m *DisableSpotResponse) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -891,20 +1058,49 @@ func (m *DeleteSpotResponse) validate(all bool) error {
 
 	// no validation rules for Success
 
+	if all {
+		switch v := interface{}(m.GetDisableSpotAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DisableSpotResponseValidationError{
+					field:  "DisableSpotAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DisableSpotResponseValidationError{
+					field:  "DisableSpotAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDisableSpotAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DisableSpotResponseValidationError{
+				field:  "DisableSpotAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
 	if len(errors) > 0 {
-		return DeleteSpotResponseMultiError(errors)
+		return DisableSpotResponseMultiError(errors)
 	}
 
 	return nil
 }
 
-// DeleteSpotResponseMultiError is an error wrapping multiple validation errors
-// returned by DeleteSpotResponse.ValidateAll() if the designated constraints
-// aren't met.
-type DeleteSpotResponseMultiError []error
+// DisableSpotResponseMultiError is an error wrapping multiple validation
+// errors returned by DisableSpotResponse.ValidateAll() if the designated
+// constraints aren't met.
+type DisableSpotResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m DeleteSpotResponseMultiError) Error() string {
+func (m DisableSpotResponseMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -913,11 +1109,11 @@ func (m DeleteSpotResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m DeleteSpotResponseMultiError) AllErrors() []error { return m }
+func (m DisableSpotResponseMultiError) AllErrors() []error { return m }
 
-// DeleteSpotResponseValidationError is the validation error returned by
-// DeleteSpotResponse.Validate if the designated constraints aren't met.
-type DeleteSpotResponseValidationError struct {
+// DisableSpotResponseValidationError is the validation error returned by
+// DisableSpotResponse.Validate if the designated constraints aren't met.
+type DisableSpotResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -925,24 +1121,24 @@ type DeleteSpotResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e DeleteSpotResponseValidationError) Field() string { return e.field }
+func (e DisableSpotResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e DeleteSpotResponseValidationError) Reason() string { return e.reason }
+func (e DisableSpotResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e DeleteSpotResponseValidationError) Cause() error { return e.cause }
+func (e DisableSpotResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e DeleteSpotResponseValidationError) Key() bool { return e.key }
+func (e DisableSpotResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e DeleteSpotResponseValidationError) ErrorName() string {
-	return "DeleteSpotResponseValidationError"
+func (e DisableSpotResponseValidationError) ErrorName() string {
+	return "DisableSpotResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e DeleteSpotResponseValidationError) Error() string {
+func (e DisableSpotResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -954,14 +1150,14 @@ func (e DeleteSpotResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sDeleteSpotResponse.%s: %s%s",
+		"invalid %sDisableSpotResponse.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = DeleteSpotResponseValidationError{}
+var _ error = DisableSpotResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -969,7 +1165,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = DeleteSpotResponseValidationError{}
+} = DisableSpotResponseValidationError{}
 
 // Validate checks the field values on ViewMarketsRequest with the rules
 // defined in the proto definition for this message. If any rules are
@@ -1023,6 +1219,28 @@ func (m *ViewMarketsRequest) validate(all bool) error {
 		}
 
 		// no validation rules for UserRoles[idx]
+	}
+
+	if m.GetPage() < 1 {
+		err := ViewMarketsRequestValidationError{
+			field:  "Page",
+			reason: "value must be greater than or equal to 1",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if val := m.GetPageSize(); val < 1 || val > 100 {
+		err := ViewMarketsRequestValidationError{
+			field:  "PageSize",
+			reason: "value must be inside range [1, 100]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -1126,6 +1344,48 @@ func (m *ViewMarketsResponse) validate(all bool) error {
 	}
 
 	var errors []error
+
+	for idx, item := range m.GetMarkets() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ViewMarketsResponseValidationError{
+						field:  fmt.Sprintf("Markets[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ViewMarketsResponseValidationError{
+						field:  fmt.Sprintf("Markets[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ViewMarketsResponseValidationError{
+					field:  fmt.Sprintf("Markets[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for Page
+
+	// no validation rules for PageSize
+
+	// no validation rules for Total
+
+	// no validation rules for TotalPages
 
 	if len(errors) > 0 {
 		return ViewMarketsResponseMultiError(errors)

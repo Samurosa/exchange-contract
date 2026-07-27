@@ -15,12 +15,15 @@ service SpotInstrumentService {
         
     rpc GetSpot(GetSpotRequest)
         returns (GetSpotResponse);
-    
-    rpc ViewMarkets(ViewMarketsRequest)
-        returns (ViewMarketsResponse);
+
+    rpc EnableSpot(EnableSpotRequest)
+        returns (EnableSpotResponse);
 
     rpc DisableSpot(DisableSpotRequest)
         returns (DisableSpotResponse);
+    
+    rpc ViewMarkets(ViewMarketsRequest)
+        returns (ViewMarketsResponse);
 
     rpc DescribeMarket(DescribeMarketRequest)
         returns (DescribeMarketResponse);
@@ -151,6 +154,18 @@ message GetSpotResponse{
     google.protobuf.Timestamp created_at = 14; // время создания
     google.protobuf.Timestamp updated_at = 15; // время обновления
     google.protobuf.Timestamp disable_at = 16; // время обновления
+}
+
+message EnableSpotRequest {
+    string id = 1 [
+        (validate.rules).string.uuid = true
+    ];
+}
+
+message EnableSpotResponse {
+    bool success = 1;
+
+    google.protobuf.Timestamp enable_spot_at = 2;
 }
 
 message DisableSpotRequest {

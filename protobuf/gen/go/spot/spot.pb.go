@@ -182,16 +182,15 @@ func (x *Market) GetUpdatedAt() *timestamppb.Timestamp {
 
 type CreateSpotRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	Symbol            string                 `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
-	BaseAsset         string                 `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
-	QuoteAsset        string                 `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
-	PricePrecision    int32                  `protobuf:"varint,4,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
-	QuantityPrecision int32                  `protobuf:"varint,5,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`
-	MinOrderSize      string                 `protobuf:"bytes,6,opt,name=min_order_size,json=minOrderSize,proto3" json:"min_order_size,omitempty"`
-	MaxOrderSize      string                 `protobuf:"bytes,7,opt,name=max_order_size,json=maxOrderSize,proto3" json:"max_order_size,omitempty"`
-	AllowedRoles      []string               `protobuf:"bytes,8,rep,name=allowed_roles,json=allowedRoles,proto3" json:"allowed_roles,omitempty"`
-	Name              string                 `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
-	Description       string                 `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
+	BaseAsset         string                 `protobuf:"bytes,1,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
+	QuoteAsset        string                 `protobuf:"bytes,2,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
+	PricePrecision    int32                  `protobuf:"varint,3,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
+	QuantityPrecision int32                  `protobuf:"varint,4,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`
+	MinOrderSize      string                 `protobuf:"bytes,5,opt,name=min_order_size,json=minOrderSize,proto3" json:"min_order_size,omitempty"`
+	MaxOrderSize      string                 `protobuf:"bytes,6,opt,name=max_order_size,json=maxOrderSize,proto3" json:"max_order_size,omitempty"`
+	AllowedRoles      []string               `protobuf:"bytes,7,rep,name=allowed_roles,json=allowedRoles,proto3" json:"allowed_roles,omitempty"`
+	Name              string                 `protobuf:"bytes,8,opt,name=name,proto3" json:"name,omitempty"`
+	Description       string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -224,13 +223,6 @@ func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CreateSpotRequest.ProtoReflect.Descriptor instead.
 func (*CreateSpotRequest) Descriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *CreateSpotRequest) GetSymbol() string {
-	if x != nil {
-		return x.Symbol
-	}
-	return ""
 }
 
 func (x *CreateSpotRequest) GetBaseAsset() string {
@@ -408,6 +400,7 @@ type GetSpotResponse struct {
 	Description       string                 `protobuf:"bytes,13,opt,name=description,proto3" json:"description,omitempty"`                                      // описание спота
 	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                         // время создания
 	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                         // время обновления
+	DisableAt         *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=disable_at,json=disableAt,proto3" json:"disable_at,omitempty"`                         // время обновления
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -536,6 +529,13 @@ func (x *GetSpotResponse) GetCreatedAt() *timestamppb.Timestamp {
 func (x *GetSpotResponse) GetUpdatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *GetSpotResponse) GetDisableAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DisableAt
 	}
 	return nil
 }
@@ -902,33 +902,30 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x10price_change_24h\x18\a \x01(\tR\x0epriceChange24h\x127\n" +
 	"\x18price_change_percent_24h\x18\b \x01(\tR\x15priceChangePercent24h\x129\n" +
 	"\n" +
-	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9c\x04\n" +
-	"\x11CreateSpotRequest\x12+\n" +
-	"\x06symbol\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
-	"2\b^[A-Z]+$R\x06symbol\x122\n" +
+	"updated_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xef\x03\n" +
+	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
-	"base_asset\x18\x02 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
+	"base_asset\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
 	"2\b^[A-Z]+$R\tbaseAsset\x124\n" +
-	"\vquote_asset\x18\x03 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
+	"\vquote_asset\x18\x02 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
 	"2\b^[A-Z]+$R\n" +
 	"quoteAsset\x122\n" +
-	"\x0fprice_precision\x18\x04 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
+	"\x0fprice_precision\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
 	"(\x00R\x0epricePrecision\x128\n" +
-	"\x12quantity_precision\x18\x05 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
+	"\x12quantity_precision\x18\x04 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
 	"(\x00R\x11quantityPrecision\x12B\n" +
-	"\x0emin_order_size\x18\x06 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\fminOrderSize\x12B\n" +
-	"\x0emax_order_size\x18\a \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\fmaxOrderSize\x12/\n" +
-	"\rallowed_roles\x18\b \x03(\tB\n" +
+	"\x0emin_order_size\x18\x05 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\fminOrderSize\x12B\n" +
+	"\x0emax_order_size\x18\x06 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\fmaxOrderSize\x12/\n" +
+	"\rallowed_roles\x18\a \x03(\tB\n" +
 	"\xfaB\a\x92\x01\x04\b\x01\x18\x01R\fallowedRoles\x12\x1d\n" +
-	"\x04name\x18\t \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x04name\x12*\n" +
-	"\vdescription\x18\n" +
-	" \x01(\tB\b\xfaB\x05r\x03\x18\xc8\x01R\vdescription\"_\n" +
+	"\x04name\x18\b \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x04name\x12*\n" +
+	"\vdescription\x18\t \x01(\tB\b\xfaB\x05r\x03\x18\xc8\x01R\vdescription\"_\n" +
 	"\x12CreateSpotResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x129\n" +
 	"\n" +
 	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"*\n" +
 	"\x0eGetSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\x98\x04\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\xd3\x04\n" +
 	"\x0fGetSpotResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
 	"\x06symbol\x18\x02 \x01(\tR\x06symbol\x12\x1d\n" +
@@ -948,7 +945,9 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\".\n" +
+	"updated_at\x18\x0f \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
+	"\n" +
+	"disable_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\tdisableAt\".\n" +
 	"\x12DisableSpotRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"s\n" +
 	"\x13DisableSpotResponse\x12\x18\n" +
@@ -1025,23 +1024,24 @@ var file_spot_spot_proto_depIdxs = []int32{
 	0,  // 3: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
 	12, // 4: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
 	12, // 5: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
-	12, // 6: spot.DisableSpotResponse.disable_spot_at:type_name -> google.protobuf.Timestamp
-	1,  // 7: spot.ViewMarketsResponse.markets:type_name -> spot.Market
-	2,  // 8: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
-	4,  // 9: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
-	8,  // 10: spot.SpotInstrumentService.ViewMarkets:input_type -> spot.ViewMarketsRequest
-	6,  // 11: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
-	10, // 12: spot.SpotInstrumentService.DescribeMarket:input_type -> spot.DescribeMarketRequest
-	3,  // 13: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
-	5,  // 14: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
-	9,  // 15: spot.SpotInstrumentService.ViewMarkets:output_type -> spot.ViewMarketsResponse
-	7,  // 16: spot.SpotInstrumentService.DisableSpot:output_type -> spot.DisableSpotResponse
-	11, // 17: spot.SpotInstrumentService.DescribeMarket:output_type -> spot.DescribeMarketResponse
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	12, // 6: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
+	12, // 7: spot.DisableSpotResponse.disable_spot_at:type_name -> google.protobuf.Timestamp
+	1,  // 8: spot.ViewMarketsResponse.markets:type_name -> spot.Market
+	2,  // 9: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
+	4,  // 10: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
+	8,  // 11: spot.SpotInstrumentService.ViewMarkets:input_type -> spot.ViewMarketsRequest
+	6,  // 12: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
+	10, // 13: spot.SpotInstrumentService.DescribeMarket:input_type -> spot.DescribeMarketRequest
+	3,  // 14: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
+	5,  // 15: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
+	9,  // 16: spot.SpotInstrumentService.ViewMarkets:output_type -> spot.ViewMarketsResponse
+	7,  // 17: spot.SpotInstrumentService.DisableSpot:output_type -> spot.DisableSpotResponse
+	11, // 18: spot.SpotInstrumentService.DescribeMarket:output_type -> spot.DescribeMarketResponse
+	14, // [14:19] is the sub-list for method output_type
+	9,  // [9:14] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_spot_spot_proto_init() }

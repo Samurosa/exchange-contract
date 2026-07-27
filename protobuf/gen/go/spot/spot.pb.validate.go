@@ -203,28 +203,6 @@ func (m *CreateSpotRequest) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetSymbol()); l < 2 || l > 10 {
-		err := CreateSpotRequestValidationError{
-			field:  "Symbol",
-			reason: "value length must be between 2 and 10 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if !_CreateSpotRequest_Symbol_Pattern.MatchString(m.GetSymbol()) {
-		err := CreateSpotRequestValidationError{
-			field:  "Symbol",
-			reason: "value does not match regex pattern \"^[A-Z]+$\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if l := utf8.RuneCountInString(m.GetBaseAsset()); l < 2 || l > 10 {
 		err := CreateSpotRequestValidationError{
 			field:  "BaseAsset",
@@ -468,8 +446,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateSpotRequestValidationError{}
-
-var _CreateSpotRequest_Symbol_Pattern = regexp.MustCompile("^[A-Z]+$")
 
 var _CreateSpotRequest_BaseAsset_Pattern = regexp.MustCompile("^[A-Z]+$")
 
@@ -828,6 +804,35 @@ func (m *GetSpotResponse) validate(all bool) error {
 		if err := v.Validate(); err != nil {
 			return GetSpotResponseValidationError{
 				field:  "UpdatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetDisableAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, GetSpotResponseValidationError{
+					field:  "DisableAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, GetSpotResponseValidationError{
+					field:  "DisableAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetDisableAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return GetSpotResponseValidationError{
+				field:  "DisableAt",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

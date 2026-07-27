@@ -917,6 +917,261 @@ var _ interface {
 	ErrorName() string
 } = GetSpotResponseValidationError{}
 
+// Validate checks the field values on EnableSpotRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *EnableSpotRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on EnableSpotRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// EnableSpotRequestMultiError, or nil if none found.
+func (m *EnableSpotRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *EnableSpotRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if err := m._validateUuid(m.GetId()); err != nil {
+		err = EnableSpotRequestValidationError{
+			field:  "Id",
+			reason: "value must be a valid UUID",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return EnableSpotRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *EnableSpotRequest) _validateUuid(uuid string) error {
+	if matched := _spot_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
+	}
+
+	return nil
+}
+
+// EnableSpotRequestMultiError is an error wrapping multiple validation errors
+// returned by EnableSpotRequest.ValidateAll() if the designated constraints
+// aren't met.
+type EnableSpotRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EnableSpotRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EnableSpotRequestMultiError) AllErrors() []error { return m }
+
+// EnableSpotRequestValidationError is the validation error returned by
+// EnableSpotRequest.Validate if the designated constraints aren't met.
+type EnableSpotRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EnableSpotRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EnableSpotRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EnableSpotRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EnableSpotRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EnableSpotRequestValidationError) ErrorName() string {
+	return "EnableSpotRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e EnableSpotRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEnableSpotRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EnableSpotRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EnableSpotRequestValidationError{}
+
+// Validate checks the field values on EnableSpotResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *EnableSpotResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on EnableSpotResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// EnableSpotResponseMultiError, or nil if none found.
+func (m *EnableSpotResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *EnableSpotResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Success
+
+	if all {
+		switch v := interface{}(m.GetEnableSpotAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, EnableSpotResponseValidationError{
+					field:  "EnableSpotAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, EnableSpotResponseValidationError{
+					field:  "EnableSpotAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetEnableSpotAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return EnableSpotResponseValidationError{
+				field:  "EnableSpotAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return EnableSpotResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// EnableSpotResponseMultiError is an error wrapping multiple validation errors
+// returned by EnableSpotResponse.ValidateAll() if the designated constraints
+// aren't met.
+type EnableSpotResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EnableSpotResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EnableSpotResponseMultiError) AllErrors() []error { return m }
+
+// EnableSpotResponseValidationError is the validation error returned by
+// EnableSpotResponse.Validate if the designated constraints aren't met.
+type EnableSpotResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EnableSpotResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EnableSpotResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EnableSpotResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EnableSpotResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EnableSpotResponseValidationError) ErrorName() string {
+	return "EnableSpotResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e EnableSpotResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEnableSpotResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EnableSpotResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EnableSpotResponseValidationError{}
+
 // Validate checks the field values on DisableSpotRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

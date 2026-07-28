@@ -107,7 +107,7 @@ func (c *spotInstrumentServiceClient) DescribeMarket(ctx context.Context, in *De
 	return out, nil
 }
 
-// SpotInstrumentServiceServer is the server API for SpotInstrumentService service.
+// SpotInstrumentServiceServer is the SpotServer API for SpotInstrumentService service.
 // All implementations must embed UnimplementedSpotInstrumentServiceServer
 // for forward compatibility.
 type SpotInstrumentServiceServer interface {

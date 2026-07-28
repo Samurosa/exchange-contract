@@ -19,20 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_Registration_FullMethodName     = "/user.UserService/Registration"
-	UserService_GetUser_FullMethodName          = "/user.UserService/GetUser"
-	UserService_UpdateUserInfo_FullMethodName   = "/user.UserService/UpdateUserInfo"
-	UserService_DeleteUser_FullMethodName       = "/user.UserService/DeleteUser"
-	UserService_ChangePassword_FullMethodName   = "/user.UserService/ChangePassword"
-	UserService_Deposit_FullMethodName          = "/user.UserService/Deposit"
-	UserService_Login_FullMethodName            = "/user.UserService/Login"
-	UserService_Logout_FullMethodName           = "/user.UserService/Logout"
-	UserService_LogoutAllDevices_FullMethodName = "/user.UserService/LogoutAllDevices"
-	UserService_GetBalances_FullMethodName      = "/user.UserService/GetBalances"
-	UserService_RefreshToken_FullMethodName     = "/user.UserService/RefreshToken"
+	UserService_Registration_FullMethodName     = "/user.UserServer/Registration"
+	UserService_GetUser_FullMethodName          = "/user.UserServer/GetUser"
+	UserService_UpdateUserInfo_FullMethodName   = "/user.UserServer/UpdateUserInfo"
+	UserService_DeleteUser_FullMethodName       = "/user.UserServer/DeleteUser"
+	UserService_ChangePassword_FullMethodName   = "/user.UserServer/ChangePassword"
+	UserService_Deposit_FullMethodName          = "/user.UserServer/Deposit"
+	UserService_Login_FullMethodName            = "/user.UserServer/Login"
+	UserService_Logout_FullMethodName           = "/user.UserServer/Logout"
+	UserService_LogoutAllDevices_FullMethodName = "/user.UserServer/LogoutAllDevices"
+	UserService_GetBalances_FullMethodName      = "/user.UserServer/GetBalances"
+	UserService_RefreshToken_FullMethodName     = "/user.UserServer/RefreshToken"
 )
 
-// UserServiceClient is the client API for UserService service.
+// UserServiceClient is the client API for UserServer service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
@@ -167,7 +167,7 @@ func (c *userServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRe
 	return out, nil
 }
 
-// UserServiceServer is the server API for UserService service.
+// UserServiceServer is the SpotServer API for UserServer service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
 type UserServiceServer interface {
@@ -444,11 +444,11 @@ func _UserService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-// UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
+// UserService_ServiceDesc is the grpc.ServiceDesc for UserServer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "user.UserService",
+	ServiceName: "user.UserServer",
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

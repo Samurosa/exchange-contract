@@ -99,7 +99,7 @@ message CreateSpotRequest {
         }
     ];
 
-    repeated string allowed_roles = 7 [
+    repeated user.Role allowed_roles = 7 [
         (validate.rules).repeated = {
             min_items: 1,
             unique: true,

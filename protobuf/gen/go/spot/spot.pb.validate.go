@@ -328,7 +328,7 @@ func (m *CreateSpotRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	_CreateSpotRequest_AllowedRoles_Unique := make(map[string]struct{}, len(m.GetAllowedRoles()))
+	_CreateSpotRequest_AllowedRoles_Unique := make(map[user.Role]struct{}, len(m.GetAllowedRoles()))
 
 	for idx, item := range m.GetAllowedRoles() {
 		_, _ = idx, item

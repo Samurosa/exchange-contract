@@ -6,6 +6,7 @@ option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;
 
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "user/user.proto";
 
 
 service SpotInstrumentService {
@@ -146,7 +147,7 @@ message GetSpotResponse{
     string max_order_size     = 8; // максимальное количество покупки актива
 
     SpotStatus status = 10; // статус спота
-    repeated string allowed_roles = 11; //разрешенные роли у пользователей
+    repeated user.Role allowed_roles = 11; //разрешенные роли у пользователей
 
     string name        = 12; // название спота
     string description = 13; // описание спота

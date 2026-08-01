@@ -136,7 +136,7 @@ message DepositRequest  {
     string asset = 2[
         (validate.rules).string = {
         min_len: 1,
-        max_len: 20,
+        max_len: 10,
         pattern: "^[A-Z_]+$"
         }
     ];

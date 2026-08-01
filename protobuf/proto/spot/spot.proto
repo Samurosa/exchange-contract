@@ -182,34 +182,21 @@ message DisableSpotResponse {
 }
 
 message ViewMarketsRequest {
-    repeated string user_roles = 1 [
-        (validate.rules).repeated = {
-            min_items: 1,
-            unique: true,
-        }
-    ];
-
-    int32 page = 2 [
-        (validate.rules).int32 = {
-            gte: 1
-        }
-    ];
-
-    int32 page_size = 3 [
+    int32 page_size = 1 [
         (validate.rules).int32 = {
             gte: 1,
             lte: 100
         }
     ];
+
+    optional string cursor = 2;
 }
 
 message ViewMarketsResponse {
     repeated Market markets = 1;
 
-    int32 page = 2;
-    int32 page_size = 3;
-    int64 total = 4;
-    int32 total_pages = 5;
+    string next_cursor = 2;
+    bool has_more = 3;
 }
 
 message DescribeMarketRequest {

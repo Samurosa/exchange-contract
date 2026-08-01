@@ -4,7 +4,22 @@ package shared;
 
 option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared;shared";
 
+import "validate/validate.proto";
+
 message Money {
-  string currency = 1;
-  string amount = 2;
+  string currency = 1 [
+    (validate.rules).string = {
+      min_len: 1,
+      max_len: 10,
+      pattern: "^[A-Z_]+$"
+    }
+  ];
+
+  string amount = 2 [
+    (validate.rules).string = {
+      min_len: 1,
+      max_len: 20,
+      pattern: "^[0-9]+(\\.[0-9]+)?$",
+    }
+  ];
 }

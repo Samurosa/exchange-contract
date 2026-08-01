@@ -126,19 +126,14 @@ message StreamOrderUpdateResponse {
 }
 
 message ListOrdersRequest {
-    int32 page = 1 [
-        (validate.rules).int32 = {
-            gte: 1
-        }
-    ];
-
-    int32 page_size = 2 [
+    int32 page_size = 1 [
         (validate.rules).int32 = {
             gte: 1,
             lte: 100
         }
     ];
 
+    optional string cursor = 2;
     optional string market_id = 3;
     optional OrderStatus status = 4;
     optional OrderSide side = 5;
@@ -147,9 +142,7 @@ message ListOrdersRequest {
 message ListOrdersResponse {
     repeated Order orders = 1;
 
-    int64 total = 2;
+    string next_cursor = 2;
 
-    int32 page = 3;
-
-    int32 page_size = 4;
+    bool has_more = 3;
 }

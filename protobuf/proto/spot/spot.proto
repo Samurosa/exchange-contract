@@ -22,36 +22,12 @@ service SpotInstrumentService {
 
     rpc DisableSpot(DisableSpotRequest)
         returns (DisableSpotResponse);
-    
-    rpc ViewMarkets(ViewMarketsRequest)
-        returns (ViewMarketsResponse);
-
-    rpc DescribeMarket(DescribeMarketRequest)
-        returns (DescribeMarketResponse);
-
 }
 
 enum SpotStatus {
     SPOT_STATUS_UNSPECIFIED = 0;
     SPOT_STATUS_ACTIVE = 1;
     SPOT_STATUS_DISABLED = 2;
-}
-
-message Market {
-    string spot_id = 1;
-
-    string symbol = 2;
-
-    string base_asset = 3;
-    string quote_asset = 4;
-
-    SpotStatus status = 5;
-
-    string last_price = 6;
-    string price_change_24h = 7;
-    string price_change_percent_24h = 8;
-
-    google.protobuf.Timestamp updated_at = 9;
 }
 
 message CreateSpotRequest {
@@ -179,36 +155,4 @@ message DisableSpotResponse {
     bool success = 1;
 
     google.protobuf.Timestamp disable_spot_at = 2;
-}
-
-message ViewMarketsRequest {
-    int32 page_size = 1 [
-        (validate.rules).int32 = {
-            gte: 1,
-            lte: 100
-        }
-    ];
-
-    optional string cursor = 2;
-}
-
-message ViewMarketsResponse {
-    repeated Market markets = 1;
-
-    string next_cursor = 2;
-    bool has_more = 3;
-}
-
-message DescribeMarketRequest {
-    string spot_id = 1 [
-        (validate.rules).string.uuid = true
-    ];
-}
-
-message DescribeMarketResponse {
-    string base_asset = 1;
-    string quote_asset = 2;
-
-    string name = 3;
-    string description = 4;
 }

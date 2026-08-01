@@ -19,12 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SpotInstrumentService_CreateSpot_FullMethodName     = "/spot.SpotInstrumentService/CreateSpot"
-	SpotInstrumentService_GetSpot_FullMethodName        = "/spot.SpotInstrumentService/GetSpot"
-	SpotInstrumentService_EnableSpot_FullMethodName     = "/spot.SpotInstrumentService/EnableSpot"
-	SpotInstrumentService_DisableSpot_FullMethodName    = "/spot.SpotInstrumentService/DisableSpot"
-	SpotInstrumentService_ViewMarkets_FullMethodName    = "/spot.SpotInstrumentService/ViewMarkets"
-	SpotInstrumentService_DescribeMarket_FullMethodName = "/spot.SpotInstrumentService/DescribeMarket"
+	SpotInstrumentService_CreateSpot_FullMethodName  = "/spot.SpotInstrumentService/CreateSpot"
+	SpotInstrumentService_GetSpot_FullMethodName     = "/spot.SpotInstrumentService/GetSpot"
+	SpotInstrumentService_EnableSpot_FullMethodName  = "/spot.SpotInstrumentService/EnableSpot"
+	SpotInstrumentService_DisableSpot_FullMethodName = "/spot.SpotInstrumentService/DisableSpot"
 )
 
 // SpotInstrumentServiceClient is the client API for SpotInstrumentService service.
@@ -35,8 +33,6 @@ type SpotInstrumentServiceClient interface {
 	GetSpot(ctx context.Context, in *GetSpotRequest, opts ...grpc.CallOption) (*GetSpotResponse, error)
 	EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*EnableSpotResponse, error)
 	DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*DisableSpotResponse, error)
-	ViewMarkets(ctx context.Context, in *ViewMarketsRequest, opts ...grpc.CallOption) (*ViewMarketsResponse, error)
-	DescribeMarket(ctx context.Context, in *DescribeMarketRequest, opts ...grpc.CallOption) (*DescribeMarketResponse, error)
 }
 
 type spotInstrumentServiceClient struct {
@@ -87,26 +83,6 @@ func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *Disab
 	return out, nil
 }
 
-func (c *spotInstrumentServiceClient) ViewMarkets(ctx context.Context, in *ViewMarketsRequest, opts ...grpc.CallOption) (*ViewMarketsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ViewMarketsResponse)
-	err := c.cc.Invoke(ctx, SpotInstrumentService_ViewMarkets_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *spotInstrumentServiceClient) DescribeMarket(ctx context.Context, in *DescribeMarketRequest, opts ...grpc.CallOption) (*DescribeMarketResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DescribeMarketResponse)
-	err := c.cc.Invoke(ctx, SpotInstrumentService_DescribeMarket_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // SpotInstrumentServiceServer is the server API for SpotInstrumentService service.
 // All implementations must embed UnimplementedSpotInstrumentServiceServer
 // for forward compatibility.
@@ -115,8 +91,6 @@ type SpotInstrumentServiceServer interface {
 	GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error)
 	EnableSpot(context.Context, *EnableSpotRequest) (*EnableSpotResponse, error)
 	DisableSpot(context.Context, *DisableSpotRequest) (*DisableSpotResponse, error)
-	ViewMarkets(context.Context, *ViewMarketsRequest) (*ViewMarketsResponse, error)
-	DescribeMarket(context.Context, *DescribeMarketRequest) (*DescribeMarketResponse, error)
 	mustEmbedUnimplementedSpotInstrumentServiceServer()
 }
 
@@ -138,12 +112,6 @@ func (UnimplementedSpotInstrumentServiceServer) EnableSpot(context.Context, *Ena
 }
 func (UnimplementedSpotInstrumentServiceServer) DisableSpot(context.Context, *DisableSpotRequest) (*DisableSpotResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DisableSpot not implemented")
-}
-func (UnimplementedSpotInstrumentServiceServer) ViewMarkets(context.Context, *ViewMarketsRequest) (*ViewMarketsResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ViewMarkets not implemented")
-}
-func (UnimplementedSpotInstrumentServiceServer) DescribeMarket(context.Context, *DescribeMarketRequest) (*DescribeMarketResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method DescribeMarket not implemented")
 }
 func (UnimplementedSpotInstrumentServiceServer) mustEmbedUnimplementedSpotInstrumentServiceServer() {}
 func (UnimplementedSpotInstrumentServiceServer) testEmbeddedByValue()                               {}
@@ -238,42 +206,6 @@ func _SpotInstrumentService_DisableSpot_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SpotInstrumentService_ViewMarkets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ViewMarketsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SpotInstrumentServiceServer).ViewMarkets(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SpotInstrumentService_ViewMarkets_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SpotInstrumentServiceServer).ViewMarkets(ctx, req.(*ViewMarketsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _SpotInstrumentService_DescribeMarket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DescribeMarketRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(SpotInstrumentServiceServer).DescribeMarket(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: SpotInstrumentService_DescribeMarket_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SpotInstrumentServiceServer).DescribeMarket(ctx, req.(*DescribeMarketRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // SpotInstrumentService_ServiceDesc is the grpc.ServiceDesc for SpotInstrumentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -296,14 +228,6 @@ var SpotInstrumentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DisableSpot",
 			Handler:    _SpotInstrumentService_DisableSpot_Handler,
-		},
-		{
-			MethodName: "ViewMarkets",
-			Handler:    _SpotInstrumentService_ViewMarkets_Handler,
-		},
-		{
-			MethodName: "DescribeMarket",
-			Handler:    _SpotInstrumentService_DescribeMarket_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

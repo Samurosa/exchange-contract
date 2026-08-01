@@ -1453,49 +1453,6 @@ func (m *ViewMarketsRequest) validate(all bool) error {
 
 	var errors []error
 
-	if len(m.GetUserRoles()) < 1 {
-		err := ViewMarketsRequestValidationError{
-			field:  "UserRoles",
-			reason: "value must contain at least 1 item(s)",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	_ViewMarketsRequest_UserRoles_Unique := make(map[string]struct{}, len(m.GetUserRoles()))
-
-	for idx, item := range m.GetUserRoles() {
-		_, _ = idx, item
-
-		if _, exists := _ViewMarketsRequest_UserRoles_Unique[item]; exists {
-			err := ViewMarketsRequestValidationError{
-				field:  fmt.Sprintf("UserRoles[%v]", idx),
-				reason: "repeated value must contain unique items",
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		} else {
-			_ViewMarketsRequest_UserRoles_Unique[item] = struct{}{}
-		}
-
-		// no validation rules for UserRoles[idx]
-	}
-
-	if m.GetPage() < 1 {
-		err := ViewMarketsRequestValidationError{
-			field:  "Page",
-			reason: "value must be greater than or equal to 1",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if val := m.GetPageSize(); val < 1 || val > 100 {
 		err := ViewMarketsRequestValidationError{
 			field:  "PageSize",
@@ -1505,6 +1462,10 @@ func (m *ViewMarketsRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
+	}
+
+	if m.Cursor != nil {
+		// no validation rules for Cursor
 	}
 
 	if len(errors) > 0 {
@@ -1643,13 +1604,9 @@ func (m *ViewMarketsResponse) validate(all bool) error {
 
 	}
 
-	// no validation rules for Page
+	// no validation rules for NextCursor
 
-	// no validation rules for PageSize
-
-	// no validation rules for Total
-
-	// no validation rules for TotalPages
+	// no validation rules for HasMore
 
 	if len(errors) > 0 {
 		return ViewMarketsResponseMultiError(errors)

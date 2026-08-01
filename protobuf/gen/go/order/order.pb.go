@@ -588,8 +588,8 @@ func (x *StreamOrderUpdateResponse) GetUpdatedAt() *timestamppb.Timestamp {
 
 type ListOrdersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
 	MarketId      *string                `protobuf:"bytes,3,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
 	Status        *OrderStatus           `protobuf:"varint,4,opt,name=status,proto3,enum=order.OrderStatus,oneof" json:"status,omitempty"`
 	Side          *OrderSide             `protobuf:"varint,5,opt,name=side,proto3,enum=order.OrderSide,oneof" json:"side,omitempty"`
@@ -627,18 +627,18 @@ func (*ListOrdersRequest) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ListOrdersRequest) GetPage() int32 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
 func (x *ListOrdersRequest) GetPageSize() int32 {
 	if x != nil {
 		return x.PageSize
 	}
 	return 0
+}
+
+func (x *ListOrdersRequest) GetCursor() string {
+	if x != nil && x.Cursor != nil {
+		return *x.Cursor
+	}
+	return ""
 }
 
 func (x *ListOrdersRequest) GetMarketId() string {
@@ -665,9 +665,8 @@ func (x *ListOrdersRequest) GetSide() OrderSide {
 type ListOrdersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Orders        []*Order               `protobuf:"bytes,1,rep,name=orders,proto3" json:"orders,omitempty"`
-	Total         int64                  `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
-	Page          int32                  `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,4,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	HasMore       bool                   `protobuf:"varint,3,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -709,25 +708,18 @@ func (x *ListOrdersResponse) GetOrders() []*Order {
 	return nil
 }
 
-func (x *ListOrdersResponse) GetTotal() int64 {
+func (x *ListOrdersResponse) GetNextCursor() string {
 	if x != nil {
-		return x.Total
+		return x.NextCursor
 	}
-	return 0
+	return ""
 }
 
-func (x *ListOrdersResponse) GetPage() int32 {
+func (x *ListOrdersResponse) GetHasMore() bool {
 	if x != nil {
-		return x.Page
+		return x.HasMore
 	}
-	return 0
-}
-
-func (x *ListOrdersResponse) GetPageSize() int32 {
-	if x != nil {
-		return x.PageSize
-	}
-	return 0
+	return false
 }
 
 var File_order_order_proto protoreflect.FileDescriptor
@@ -773,22 +765,23 @@ const file_order_order_proto_rawDesc = "" +
 	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12'\n" +
 	"\x0ffilled_quantity\x18\x03 \x01(\tR\x0efilledQuantity\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xf8\x01\n" +
-	"\x11ListOrdersRequest\x12\x1b\n" +
-	"\x04page\x18\x01 \x01(\x05B\a\xfaB\x04\x1a\x02(\x01R\x04page\x12&\n" +
-	"\tpage_size\x18\x02 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12 \n" +
-	"\tmarket_id\x18\x03 \x01(\tH\x00R\bmarketId\x88\x01\x01\x12/\n" +
-	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusH\x01R\x06status\x88\x01\x01\x12)\n" +
-	"\x04side\x18\x05 \x01(\x0e2\x10.order.OrderSideH\x02R\x04side\x88\x01\x01B\f\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x83\x02\n" +
+	"\x11ListOrdersRequest\x12&\n" +
+	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
+	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12 \n" +
+	"\tmarket_id\x18\x03 \x01(\tH\x01R\bmarketId\x88\x01\x01\x12/\n" +
+	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusH\x02R\x06status\x88\x01\x01\x12)\n" +
+	"\x04side\x18\x05 \x01(\x0e2\x10.order.OrderSideH\x03R\x04side\x88\x01\x01B\t\n" +
+	"\a_cursorB\f\n" +
 	"\n" +
 	"_market_idB\t\n" +
 	"\a_statusB\a\n" +
-	"\x05_side\"\x81\x01\n" +
+	"\x05_side\"v\n" +
 	"\x12ListOrdersResponse\x12$\n" +
-	"\x06orders\x18\x01 \x03(\v2\f.order.OrderR\x06orders\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x03R\x05total\x12\x12\n" +
-	"\x04page\x18\x03 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x04 \x01(\x05R\bpageSize*P\n" +
+	"\x06orders\x18\x01 \x03(\v2\f.order.OrderR\x06orders\x12\x1f\n" +
+	"\vnext_cursor\x18\x02 \x01(\tR\n" +
+	"nextCursor\x12\x19\n" +
+	"\bhas_more\x18\x03 \x01(\bR\ahasMore*P\n" +
 	"\tOrderSide\x12\x1a\n" +
 	"\x16ORDER_SIDE_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eORDER_SIDE_BUY\x10\x01\x12\x13\n" +

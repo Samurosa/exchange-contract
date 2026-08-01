@@ -1111,17 +1111,6 @@ func (m *ListOrdersRequest) validate(all bool) error {
 
 	var errors []error
 
-	if m.GetPage() < 1 {
-		err := ListOrdersRequestValidationError{
-			field:  "Page",
-			reason: "value must be greater than or equal to 1",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if val := m.GetPageSize(); val < 1 || val > 100 {
 		err := ListOrdersRequestValidationError{
 			field:  "PageSize",
@@ -1131,6 +1120,10 @@ func (m *ListOrdersRequest) validate(all bool) error {
 			return err
 		}
 		errors = append(errors, err)
+	}
+
+	if m.Cursor != nil {
+		// no validation rules for Cursor
 	}
 
 	if m.MarketId != nil {
@@ -1281,11 +1274,9 @@ func (m *ListOrdersResponse) validate(all bool) error {
 
 	}
 
-	// no validation rules for Total
+	// no validation rules for NextCursor
 
-	// no validation rules for Page
-
-	// no validation rules for PageSize
+	// no validation rules for HasMore
 
 	if len(errors) > 0 {
 		return ListOrdersResponseMultiError(errors)

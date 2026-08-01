@@ -735,9 +735,8 @@ func (x *DisableSpotResponse) GetDisableSpotAt() *timestamppb.Timestamp {
 
 type ViewMarketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserRoles     []string               `protobuf:"bytes,1,rep,name=user_roles,json=userRoles,proto3" json:"user_roles,omitempty"`
-	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -772,20 +771,6 @@ func (*ViewMarketsRequest) Descriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *ViewMarketsRequest) GetUserRoles() []string {
-	if x != nil {
-		return x.UserRoles
-	}
-	return nil
-}
-
-func (x *ViewMarketsRequest) GetPage() int32 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
 func (x *ViewMarketsRequest) GetPageSize() int32 {
 	if x != nil {
 		return x.PageSize
@@ -793,13 +778,18 @@ func (x *ViewMarketsRequest) GetPageSize() int32 {
 	return 0
 }
 
+func (x *ViewMarketsRequest) GetCursor() string {
+	if x != nil && x.Cursor != nil {
+		return *x.Cursor
+	}
+	return ""
+}
+
 type ViewMarketsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Markets       []*Market              `protobuf:"bytes,1,rep,name=markets,proto3" json:"markets,omitempty"`
-	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32                  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Total         int64                  `protobuf:"varint,4,opt,name=total,proto3" json:"total,omitempty"`
-	TotalPages    int32                  `protobuf:"varint,5,opt,name=total_pages,json=totalPages,proto3" json:"total_pages,omitempty"`
+	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	HasMore       bool                   `protobuf:"varint,3,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -841,32 +831,18 @@ func (x *ViewMarketsResponse) GetMarkets() []*Market {
 	return nil
 }
 
-func (x *ViewMarketsResponse) GetPage() int32 {
+func (x *ViewMarketsResponse) GetNextCursor() string {
 	if x != nil {
-		return x.Page
+		return x.NextCursor
 	}
-	return 0
+	return ""
 }
 
-func (x *ViewMarketsResponse) GetPageSize() int32 {
+func (x *ViewMarketsResponse) GetHasMore() bool {
 	if x != nil {
-		return x.PageSize
+		return x.HasMore
 	}
-	return 0
-}
-
-func (x *ViewMarketsResponse) GetTotal() int64 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
-}
-
-func (x *ViewMarketsResponse) GetTotalPages() int32 {
-	if x != nil {
-		return x.TotalPages
-	}
-	return 0
+	return false
 }
 
 type DescribeMarketRequest struct {
@@ -1056,20 +1032,16 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"s\n" +
 	"\x13DisableSpotResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
-	"\x0fdisable_spot_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rdisableSpotAt\"\x84\x01\n" +
-	"\x12ViewMarketsRequest\x12)\n" +
-	"\n" +
-	"user_roles\x18\x01 \x03(\tB\n" +
-	"\xfaB\a\x92\x01\x04\b\x01\x18\x01R\tuserRoles\x12\x1b\n" +
-	"\x04page\x18\x02 \x01(\x05B\a\xfaB\x04\x1a\x02(\x01R\x04page\x12&\n" +
-	"\tpage_size\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\"\xa5\x01\n" +
+	"\x0fdisable_spot_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rdisableSpotAt\"d\n" +
+	"\x12ViewMarketsRequest\x12&\n" +
+	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
+	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01B\t\n" +
+	"\a_cursor\"y\n" +
 	"\x13ViewMarketsResponse\x12&\n" +
-	"\amarkets\x18\x01 \x03(\v2\f.spot.MarketR\amarkets\x12\x12\n" +
-	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x12\x14\n" +
-	"\x05total\x18\x04 \x01(\x03R\x05total\x12\x1f\n" +
-	"\vtotal_pages\x18\x05 \x01(\x05R\n" +
-	"totalPages\":\n" +
+	"\amarkets\x18\x01 \x03(\v2\f.spot.MarketR\amarkets\x12\x1f\n" +
+	"\vnext_cursor\x18\x02 \x01(\tR\n" +
+	"nextCursor\x12\x19\n" +
+	"\bhas_more\x18\x03 \x01(\bR\ahasMore\":\n" +
 	"\x15DescribeMarketRequest\x12!\n" +
 	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\"\x8e\x01\n" +
 	"\x16DescribeMarketResponse\x12\x1d\n" +
@@ -1163,6 +1135,7 @@ func file_spot_spot_proto_init() {
 	if File_spot_spot_proto != nil {
 		return
 	}
+	file_spot_spot_proto_msgTypes[9].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

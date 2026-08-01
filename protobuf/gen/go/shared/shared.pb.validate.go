@@ -56,9 +56,49 @@ func (m *Money) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Currency
+	if l := utf8.RuneCountInString(m.GetCurrency()); l < 1 || l > 10 {
+		err := MoneyValidationError{
+			field:  "Currency",
+			reason: "value length must be between 1 and 10 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Amount
+	if !_Money_Currency_Pattern.MatchString(m.GetCurrency()) {
+		err := MoneyValidationError{
+			field:  "Currency",
+			reason: "value does not match regex pattern \"^[A-Z_]+$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if l := utf8.RuneCountInString(m.GetAmount()); l < 1 || l > 20 {
+		err := MoneyValidationError{
+			field:  "Amount",
+			reason: "value length must be between 1 and 20 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if !_Money_Amount_Pattern.MatchString(m.GetAmount()) {
+		err := MoneyValidationError{
+			field:  "Amount",
+			reason: "value does not match regex pattern \"^[0-9]+(\\\\.[0-9]+)?$\"",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return MoneyMultiError(errors)
@@ -136,3 +176,7 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = MoneyValidationError{}
+
+var _Money_Currency_Pattern = regexp.MustCompile("^[A-Z_]+$")
+
+var _Money_Amount_Pattern = regexp.MustCompile("^[0-9]+(\\.[0-9]+)?$")

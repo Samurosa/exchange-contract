@@ -1209,10 +1209,10 @@ func (m *DepositRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetAsset()); l < 1 || l > 20 {
+	if l := utf8.RuneCountInString(m.GetAsset()); l < 1 || l > 10 {
 		err := DepositRequestValidationError{
 			field:  "Asset",
-			reason: "value length must be between 1 and 20 runes, inclusive",
+			reason: "value length must be between 1 and 10 runes, inclusive",
 		}
 		if !all {
 			return err

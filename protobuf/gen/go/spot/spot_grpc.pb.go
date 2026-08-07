@@ -31,8 +31,8 @@ const (
 type SpotInstrumentServiceClient interface {
 	CreateSpot(ctx context.Context, in *CreateSpotRequest, opts ...grpc.CallOption) (*CreateSpotResponse, error)
 	GetSpot(ctx context.Context, in *GetSpotRequest, opts ...grpc.CallOption) (*GetSpotResponse, error)
-	EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*EnableSpotResponse, error)
-	DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*DisableSpotResponse, error)
+	EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*Empty, error)
+	DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type spotInstrumentServiceClient struct {
@@ -63,9 +63,9 @@ func (c *spotInstrumentServiceClient) GetSpot(ctx context.Context, in *GetSpotRe
 	return out, nil
 }
 
-func (c *spotInstrumentServiceClient) EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*EnableSpotResponse, error) {
+func (c *spotInstrumentServiceClient) EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EnableSpotResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, SpotInstrumentService_EnableSpot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -73,9 +73,9 @@ func (c *spotInstrumentServiceClient) EnableSpot(ctx context.Context, in *Enable
 	return out, nil
 }
 
-func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*DisableSpotResponse, error) {
+func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DisableSpotResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, SpotInstrumentService_DisableSpot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -89,8 +89,8 @@ func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *Disab
 type SpotInstrumentServiceServer interface {
 	CreateSpot(context.Context, *CreateSpotRequest) (*CreateSpotResponse, error)
 	GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error)
-	EnableSpot(context.Context, *EnableSpotRequest) (*EnableSpotResponse, error)
-	DisableSpot(context.Context, *DisableSpotRequest) (*DisableSpotResponse, error)
+	EnableSpot(context.Context, *EnableSpotRequest) (*Empty, error)
+	DisableSpot(context.Context, *DisableSpotRequest) (*Empty, error)
 	mustEmbedUnimplementedSpotInstrumentServiceServer()
 }
 
@@ -107,10 +107,10 @@ func (UnimplementedSpotInstrumentServiceServer) CreateSpot(context.Context, *Cre
 func (UnimplementedSpotInstrumentServiceServer) GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSpot not implemented")
 }
-func (UnimplementedSpotInstrumentServiceServer) EnableSpot(context.Context, *EnableSpotRequest) (*EnableSpotResponse, error) {
+func (UnimplementedSpotInstrumentServiceServer) EnableSpot(context.Context, *EnableSpotRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method EnableSpot not implemented")
 }
-func (UnimplementedSpotInstrumentServiceServer) DisableSpot(context.Context, *DisableSpotRequest) (*DisableSpotResponse, error) {
+func (UnimplementedSpotInstrumentServiceServer) DisableSpot(context.Context, *DisableSpotRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DisableSpot not implemented")
 }
 func (UnimplementedSpotInstrumentServiceServer) mustEmbedUnimplementedSpotInstrumentServiceServer() {}

@@ -37,15 +37,15 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
 	Registration(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error)
-	GetUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*UserInfoResponse, error)
-	UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*UpdateUserInfoResponse, error)
-	DeleteUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
-	ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*ChangeUserResponse, error)
+	GetUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserInfoResponse, error)
+	UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*Empty, error)
+	DeleteUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
+	ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*Empty, error)
 	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
-	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
-	LogoutAllDevices(ctx context.Context, in *LogoutAllRequest, opts ...grpc.CallOption) (*LogoutResponse, error)
-	GetBalances(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
+	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*Empty, error)
+	LogoutAllDevices(ctx context.Context, in *LogoutAllRequest, opts ...grpc.CallOption) (*Empty, error)
+	GetBalances(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
 }
 
@@ -67,7 +67,7 @@ func (c *userServiceClient) Registration(ctx context.Context, in *RegisterUserRe
 	return out, nil
 }
 
-func (c *userServiceClient) GetUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*UserInfoResponse, error) {
+func (c *userServiceClient) GetUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserInfoResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserInfoResponse)
 	err := c.cc.Invoke(ctx, UserService_GetUser_FullMethodName, in, out, cOpts...)
@@ -77,9 +77,9 @@ func (c *userServiceClient) GetUser(ctx context.Context, in *EmptyRequest, opts 
 	return out, nil
 }
 
-func (c *userServiceClient) UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*UpdateUserInfoResponse, error) {
+func (c *userServiceClient) UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateUserInfoResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, UserService_UpdateUserInfo_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -87,9 +87,9 @@ func (c *userServiceClient) UpdateUserInfo(ctx context.Context, in *UpdateUserIn
 	return out, nil
 }
 
-func (c *userServiceClient) DeleteUser(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error) {
+func (c *userServiceClient) DeleteUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteUserResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, UserService_DeleteUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -97,9 +97,9 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *EmptyRequest, op
 	return out, nil
 }
 
-func (c *userServiceClient) ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*ChangeUserResponse, error) {
+func (c *userServiceClient) ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ChangeUserResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, UserService_ChangePassword_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -127,9 +127,9 @@ func (c *userServiceClient) Login(ctx context.Context, in *LoginRequest, opts ..
 	return out, nil
 }
 
-func (c *userServiceClient) Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*LogoutResponse, error) {
+func (c *userServiceClient) Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LogoutResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, UserService_Logout_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -137,9 +137,9 @@ func (c *userServiceClient) Logout(ctx context.Context, in *LogoutRequest, opts 
 	return out, nil
 }
 
-func (c *userServiceClient) LogoutAllDevices(ctx context.Context, in *LogoutAllRequest, opts ...grpc.CallOption) (*LogoutResponse, error) {
+func (c *userServiceClient) LogoutAllDevices(ctx context.Context, in *LogoutAllRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LogoutResponse)
+	out := new(Empty)
 	err := c.cc.Invoke(ctx, UserService_LogoutAllDevices_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -147,7 +147,7 @@ func (c *userServiceClient) LogoutAllDevices(ctx context.Context, in *LogoutAllR
 	return out, nil
 }
 
-func (c *userServiceClient) GetBalances(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error) {
+func (c *userServiceClient) GetBalances(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserBalancesInfoResponse)
 	err := c.cc.Invoke(ctx, UserService_GetBalances_FullMethodName, in, out, cOpts...)
@@ -172,15 +172,15 @@ func (c *userServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRe
 // for forward compatibility.
 type UserServiceServer interface {
 	Registration(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error)
-	GetUser(context.Context, *EmptyRequest) (*UserInfoResponse, error)
-	UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*UpdateUserInfoResponse, error)
-	DeleteUser(context.Context, *EmptyRequest) (*DeleteUserResponse, error)
-	ChangePassword(context.Context, *ChangeUserRequest) (*ChangeUserResponse, error)
+	GetUser(context.Context, *Empty) (*UserInfoResponse, error)
+	UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*Empty, error)
+	DeleteUser(context.Context, *Empty) (*Empty, error)
+	ChangePassword(context.Context, *ChangeUserRequest) (*Empty, error)
 	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
 	Login(context.Context, *LoginRequest) (*TokenPairResponse, error)
-	Logout(context.Context, *LogoutRequest) (*LogoutResponse, error)
-	LogoutAllDevices(context.Context, *LogoutAllRequest) (*LogoutResponse, error)
-	GetBalances(context.Context, *EmptyRequest) (*UserBalancesInfoResponse, error)
+	Logout(context.Context, *LogoutRequest) (*Empty, error)
+	LogoutAllDevices(context.Context, *LogoutAllRequest) (*Empty, error)
+	GetBalances(context.Context, *Empty) (*UserBalancesInfoResponse, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -195,16 +195,16 @@ type UnimplementedUserServiceServer struct{}
 func (UnimplementedUserServiceServer) Registration(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Registration not implemented")
 }
-func (UnimplementedUserServiceServer) GetUser(context.Context, *EmptyRequest) (*UserInfoResponse, error) {
+func (UnimplementedUserServiceServer) GetUser(context.Context, *Empty) (*UserInfoResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUser not implemented")
 }
-func (UnimplementedUserServiceServer) UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*UpdateUserInfoResponse, error) {
+func (UnimplementedUserServiceServer) UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateUserInfo not implemented")
 }
-func (UnimplementedUserServiceServer) DeleteUser(context.Context, *EmptyRequest) (*DeleteUserResponse, error) {
+func (UnimplementedUserServiceServer) DeleteUser(context.Context, *Empty) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteUser not implemented")
 }
-func (UnimplementedUserServiceServer) ChangePassword(context.Context, *ChangeUserRequest) (*ChangeUserResponse, error) {
+func (UnimplementedUserServiceServer) ChangePassword(context.Context, *ChangeUserRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChangePassword not implemented")
 }
 func (UnimplementedUserServiceServer) Deposit(context.Context, *DepositRequest) (*DepositResponse, error) {
@@ -213,13 +213,13 @@ func (UnimplementedUserServiceServer) Deposit(context.Context, *DepositRequest) 
 func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*TokenPairResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedUserServiceServer) Logout(context.Context, *LogoutRequest) (*LogoutResponse, error) {
+func (UnimplementedUserServiceServer) Logout(context.Context, *LogoutRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Logout not implemented")
 }
-func (UnimplementedUserServiceServer) LogoutAllDevices(context.Context, *LogoutAllRequest) (*LogoutResponse, error) {
+func (UnimplementedUserServiceServer) LogoutAllDevices(context.Context, *LogoutAllRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method LogoutAllDevices not implemented")
 }
-func (UnimplementedUserServiceServer) GetBalances(context.Context, *EmptyRequest) (*UserBalancesInfoResponse, error) {
+func (UnimplementedUserServiceServer) GetBalances(context.Context, *Empty) (*UserBalancesInfoResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetBalances not implemented")
 }
 func (UnimplementedUserServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error) {
@@ -265,7 +265,7 @@ func _UserService_Registration_Handler(srv interface{}, ctx context.Context, dec
 }
 
 func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -277,7 +277,7 @@ func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func
 		FullMethod: UserService_GetUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetUser(ctx, req.(*EmptyRequest))
+		return srv.(UserServiceServer).GetUser(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -301,7 +301,7 @@ func _UserService_UpdateUserInfo_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -313,7 +313,7 @@ func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: UserService_DeleteUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).DeleteUser(ctx, req.(*EmptyRequest))
+		return srv.(UserServiceServer).DeleteUser(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -409,7 +409,7 @@ func _UserService_LogoutAllDevices_Handler(srv interface{}, ctx context.Context,
 }
 
 func _UserService_GetBalances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -421,7 +421,7 @@ func _UserService_GetBalances_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: UserService_GetBalances_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetBalances(ctx, req.(*EmptyRequest))
+		return srv.(UserServiceServer).GetBalances(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }

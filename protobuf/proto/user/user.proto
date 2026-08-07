@@ -26,17 +26,17 @@ service UserService {
     rpc Registration(RegisterUserRequest)
         returns (RegisterUserResponse);
 
-    rpc GetUser(EmptyRequest)
+    rpc GetUser(Empty)
         returns (UserInfoResponse);
 
     rpc UpdateUserInfo(UpdateUserInfoRequest)
-        returns (UpdateUserInfoResponse);
+        returns (Empty);
 
-    rpc DeleteUser(EmptyRequest)
-        returns (DeleteUserResponse);
+    rpc DeleteUser(Empty)
+        returns (Empty);
 
     rpc ChangePassword(ChangeUserRequest)
-        returns (ChangeUserResponse);
+        returns (Empty);
 
     rpc Deposit(DepositRequest)
         returns (DepositResponse);
@@ -45,12 +45,12 @@ service UserService {
         returns (TokenPairResponse);
 
     rpc Logout(LogoutRequest)
-        returns (LogoutResponse);
+        returns (Empty);
 
     rpc LogoutAllDevices(LogoutAllRequest)
-        returns (LogoutResponse);
+        returns (Empty);
 
-    rpc GetBalances(EmptyRequest)
+    rpc GetBalances(Empty)
         returns(UserBalancesInfoResponse);
     
     rpc RefreshToken(RefreshTokenRequest)
@@ -90,9 +90,7 @@ message RegisterUserResponse {
     google.protobuf.Timestamp created_at = 2;
 }
 
-message EmptyRequest{
-
-}
+message Empty {}
 
 message UserInfoResponse {
     string user_id = 1;
@@ -115,17 +113,6 @@ message UpdateUserInfoRequest{
     optional string email = 2 [
         (validate.rules).string.email = true
     ];
-}
-message UpdateUserInfoResponse{
-    bool updated = 1;
-
-    google.protobuf.Timestamp updated_info_at = 2;
-}
-
-message DeleteUserResponse{
-    bool success = 1;
-
-    google.protobuf.Timestamp deleted_user_at = 2;
 }
 
 message DepositRequest  {
@@ -178,9 +165,9 @@ message TokenPairResponse {
     string refresh_token = 2;
 
     google.protobuf.Timestamp access_expires_at = 3;
-    google.protobuf.Timestamp access_creates_at = 4;
+    google.protobuf.Timestamp access_issued_at = 4;
     google.protobuf.Timestamp refresh_expires_at = 5;
-    google.protobuf.Timestamp refresh_creates_at = 6;
+    google.protobuf.Timestamp refresh_issued_at = 6;
 }
 
 message UserBalancesInfoResponse{
@@ -199,12 +186,6 @@ message RefreshTokenRequest{
     string refresh_token = 1;
 }
 
-message LogoutResponse{
-    bool success = 1;
-
-    google.protobuf.Timestamp logged_out_at = 2;
-}
-
 message ChangeUserRequest {
     string old_password = 1 [
         (validate.rules).string = {
@@ -218,10 +199,4 @@ message ChangeUserRequest {
             max_len: 64
         }
     ];
-}
-
-message ChangeUserResponse {
-    bool success = 1;
-
-    google.protobuf.Timestamp user_password_changed_at = 2;
 }

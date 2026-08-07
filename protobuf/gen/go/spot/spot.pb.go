@@ -73,6 +73,42 @@ func (SpotStatus) EnumDescriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{0}
 }
 
+type Empty struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Empty) Reset() {
+	*x = Empty{}
+	mi := &file_spot_spot_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Empty) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Empty) ProtoMessage() {}
+
+func (x *Empty) ProtoReflect() protoreflect.Message {
+	mi := &file_spot_spot_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
+func (*Empty) Descriptor() ([]byte, []int) {
+	return file_spot_spot_proto_rawDescGZIP(), []int{0}
+}
+
 type CreateSpotRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	BaseAsset         string                 `protobuf:"bytes,1,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
@@ -90,7 +126,7 @@ type CreateSpotRequest struct {
 
 func (x *CreateSpotRequest) Reset() {
 	*x = CreateSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[0]
+	mi := &file_spot_spot_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -102,7 +138,7 @@ func (x *CreateSpotRequest) String() string {
 func (*CreateSpotRequest) ProtoMessage() {}
 
 func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[0]
+	mi := &file_spot_spot_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -115,7 +151,7 @@ func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpotRequest.ProtoReflect.Descriptor instead.
 func (*CreateSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{0}
+	return file_spot_spot_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateSpotRequest) GetBaseAsset() string {
@@ -191,7 +227,7 @@ type CreateSpotResponse struct {
 
 func (x *CreateSpotResponse) Reset() {
 	*x = CreateSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[1]
+	mi := &file_spot_spot_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -203,7 +239,7 @@ func (x *CreateSpotResponse) String() string {
 func (*CreateSpotResponse) ProtoMessage() {}
 
 func (x *CreateSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[1]
+	mi := &file_spot_spot_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -216,7 +252,7 @@ func (x *CreateSpotResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpotResponse.ProtoReflect.Descriptor instead.
 func (*CreateSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{1}
+	return file_spot_spot_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateSpotResponse) GetId() string {
@@ -242,7 +278,7 @@ type GetSpotRequest struct {
 
 func (x *GetSpotRequest) Reset() {
 	*x = GetSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[2]
+	mi := &file_spot_spot_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -254,7 +290,7 @@ func (x *GetSpotRequest) String() string {
 func (*GetSpotRequest) ProtoMessage() {}
 
 func (x *GetSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[2]
+	mi := &file_spot_spot_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -267,7 +303,7 @@ func (x *GetSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpotRequest.ProtoReflect.Descriptor instead.
 func (*GetSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{2}
+	return file_spot_spot_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetSpotRequest) GetId() string {
@@ -300,7 +336,7 @@ type GetSpotResponse struct {
 
 func (x *GetSpotResponse) Reset() {
 	*x = GetSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[3]
+	mi := &file_spot_spot_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -312,7 +348,7 @@ func (x *GetSpotResponse) String() string {
 func (*GetSpotResponse) ProtoMessage() {}
 
 func (x *GetSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[3]
+	mi := &file_spot_spot_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -325,7 +361,7 @@ func (x *GetSpotResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpotResponse.ProtoReflect.Descriptor instead.
 func (*GetSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{3}
+	return file_spot_spot_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetSpotResponse) GetId() string {
@@ -442,7 +478,7 @@ type EnableSpotRequest struct {
 
 func (x *EnableSpotRequest) Reset() {
 	*x = EnableSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[4]
+	mi := &file_spot_spot_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -454,7 +490,7 @@ func (x *EnableSpotRequest) String() string {
 func (*EnableSpotRequest) ProtoMessage() {}
 
 func (x *EnableSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[4]
+	mi := &file_spot_spot_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -467,7 +503,7 @@ func (x *EnableSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableSpotRequest.ProtoReflect.Descriptor instead.
 func (*EnableSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{4}
+	return file_spot_spot_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *EnableSpotRequest) GetId() string {
@@ -475,58 +511,6 @@ func (x *EnableSpotRequest) GetId() string {
 		return x.Id
 	}
 	return ""
-}
-
-type EnableSpotResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	EnableSpotAt  *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=enable_spot_at,json=enableSpotAt,proto3" json:"enable_spot_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EnableSpotResponse) Reset() {
-	*x = EnableSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EnableSpotResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EnableSpotResponse) ProtoMessage() {}
-
-func (x *EnableSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EnableSpotResponse.ProtoReflect.Descriptor instead.
-func (*EnableSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *EnableSpotResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *EnableSpotResponse) GetEnableSpotAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.EnableSpotAt
-	}
-	return nil
 }
 
 type DisableSpotRequest struct {
@@ -573,63 +557,12 @@ func (x *DisableSpotRequest) GetId() string {
 	return ""
 }
 
-type DisableSpotResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	DisableSpotAt *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=disable_spot_at,json=disableSpotAt,proto3" json:"disable_spot_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DisableSpotResponse) Reset() {
-	*x = DisableSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DisableSpotResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DisableSpotResponse) ProtoMessage() {}
-
-func (x *DisableSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DisableSpotResponse.ProtoReflect.Descriptor instead.
-func (*DisableSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *DisableSpotResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *DisableSpotResponse) GetDisableSpotAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.DisableSpotAt
-	}
-	return nil
-}
-
 var File_spot_spot_proto protoreflect.FileDescriptor
 
 const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
-	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\xfb\x03\n" +
+	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\a\n" +
+	"\x05Empty\"\xfb\x03\n" +
 	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
 	"base_asset\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
@@ -678,27 +611,21 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
 	"disable_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\tdisableAt\"-\n" +
 	"\x11EnableSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"p\n" +
-	"\x12EnableSpotResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12@\n" +
-	"\x0eenable_spot_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\fenableSpotAt\".\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\".\n" +
 	"\x12DisableSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"s\n" +
-	"\x13DisableSpotResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
-	"\x0fdisable_spot_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\rdisableSpotAt*[\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id*[\n" +
 	"\n" +
 	"SpotStatus\x12\x1b\n" +
 	"\x17SPOT_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12SPOT_STATUS_ACTIVE\x10\x01\x12\x18\n" +
-	"\x14SPOT_STATUS_DISABLED\x10\x022\x95\x02\n" +
+	"\x14SPOT_STATUS_DISABLED\x10\x022\xfa\x01\n" +
 	"\x15SpotInstrumentService\x12?\n" +
 	"\n" +
 	"CreateSpot\x12\x17.spot.CreateSpotRequest\x1a\x18.spot.CreateSpotResponse\x126\n" +
-	"\aGetSpot\x12\x14.spot.GetSpotRequest\x1a\x15.spot.GetSpotResponse\x12?\n" +
+	"\aGetSpot\x12\x14.spot.GetSpotRequest\x1a\x15.spot.GetSpotResponse\x122\n" +
 	"\n" +
-	"EnableSpot\x12\x17.spot.EnableSpotRequest\x1a\x18.spot.EnableSpotResponse\x12B\n" +
-	"\vDisableSpot\x12\x18.spot.DisableSpotRequest\x1a\x19.spot.DisableSpotResponseBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spotb\x06proto3"
+	"EnableSpot\x12\x17.spot.EnableSpotRequest\x1a\v.spot.Empty\x124\n" +
+	"\vDisableSpot\x12\x18.spot.DisableSpotRequest\x1a\v.spot.EmptyBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spotb\x06proto3"
 
 var (
 	file_spot_spot_proto_rawDescOnce sync.Once
@@ -713,43 +640,40 @@ func file_spot_spot_proto_rawDescGZIP() []byte {
 }
 
 var file_spot_spot_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_spot_spot_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_spot_spot_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_spot_spot_proto_goTypes = []any{
 	(SpotStatus)(0),               // 0: spot.SpotStatus
-	(*CreateSpotRequest)(nil),     // 1: spot.CreateSpotRequest
-	(*CreateSpotResponse)(nil),    // 2: spot.CreateSpotResponse
-	(*GetSpotRequest)(nil),        // 3: spot.GetSpotRequest
-	(*GetSpotResponse)(nil),       // 4: spot.GetSpotResponse
-	(*EnableSpotRequest)(nil),     // 5: spot.EnableSpotRequest
-	(*EnableSpotResponse)(nil),    // 6: spot.EnableSpotResponse
+	(*Empty)(nil),                 // 1: spot.Empty
+	(*CreateSpotRequest)(nil),     // 2: spot.CreateSpotRequest
+	(*CreateSpotResponse)(nil),    // 3: spot.CreateSpotResponse
+	(*GetSpotRequest)(nil),        // 4: spot.GetSpotRequest
+	(*GetSpotResponse)(nil),       // 5: spot.GetSpotResponse
+	(*EnableSpotRequest)(nil),     // 6: spot.EnableSpotRequest
 	(*DisableSpotRequest)(nil),    // 7: spot.DisableSpotRequest
-	(*DisableSpotResponse)(nil),   // 8: spot.DisableSpotResponse
-	(user.Role)(0),                // 9: user.Role
-	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
+	(user.Role)(0),                // 8: user.Role
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
 }
 var file_spot_spot_proto_depIdxs = []int32{
-	9,  // 0: spot.CreateSpotRequest.allowed_roles:type_name -> user.Role
-	10, // 1: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 0: spot.CreateSpotRequest.allowed_roles:type_name -> user.Role
+	9,  // 1: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 2: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
-	9,  // 3: spot.GetSpotResponse.allowed_roles:type_name -> user.Role
-	10, // 4: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
-	10, // 5: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 6: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
-	10, // 7: spot.EnableSpotResponse.enable_spot_at:type_name -> google.protobuf.Timestamp
-	10, // 8: spot.DisableSpotResponse.disable_spot_at:type_name -> google.protobuf.Timestamp
-	1,  // 9: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
-	3,  // 10: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
-	5,  // 11: spot.SpotInstrumentService.EnableSpot:input_type -> spot.EnableSpotRequest
-	7,  // 12: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
-	2,  // 13: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
-	4,  // 14: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
-	6,  // 15: spot.SpotInstrumentService.EnableSpot:output_type -> spot.EnableSpotResponse
-	8,  // 16: spot.SpotInstrumentService.DisableSpot:output_type -> spot.DisableSpotResponse
-	13, // [13:17] is the sub-list for method output_type
-	9,  // [9:13] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	8,  // 3: spot.GetSpotResponse.allowed_roles:type_name -> user.Role
+	9,  // 4: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 5: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 6: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
+	2,  // 7: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
+	4,  // 8: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
+	6,  // 9: spot.SpotInstrumentService.EnableSpot:input_type -> spot.EnableSpotRequest
+	7,  // 10: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
+	3,  // 11: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
+	5,  // 12: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
+	1,  // 13: spot.SpotInstrumentService.EnableSpot:output_type -> spot.Empty
+	1,  // 14: spot.SpotInstrumentService.DisableSpot:output_type -> spot.Empty
+	11, // [11:15] is the sub-list for method output_type
+	7,  // [7:11] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_spot_spot_proto_init() }
@@ -763,7 +687,7 @@ func file_spot_spot_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_spot_spot_proto_rawDesc), len(file_spot_spot_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

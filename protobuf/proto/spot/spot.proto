@@ -18,10 +18,10 @@ service SpotInstrumentService {
         returns (GetSpotResponse);
 
     rpc EnableSpot(EnableSpotRequest)
-        returns (EnableSpotResponse);
+        returns (Empty);
 
     rpc DisableSpot(DisableSpotRequest)
-        returns (DisableSpotResponse);
+        returns (Empty);
 }
 
 enum SpotStatus {
@@ -29,6 +29,8 @@ enum SpotStatus {
     SPOT_STATUS_ACTIVE = 1;
     SPOT_STATUS_DISABLED = 2;
 }
+
+message Empty {}
 
 message CreateSpotRequest {
     string base_asset  = 1 [
@@ -139,20 +141,8 @@ message EnableSpotRequest {
     ];
 }
 
-message EnableSpotResponse {
-    bool success = 1;
-
-    google.protobuf.Timestamp enable_spot_at = 2;
-}
-
 message DisableSpotRequest {
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
-}
-
-message DisableSpotResponse {
-    bool success = 1;
-
-    google.protobuf.Timestamp disable_spot_at = 2;
 }

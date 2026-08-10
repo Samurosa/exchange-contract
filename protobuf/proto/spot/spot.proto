@@ -140,7 +140,7 @@ message EnableSpotRequest {
 }
 
 message EnableSpotResponse {
-    bool success = 1;
+    string grpc_status_error = 1;
 
     google.protobuf.Timestamp enable_spot_at = 2;
 }
@@ -152,7 +152,7 @@ message DisableSpotRequest {
 }
 
 message DisableSpotResponse {
-    bool success = 1;
+    string grpc_status_error = 1;
 
     google.protobuf.Timestamp disable_spot_at = 2;
 }

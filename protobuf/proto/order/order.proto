@@ -112,7 +112,6 @@ message StreamOrderUpdateRequest {
     string order_id = 1 [
         (validate.rules).string.uuid = true
     ];
-
 }
 
 message StreamOrderUpdateResponse {

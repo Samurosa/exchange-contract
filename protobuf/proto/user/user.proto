@@ -145,7 +145,9 @@ message DepositRequest  {
     (validate.rules).message = {
         required: true
     }
-];
+    ];
+
+    //string idempotent_key
 }
 
 message DepositResponse {
@@ -178,9 +180,9 @@ message TokenPairResponse {
     string refresh_token = 2;
 
     google.protobuf.Timestamp access_expires_at = 3;
-    google.protobuf.Timestamp access_creates_at = 4;
+    google.protobuf.Timestamp access_issued_at = 4;
     google.protobuf.Timestamp refresh_expires_at = 5;
-    google.protobuf.Timestamp refresh_creates_at = 6;
+    google.protobuf.Timestamp refresh_issued_at = 6;
 }
 
 message UserBalancesInfoResponse{
@@ -200,7 +202,7 @@ message RefreshTokenRequest{
 }
 
 message LogoutResponse{
-    bool success = 1;
+    string grpc_status_error = 1;
 
     google.protobuf.Timestamp logged_out_at = 2;
 }
@@ -208,20 +210,20 @@ message LogoutResponse{
 message ChangeUserRequest {
     string old_password = 1 [
         (validate.rules).string = {
-            min_len: 6,
+            min_len: 8,
             max_len: 64
         }
     ];
     string new_password = 2 [
         (validate.rules).string = {
-            min_len: 6,
+            min_len: 8,
             max_len: 64
         }
     ];
 }
 
 message ChangeUserResponse {
-    bool success = 1;
+    string grpc_status_error = 1;
 
     google.protobuf.Timestamp user_password_changed_at = 2;
 }

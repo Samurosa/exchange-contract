@@ -42,6 +42,104 @@ var (
 // define the regex for a UUID once up-front
 var _spot_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
+// Validate checks the field values on Empty with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Empty) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Empty with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in EmptyMultiError, or nil if none found.
+func (m *Empty) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Empty) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return EmptyMultiError(errors)
+	}
+
+	return nil
+}
+
+// EmptyMultiError is an error wrapping multiple validation errors returned by
+// Empty.ValidateAll() if the designated constraints aren't met.
+type EmptyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m EmptyMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m EmptyMultiError) AllErrors() []error { return m }
+
+// EmptyValidationError is the validation error returned by Empty.Validate if
+// the designated constraints aren't met.
+type EmptyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e EmptyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e EmptyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e EmptyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e EmptyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e EmptyValidationError) ErrorName() string { return "EmptyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e EmptyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sEmpty.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = EmptyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = EmptyValidationError{}
+
 // Validate checks the field values on CreateSpotRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -900,139 +998,6 @@ var _ interface {
 	ErrorName() string
 } = EnableSpotRequestValidationError{}
 
-// Validate checks the field values on EnableSpotResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *EnableSpotResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on EnableSpotResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// EnableSpotResponseMultiError, or nil if none found.
-func (m *EnableSpotResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *EnableSpotResponse) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Success
-
-	if all {
-		switch v := interface{}(m.GetEnableSpotAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, EnableSpotResponseValidationError{
-					field:  "EnableSpotAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, EnableSpotResponseValidationError{
-					field:  "EnableSpotAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetEnableSpotAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return EnableSpotResponseValidationError{
-				field:  "EnableSpotAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return EnableSpotResponseMultiError(errors)
-	}
-
-	return nil
-}
-
-// EnableSpotResponseMultiError is an error wrapping multiple validation errors
-// returned by EnableSpotResponse.ValidateAll() if the designated constraints
-// aren't met.
-type EnableSpotResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m EnableSpotResponseMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m EnableSpotResponseMultiError) AllErrors() []error { return m }
-
-// EnableSpotResponseValidationError is the validation error returned by
-// EnableSpotResponse.Validate if the designated constraints aren't met.
-type EnableSpotResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e EnableSpotResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e EnableSpotResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e EnableSpotResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e EnableSpotResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e EnableSpotResponseValidationError) ErrorName() string {
-	return "EnableSpotResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e EnableSpotResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sEnableSpotResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = EnableSpotResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = EnableSpotResponseValidationError{}
-
 // Validate checks the field values on DisableSpotRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -1154,136 +1119,3 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DisableSpotRequestValidationError{}
-
-// Validate checks the field values on DisableSpotResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *DisableSpotResponse) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on DisableSpotResponse with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// DisableSpotResponseMultiError, or nil if none found.
-func (m *DisableSpotResponse) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *DisableSpotResponse) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for Success
-
-	if all {
-		switch v := interface{}(m.GetDisableSpotAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, DisableSpotResponseValidationError{
-					field:  "DisableSpotAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, DisableSpotResponseValidationError{
-					field:  "DisableSpotAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetDisableSpotAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return DisableSpotResponseValidationError{
-				field:  "DisableSpotAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if len(errors) > 0 {
-		return DisableSpotResponseMultiError(errors)
-	}
-
-	return nil
-}
-
-// DisableSpotResponseMultiError is an error wrapping multiple validation
-// errors returned by DisableSpotResponse.ValidateAll() if the designated
-// constraints aren't met.
-type DisableSpotResponseMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m DisableSpotResponseMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m DisableSpotResponseMultiError) AllErrors() []error { return m }
-
-// DisableSpotResponseValidationError is the validation error returned by
-// DisableSpotResponse.Validate if the designated constraints aren't met.
-type DisableSpotResponseValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e DisableSpotResponseValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e DisableSpotResponseValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e DisableSpotResponseValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e DisableSpotResponseValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e DisableSpotResponseValidationError) ErrorName() string {
-	return "DisableSpotResponseValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e DisableSpotResponseValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sDisableSpotResponse.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = DisableSpotResponseValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = DisableSpotResponseValidationError{}

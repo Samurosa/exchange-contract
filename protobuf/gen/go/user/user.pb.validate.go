@@ -1126,8 +1126,6 @@ func (m *DepositResponse) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Success
-
 	if all {
 		switch v := interface{}(m.GetBalance()).(type) {
 		case interface{ ValidateAll() error }:

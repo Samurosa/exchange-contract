@@ -493,8 +493,7 @@ func (x *DepositRequest) GetIdempotencyKey() string {
 
 type DepositResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Balance       *Balance               `protobuf:"bytes,2,opt,name=balance,proto3" json:"balance,omitempty"`
+	Balance       *Balance               `protobuf:"bytes,1,opt,name=balance,proto3" json:"balance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -527,13 +526,6 @@ func (x *DepositResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DepositResponse.ProtoReflect.Descriptor instead.
 func (*DepositResponse) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *DepositResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
 }
 
 func (x *DepositResponse) GetBalance() *Balance {
@@ -953,10 +945,9 @@ const file_user_user_proto_rawDesc = "" +
 	"\x05asset\x18\x02 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\n" +
 	"2\t^[A-Z_]+$R\x05asset\x12/\n" +
 	"\x06amount\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\x121\n" +
-	"\x0fidempotency_key\x18\x04 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x0eidempotencyKey\"T\n" +
-	"\x0fDepositResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12'\n" +
-	"\abalance\x18\x02 \x01(\v2\r.user.BalanceR\abalance\"|\n" +
+	"\x0fidempotency_key\x18\x04 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x0eidempotencyKey\":\n" +
+	"\x0fDepositResponse\x12'\n" +
+	"\abalance\x18\x01 \x01(\v2\r.user.BalanceR\abalance\"|\n" +
 	"\fLoginRequest\x12\x1d\n" +
 	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x06\x18@R\bpassword\x12&\n" +

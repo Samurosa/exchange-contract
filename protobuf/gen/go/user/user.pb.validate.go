@@ -840,7 +840,16 @@ func (m *DepositRequest) validate(all bool) error {
 		}
 	}
 
-	// no validation rules for IdempotencyKey
+	if l := utf8.RuneCountInString(m.GetIdempotencyKey()); l < 1 || l > 50 {
+		err := DepositRequestValidationError{
+			field:  "IdempotencyKey",
+			reason: "value length must be between 1 and 50 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return DepositRequestMultiError(errors)

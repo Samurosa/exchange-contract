@@ -282,11 +282,10 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if err := m._validateUuid(m.GetIdempotencyKey()); err != nil {
-		err = CreateOrderRequestValidationError{
+	if l := utf8.RuneCountInString(m.GetIdempotencyKey()); l < 1 || l > 50 {
+		err := CreateOrderRequestValidationError{
 			field:  "IdempotencyKey",
-			reason: "value must be a valid UUID",
-			cause:  err,
+			reason: "value length must be between 1 and 50 runes, inclusive",
 		}
 		if !all {
 			return err

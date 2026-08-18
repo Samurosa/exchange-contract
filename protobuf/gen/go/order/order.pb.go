@@ -741,12 +741,12 @@ const file_order_order_proto_rawDesc = "" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x92\x02\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x93\x02\n" +
 	"\x12CreateOrderRequest\x12%\n" +
 	"\tmarket_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\bmarketId\x129\n" +
 	"\n" +
-	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x121\n" +
-	"\x0fidempotency_key\x18\x03 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x0eidempotencyKey\x12-\n" +
+	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x122\n" +
+	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12-\n" +
 	"\x05price\x18\x04 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05price\x128\n" +
 	"\bquantity\x18\x05 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +

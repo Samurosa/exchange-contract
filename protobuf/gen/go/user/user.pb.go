@@ -841,13 +841,13 @@ const file_user_user_proto_rawDesc = "" +
 	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"D\n" +
 	"\x15UpdateUserInfoRequest\x12\"\n" +
 	"\x04name\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@H\x00R\x04name\x88\x01\x01B\a\n" +
-	"\x05_name\"\xb9\x01\n" +
+	"\x05_name\"\xc4\x01\n" +
 	"\x0eDepositRequest\x12!\n" +
 	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12*\n" +
 	"\x05asset\x18\x02 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\n" +
 	"2\t^[A-Z_]+$R\x05asset\x12/\n" +
-	"\x06amount\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\x12'\n" +
-	"\x0fidempotency_key\x18\x04 \x01(\tR\x0eidempotencyKey\":\n" +
+	"\x06amount\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\x122\n" +
+	"\x0fidempotency_key\x18\x04 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\":\n" +
 	"\x0fDepositResponse\x12'\n" +
 	"\abalance\x18\x01 \x01(\v2\r.user.BalanceR\abalance\"T\n" +
 	"\fLoginRequest\x12\x1d\n" +

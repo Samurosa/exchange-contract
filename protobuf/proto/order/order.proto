@@ -73,7 +73,10 @@ message CreateOrderRequest {
     ];
 
     string idempotency_key = 3[
-        (validate.rules).string.uuid = true
+        (validate.rules).string = {
+            min_len: 1,
+            max_len: 50,
+        }
     ];
 
     shared.Money price = 4[

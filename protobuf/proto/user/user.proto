@@ -130,7 +130,12 @@ message DepositRequest  {
     }
     ];
 
-    string idempotency_key = 4;
+    string idempotency_key = 4[
+        (validate.rules).string = {
+            min_len: 1,
+            max_len: 50,
+        }
+    ];
 }
 
 

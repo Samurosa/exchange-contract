@@ -11,6 +11,7 @@ import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -561,7 +562,7 @@ var File_spot_spot_proto protoreflect.FileDescriptor
 
 const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
-	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\a\n" +
+	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\a\n" +
 	"\x05Empty\"\xfb\x03\n" +
 	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
@@ -618,14 +619,14 @@ const file_spot_spot_proto_rawDesc = "" +
 	"SpotStatus\x12\x1b\n" +
 	"\x17SPOT_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12SPOT_STATUS_ACTIVE\x10\x01\x12\x18\n" +
-	"\x14SPOT_STATUS_DISABLED\x10\x022\xfa\x01\n" +
+	"\x14SPOT_STATUS_DISABLED\x10\x022\x90\x02\n" +
 	"\x15SpotInstrumentService\x12?\n" +
 	"\n" +
 	"CreateSpot\x12\x17.spot.CreateSpotRequest\x1a\x18.spot.CreateSpotResponse\x126\n" +
-	"\aGetSpot\x12\x14.spot.GetSpotRequest\x1a\x15.spot.GetSpotResponse\x122\n" +
+	"\aGetSpot\x12\x14.spot.GetSpotRequest\x1a\x15.spot.GetSpotResponse\x12=\n" +
 	"\n" +
-	"EnableSpot\x12\x17.spot.EnableSpotRequest\x1a\v.spot.Empty\x124\n" +
-	"\vDisableSpot\x12\x18.spot.DisableSpotRequest\x1a\v.spot.EmptyBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spotb\x06proto3"
+	"EnableSpot\x12\x17.spot.EnableSpotRequest\x1a\x16.google.protobuf.Empty\x12?\n" +
+	"\vDisableSpot\x12\x18.spot.DisableSpotRequest\x1a\x16.google.protobuf.EmptyBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spotb\x06proto3"
 
 var (
 	file_spot_spot_proto_rawDescOnce sync.Once
@@ -652,6 +653,7 @@ var file_spot_spot_proto_goTypes = []any{
 	(*DisableSpotRequest)(nil),    // 7: spot.DisableSpotRequest
 	(user.Role)(0),                // 8: user.Role
 	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 10: google.protobuf.Empty
 }
 var file_spot_spot_proto_depIdxs = []int32{
 	8,  // 0: spot.CreateSpotRequest.allowed_roles:type_name -> user.Role
@@ -667,8 +669,8 @@ var file_spot_spot_proto_depIdxs = []int32{
 	7,  // 10: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
 	3,  // 11: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
 	5,  // 12: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
-	1,  // 13: spot.SpotInstrumentService.EnableSpot:output_type -> spot.Empty
-	1,  // 14: spot.SpotInstrumentService.DisableSpot:output_type -> spot.Empty
+	10, // 13: spot.SpotInstrumentService.EnableSpot:output_type -> google.protobuf.Empty
+	10, // 14: spot.SpotInstrumentService.DisableSpot:output_type -> google.protobuf.Empty
 	11, // [11:15] is the sub-list for method output_type
 	7,  // [7:11] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name

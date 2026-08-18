@@ -176,10 +176,10 @@ func (m *RegisterUserRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetPassword()); l < 6 || l > 64 {
+	if l := utf8.RuneCountInString(m.GetPassword()); l < 8 || l > 64 {
 		err := RegisterUserRequestValidationError{
 			field:  "Password",
-			reason: "value length must be between 6 and 64 runes, inclusive",
+			reason: "value length must be between 8 and 64 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -461,104 +461,6 @@ var _ interface {
 	ErrorName() string
 } = RegisterUserResponseValidationError{}
 
-// Validate checks the field values on Empty with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Empty) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Empty with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in EmptyMultiError, or nil if none found.
-func (m *Empty) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Empty) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return EmptyMultiError(errors)
-	}
-
-	return nil
-}
-
-// EmptyMultiError is an error wrapping multiple validation errors returned by
-// Empty.ValidateAll() if the designated constraints aren't met.
-type EmptyMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m EmptyMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m EmptyMultiError) AllErrors() []error { return m }
-
-// EmptyValidationError is the validation error returned by Empty.Validate if
-// the designated constraints aren't met.
-type EmptyValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e EmptyValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e EmptyValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e EmptyValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e EmptyValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e EmptyValidationError) ErrorName() string { return "EmptyValidationError" }
-
-// Error satisfies the builtin error interface
-func (e EmptyValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sEmpty.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = EmptyValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = EmptyValidationError{}
-
 // Validate checks the field values on UserInfoResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -762,77 +664,11 @@ func (m *UpdateUserInfoRequest) validate(all bool) error {
 
 	}
 
-	if m.Email != nil {
-
-		if err := m._validateEmail(m.GetEmail()); err != nil {
-			err = UpdateUserInfoRequestValidationError{
-				field:  "Email",
-				reason: "value must be a valid email address",
-				cause:  err,
-			}
-			if !all {
-				return err
-			}
-			errors = append(errors, err)
-		}
-
-	}
-
 	if len(errors) > 0 {
 		return UpdateUserInfoRequestMultiError(errors)
 	}
 
 	return nil
-}
-
-func (m *UpdateUserInfoRequest) _validateHostname(host string) error {
-	s := strings.ToLower(strings.TrimSuffix(host, "."))
-
-	if len(host) > 253 {
-		return errors.New("hostname cannot exceed 253 characters")
-	}
-
-	for _, part := range strings.Split(s, ".") {
-		if l := len(part); l == 0 || l > 63 {
-			return errors.New("hostname part must be non-empty and cannot exceed 63 characters")
-		}
-
-		if part[0] == '-' {
-			return errors.New("hostname parts cannot begin with hyphens")
-		}
-
-		if part[len(part)-1] == '-' {
-			return errors.New("hostname parts cannot end with hyphens")
-		}
-
-		for _, r := range part {
-			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' {
-				return fmt.Errorf("hostname parts can only contain alphanumeric characters or hyphens, got %q", string(r))
-			}
-		}
-	}
-
-	return nil
-}
-
-func (m *UpdateUserInfoRequest) _validateEmail(addr string) error {
-	a, err := mail.ParseAddress(addr)
-	if err != nil {
-		return err
-	}
-	addr = a.Address
-
-	if len(addr) > 254 {
-		return errors.New("email addresses cannot exceed 254 characters")
-	}
-
-	parts := strings.SplitN(addr, "@", 2)
-
-	if len(parts[0]) > 64 {
-		return errors.New("email address local phrase cannot exceed 64 characters")
-	}
-
-	return m._validateHostname(parts[1])
 }
 
 // UpdateUserInfoRequestMultiError is an error wrapping multiple validation
@@ -1004,17 +840,7 @@ func (m *DepositRequest) validate(all bool) error {
 		}
 	}
 
-	if err := m._validateUuid(m.GetIdempotencyKey()); err != nil {
-		err = DepositRequestValidationError{
-			field:  "IdempotencyKey",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
+	// no validation rules for IdempotencyKey
 
 	if len(errors) > 0 {
 		return DepositRequestMultiError(errors)
@@ -1267,21 +1093,10 @@ func (m *LoginRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetPassword()); l < 6 || l > 64 {
+	if l := utf8.RuneCountInString(m.GetPassword()); l < 8 || l > 64 {
 		err := LoginRequestValidationError{
 			field:  "Password",
-			reason: "value length must be between 6 and 64 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetDeviceId()); l < 1 || l > 64 {
-		err := LoginRequestValidationError{
-			field:  "DeviceId",
-			reason: "value length must be between 1 and 64 runes, inclusive",
+			reason: "value length must be between 8 and 64 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -1875,108 +1690,6 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = LogoutRequestValidationError{}
-
-// Validate checks the field values on LogoutAllRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *LogoutAllRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on LogoutAllRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// LogoutAllRequestMultiError, or nil if none found.
-func (m *LogoutAllRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *LogoutAllRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for RefreshToken
-
-	if len(errors) > 0 {
-		return LogoutAllRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-// LogoutAllRequestMultiError is an error wrapping multiple validation errors
-// returned by LogoutAllRequest.ValidateAll() if the designated constraints
-// aren't met.
-type LogoutAllRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m LogoutAllRequestMultiError) Error() string {
-	msgs := make([]string, 0, len(m))
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m LogoutAllRequestMultiError) AllErrors() []error { return m }
-
-// LogoutAllRequestValidationError is the validation error returned by
-// LogoutAllRequest.Validate if the designated constraints aren't met.
-type LogoutAllRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e LogoutAllRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e LogoutAllRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e LogoutAllRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e LogoutAllRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e LogoutAllRequestValidationError) ErrorName() string { return "LogoutAllRequestValidationError" }
-
-// Error satisfies the builtin error interface
-func (e LogoutAllRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sLogoutAllRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = LogoutAllRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = LogoutAllRequestValidationError{}
 
 // Validate checks the field values on RefreshTokenRequest with the rules
 // defined in the proto definition for this message. If any rules are

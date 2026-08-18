@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -31,8 +32,8 @@ const (
 type SpotInstrumentServiceClient interface {
 	CreateSpot(ctx context.Context, in *CreateSpotRequest, opts ...grpc.CallOption) (*CreateSpotResponse, error)
 	GetSpot(ctx context.Context, in *GetSpotRequest, opts ...grpc.CallOption) (*GetSpotResponse, error)
-	EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*Empty, error)
-	DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*Empty, error)
+	EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type spotInstrumentServiceClient struct {
@@ -63,9 +64,9 @@ func (c *spotInstrumentServiceClient) GetSpot(ctx context.Context, in *GetSpotRe
 	return out, nil
 }
 
-func (c *spotInstrumentServiceClient) EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *spotInstrumentServiceClient) EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, SpotInstrumentService_EnableSpot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -73,9 +74,9 @@ func (c *spotInstrumentServiceClient) EnableSpot(ctx context.Context, in *Enable
 	return out, nil
 }
 
-func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Empty)
+	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, SpotInstrumentService_DisableSpot_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -89,8 +90,8 @@ func (c *spotInstrumentServiceClient) DisableSpot(ctx context.Context, in *Disab
 type SpotInstrumentServiceServer interface {
 	CreateSpot(context.Context, *CreateSpotRequest) (*CreateSpotResponse, error)
 	GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error)
-	EnableSpot(context.Context, *EnableSpotRequest) (*Empty, error)
-	DisableSpot(context.Context, *DisableSpotRequest) (*Empty, error)
+	EnableSpot(context.Context, *EnableSpotRequest) (*emptypb.Empty, error)
+	DisableSpot(context.Context, *DisableSpotRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedSpotInstrumentServiceServer()
 }
 
@@ -107,10 +108,10 @@ func (UnimplementedSpotInstrumentServiceServer) CreateSpot(context.Context, *Cre
 func (UnimplementedSpotInstrumentServiceServer) GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSpot not implemented")
 }
-func (UnimplementedSpotInstrumentServiceServer) EnableSpot(context.Context, *EnableSpotRequest) (*Empty, error) {
+func (UnimplementedSpotInstrumentServiceServer) EnableSpot(context.Context, *EnableSpotRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method EnableSpot not implemented")
 }
-func (UnimplementedSpotInstrumentServiceServer) DisableSpot(context.Context, *DisableSpotRequest) (*Empty, error) {
+func (UnimplementedSpotInstrumentServiceServer) DisableSpot(context.Context, *DisableSpotRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DisableSpot not implemented")
 }
 func (UnimplementedSpotInstrumentServiceServer) mustEmbedUnimplementedSpotInstrumentServiceServer() {}

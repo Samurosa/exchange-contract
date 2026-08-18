@@ -5,6 +5,7 @@ package spot;
 option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spot";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 import "validate/validate.proto";
 import "user/user.proto";
 
@@ -18,10 +19,12 @@ service SpotInstrumentService {
         returns (GetSpotResponse);
 
     rpc EnableSpot(EnableSpotRequest)
-        returns (Empty);
+        returns (google.protobuf.Empty);
 
     rpc DisableSpot(DisableSpotRequest)
-        returns (Empty);
+        returns (google.protobuf.Empty);
+
+    //listmarkets (просто споты из бд с пагинацией)
 }
 
 enum SpotStatus {

@@ -5,6 +5,7 @@ package user;
 option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/user;user";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 import "validate/validate.proto";
 import "shared/shared.proto";
 
@@ -26,17 +27,17 @@ service UserService {
     rpc Registration(RegisterUserRequest)
         returns (RegisterUserResponse);
 
-    rpc GetUser(Empty)
+    rpc GetUser(google.protobuf.Empty)
         returns (UserInfoResponse);
 
     rpc UpdateUserInfo(UpdateUserInfoRequest)
-        returns (Empty);
+        returns (google.protobuf.Empty);
 
-    rpc DeleteUser(Empty)
-        returns (Empty);
+    rpc DeleteUser(google.protobuf.Empty)
+        returns (google.protobuf.Empty);
 
     rpc ChangePassword(ChangeUserRequest)
-        returns (Empty);
+        returns (google.protobuf.Empty);
 
     rpc Deposit(DepositRequest)
         returns (DepositResponse);
@@ -45,12 +46,12 @@ service UserService {
         returns (TokenPairResponse);
 
     rpc Logout(LogoutRequest)
-        returns (Empty);
+        returns (google.protobuf.Empty);
 
-    rpc LogoutAllDevices(LogoutAllRequest)
-        returns (Empty);
+    rpc LogoutAllDevices(google.protobuf.Empty)
+        returns (google.protobuf.Empty);
 
-    rpc GetBalances(Empty)
+    rpc GetBalances(google.protobuf.Empty)
         returns(UserBalancesInfoResponse);
     
     rpc RefreshToken(RefreshTokenRequest)
@@ -74,7 +75,7 @@ message RegisterUserRequest  {
 
     string password = 2 [
         (validate.rules).string = {
-            min_len: 6,
+            min_len: 8,
             max_len: 64,
         }
     ];
@@ -89,8 +90,6 @@ message RegisterUserResponse {
     string user_id = 1;
     google.protobuf.Timestamp created_at = 2;
 }
-
-message Empty {}
 
 message UserInfoResponse {
     string user_id = 1;
@@ -109,9 +108,6 @@ message UpdateUserInfoRequest{
             min_len: 2,
             max_len: 64,
         }
-    ];
-    optional string email = 2 [
-        (validate.rules).string.email = true
     ];
 }
 
@@ -134,10 +130,9 @@ message DepositRequest  {
     }
     ];
 
-    string idempotency_key = 4[
-        (validate.rules).string.uuid = true
-    ];
+    string idempotency_key = 4;
 }
+
 
 message DepositResponse {
     Balance balance = 1;
@@ -150,14 +145,7 @@ message LoginRequest{
 
     string password = 2 [
         (validate.rules).string = {
-            min_len: 6,
-            max_len: 64,
-        }
-    ];
-
-    string device_id = 3 [
-        (validate.rules).string = {
-            min_len: 1,
+            min_len: 8,
             max_len: 64,
         }
     ];
@@ -178,10 +166,6 @@ message UserBalancesInfoResponse{
 }
 
 message LogoutRequest{
-    string refresh_token = 1;
-}
-
-message LogoutAllRequest{
     string refresh_token = 1;
 }
 

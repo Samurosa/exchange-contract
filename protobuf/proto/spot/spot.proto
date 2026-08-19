@@ -33,8 +33,6 @@ enum SpotStatus {
     SPOT_STATUS_DISABLED = 2;
 }
 
-message Empty {}
-
 message CreateSpotRequest {
     string base_asset  = 1 [
         (validate.rules).string = {

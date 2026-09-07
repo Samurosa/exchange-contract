@@ -74,42 +74,6 @@ func (SpotStatus) EnumDescriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{0}
 }
 
-type Empty struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Empty) Reset() {
-	*x = Empty{}
-	mi := &file_spot_spot_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Empty) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Empty) ProtoMessage() {}
-
-func (x *Empty) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
-func (*Empty) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{0}
-}
-
 type CreateSpotRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	BaseAsset         string                 `protobuf:"bytes,1,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
@@ -127,7 +91,7 @@ type CreateSpotRequest struct {
 
 func (x *CreateSpotRequest) Reset() {
 	*x = CreateSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[1]
+	mi := &file_spot_spot_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -139,7 +103,7 @@ func (x *CreateSpotRequest) String() string {
 func (*CreateSpotRequest) ProtoMessage() {}
 
 func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[1]
+	mi := &file_spot_spot_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -152,7 +116,7 @@ func (x *CreateSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpotRequest.ProtoReflect.Descriptor instead.
 func (*CreateSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{1}
+	return file_spot_spot_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CreateSpotRequest) GetBaseAsset() string {
@@ -228,7 +192,7 @@ type CreateSpotResponse struct {
 
 func (x *CreateSpotResponse) Reset() {
 	*x = CreateSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[2]
+	mi := &file_spot_spot_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -240,7 +204,7 @@ func (x *CreateSpotResponse) String() string {
 func (*CreateSpotResponse) ProtoMessage() {}
 
 func (x *CreateSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[2]
+	mi := &file_spot_spot_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -253,7 +217,7 @@ func (x *CreateSpotResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSpotResponse.ProtoReflect.Descriptor instead.
 func (*CreateSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{2}
+	return file_spot_spot_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateSpotResponse) GetId() string {
@@ -279,7 +243,7 @@ type GetSpotRequest struct {
 
 func (x *GetSpotRequest) Reset() {
 	*x = GetSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[3]
+	mi := &file_spot_spot_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -291,7 +255,7 @@ func (x *GetSpotRequest) String() string {
 func (*GetSpotRequest) ProtoMessage() {}
 
 func (x *GetSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[3]
+	mi := &file_spot_spot_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -304,7 +268,7 @@ func (x *GetSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpotRequest.ProtoReflect.Descriptor instead.
 func (*GetSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{3}
+	return file_spot_spot_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *GetSpotRequest) GetId() string {
@@ -336,7 +300,7 @@ type GetSpotResponse struct {
 
 func (x *GetSpotResponse) Reset() {
 	*x = GetSpotResponse{}
-	mi := &file_spot_spot_proto_msgTypes[4]
+	mi := &file_spot_spot_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -348,7 +312,7 @@ func (x *GetSpotResponse) String() string {
 func (*GetSpotResponse) ProtoMessage() {}
 
 func (x *GetSpotResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[4]
+	mi := &file_spot_spot_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -361,7 +325,7 @@ func (x *GetSpotResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpotResponse.ProtoReflect.Descriptor instead.
 func (*GetSpotResponse) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{4}
+	return file_spot_spot_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetSpotResponse) GetId() string {
@@ -471,7 +435,7 @@ type EnableSpotRequest struct {
 
 func (x *EnableSpotRequest) Reset() {
 	*x = EnableSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[5]
+	mi := &file_spot_spot_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -483,7 +447,7 @@ func (x *EnableSpotRequest) String() string {
 func (*EnableSpotRequest) ProtoMessage() {}
 
 func (x *EnableSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[5]
+	mi := &file_spot_spot_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -496,7 +460,7 @@ func (x *EnableSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableSpotRequest.ProtoReflect.Descriptor instead.
 func (*EnableSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{5}
+	return file_spot_spot_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *EnableSpotRequest) GetId() string {
@@ -515,7 +479,7 @@ type DisableSpotRequest struct {
 
 func (x *DisableSpotRequest) Reset() {
 	*x = DisableSpotRequest{}
-	mi := &file_spot_spot_proto_msgTypes[6]
+	mi := &file_spot_spot_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -527,7 +491,7 @@ func (x *DisableSpotRequest) String() string {
 func (*DisableSpotRequest) ProtoMessage() {}
 
 func (x *DisableSpotRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_spot_spot_proto_msgTypes[6]
+	mi := &file_spot_spot_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -540,7 +504,7 @@ func (x *DisableSpotRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableSpotRequest.ProtoReflect.Descriptor instead.
 func (*DisableSpotRequest) Descriptor() ([]byte, []int) {
-	return file_spot_spot_proto_rawDescGZIP(), []int{6}
+	return file_spot_spot_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DisableSpotRequest) GetId() string {
@@ -554,8 +518,7 @@ var File_spot_spot_proto protoreflect.FileDescriptor
 
 const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
-	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\a\n" +
-	"\x05Empty\"\xfb\x03\n" +
+	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\xfb\x03\n" +
 	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
 	"base_asset\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
@@ -632,36 +595,35 @@ func file_spot_spot_proto_rawDescGZIP() []byte {
 }
 
 var file_spot_spot_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_spot_spot_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_spot_spot_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_spot_spot_proto_goTypes = []any{
 	(SpotStatus)(0),               // 0: spot.SpotStatus
-	(*Empty)(nil),                 // 1: spot.Empty
-	(*CreateSpotRequest)(nil),     // 2: spot.CreateSpotRequest
-	(*CreateSpotResponse)(nil),    // 3: spot.CreateSpotResponse
-	(*GetSpotRequest)(nil),        // 4: spot.GetSpotRequest
-	(*GetSpotResponse)(nil),       // 5: spot.GetSpotResponse
-	(*EnableSpotRequest)(nil),     // 6: spot.EnableSpotRequest
-	(*DisableSpotRequest)(nil),    // 7: spot.DisableSpotRequest
-	(user.Role)(0),                // 8: user.Role
-	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
-	(*emptypb.Empty)(nil),         // 10: google.protobuf.Empty
+	(*CreateSpotRequest)(nil),     // 1: spot.CreateSpotRequest
+	(*CreateSpotResponse)(nil),    // 2: spot.CreateSpotResponse
+	(*GetSpotRequest)(nil),        // 3: spot.GetSpotRequest
+	(*GetSpotResponse)(nil),       // 4: spot.GetSpotResponse
+	(*EnableSpotRequest)(nil),     // 5: spot.EnableSpotRequest
+	(*DisableSpotRequest)(nil),    // 6: spot.DisableSpotRequest
+	(user.Role)(0),                // 7: user.Role
+	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+	(*emptypb.Empty)(nil),         // 9: google.protobuf.Empty
 }
 var file_spot_spot_proto_depIdxs = []int32{
-	8,  // 0: spot.CreateSpotRequest.allowed_roles:type_name -> user.Role
-	9,  // 1: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 0: spot.CreateSpotRequest.allowed_roles:type_name -> user.Role
+	8,  // 1: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 2: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
-	8,  // 3: spot.GetSpotResponse.allowed_roles:type_name -> user.Role
-	9,  // 4: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 5: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 6: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
-	2,  // 7: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
-	4,  // 8: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
-	6,  // 9: spot.SpotInstrumentService.EnableSpot:input_type -> spot.EnableSpotRequest
-	7,  // 10: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
-	3,  // 11: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
-	5,  // 12: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
-	10, // 13: spot.SpotInstrumentService.EnableSpot:output_type -> google.protobuf.Empty
-	10, // 14: spot.SpotInstrumentService.DisableSpot:output_type -> google.protobuf.Empty
+	7,  // 3: spot.GetSpotResponse.allowed_roles:type_name -> user.Role
+	8,  // 4: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	8,  // 5: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 6: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
+	1,  // 7: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
+	3,  // 8: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
+	5,  // 9: spot.SpotInstrumentService.EnableSpot:input_type -> spot.EnableSpotRequest
+	6,  // 10: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
+	2,  // 11: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
+	4,  // 12: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
+	9,  // 13: spot.SpotInstrumentService.EnableSpot:output_type -> google.protobuf.Empty
+	9,  // 14: spot.SpotInstrumentService.DisableSpot:output_type -> google.protobuf.Empty
 	11, // [11:15] is the sub-list for method output_type
 	7,  // [7:11] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name
@@ -680,7 +642,7 @@ func file_spot_spot_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_spot_spot_proto_rawDesc), len(file_spot_spot_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   7,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

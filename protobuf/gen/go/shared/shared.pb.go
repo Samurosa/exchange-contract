@@ -78,11 +78,11 @@ var File_shared_shared_proto protoreflect.FileDescriptor
 
 const file_shared_shared_proto_rawDesc = "" +
 	"\n" +
-	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"q\n" +
+	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"\x7f\n" +
 	"\x05Money\x120\n" +
 	"\bcurrency\x18\x01 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\n" +
-	"2\t^[A-Z_]+$R\bcurrency\x126\n" +
-	"\x06amount\x18\x02 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x142\x13^[0-9]+(\\.[0-9]+)?$R\x06amountBEZCgithub.com/Samurosa/exchange-contract/protobuf/gen/go/shared;sharedb\x06proto3"
+	"2\t^[A-Z_]+$R\bcurrency\x12D\n" +
+	"\x06amount\x18\x02 \x01(\tB,\xfaB)r'\x10\x01\x18\x142!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x06amountBEZCgithub.com/Samurosa/exchange-contract/protobuf/gen/go/shared;sharedb\x06proto3"
 
 var (
 	file_shared_shared_proto_rawDescOnce sync.Once

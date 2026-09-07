@@ -691,8 +691,6 @@ func (m *GetSpotResponse) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Symbol
-
 	// no validation rules for BaseAsset
 
 	// no validation rules for QuoteAsset

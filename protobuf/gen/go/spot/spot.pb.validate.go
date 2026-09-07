@@ -42,40 +42,55 @@ var (
 // define the regex for a UUID once up-front
 var _spot_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on Empty with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
+// Validate checks the field values on SpotListItem with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
-func (m *Empty) Validate() error {
+func (m *SpotListItem) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Empty with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in EmptyMultiError, or nil if none found.
-func (m *Empty) ValidateAll() error {
+// ValidateAll checks the field values on SpotListItem with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in SpotListItemMultiError, or
+// nil if none found.
+func (m *SpotListItem) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Empty) validate(all bool) error {
+func (m *SpotListItem) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
 	var errors []error
 
+	// no validation rules for Id
+
+	// no validation rules for Symbol
+
+	// no validation rules for BaseAsset
+
+	// no validation rules for QuoteAsset
+
+	// no validation rules for Name
+
+	// no validation rules for Description
+
+	// no validation rules for Status
+
 	if len(errors) > 0 {
-		return EmptyMultiError(errors)
+		return SpotListItemMultiError(errors)
 	}
 
 	return nil
 }
 
-// EmptyMultiError is an error wrapping multiple validation errors returned by
-// Empty.ValidateAll() if the designated constraints aren't met.
-type EmptyMultiError []error
+// SpotListItemMultiError is an error wrapping multiple validation errors
+// returned by SpotListItem.ValidateAll() if the designated constraints aren't met.
+type SpotListItemMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m EmptyMultiError) Error() string {
+func (m SpotListItemMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -84,11 +99,11 @@ func (m EmptyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m EmptyMultiError) AllErrors() []error { return m }
+func (m SpotListItemMultiError) AllErrors() []error { return m }
 
-// EmptyValidationError is the validation error returned by Empty.Validate if
-// the designated constraints aren't met.
-type EmptyValidationError struct {
+// SpotListItemValidationError is the validation error returned by
+// SpotListItem.Validate if the designated constraints aren't met.
+type SpotListItemValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -96,22 +111,22 @@ type EmptyValidationError struct {
 }
 
 // Field function returns field value.
-func (e EmptyValidationError) Field() string { return e.field }
+func (e SpotListItemValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e EmptyValidationError) Reason() string { return e.reason }
+func (e SpotListItemValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e EmptyValidationError) Cause() error { return e.cause }
+func (e SpotListItemValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e EmptyValidationError) Key() bool { return e.key }
+func (e SpotListItemValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e EmptyValidationError) ErrorName() string { return "EmptyValidationError" }
+func (e SpotListItemValidationError) ErrorName() string { return "SpotListItemValidationError" }
 
 // Error satisfies the builtin error interface
-func (e EmptyValidationError) Error() string {
+func (e SpotListItemValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -123,14 +138,14 @@ func (e EmptyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sEmpty.%s: %s%s",
+		"invalid %sSpotListItem.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = EmptyValidationError{}
+var _ error = SpotListItemValidationError{}
 
 var _ interface {
 	Field() string
@@ -138,7 +153,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = EmptyValidationError{}
+} = SpotListItemValidationError{}
 
 // Validate checks the field values on CreateSpotRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
@@ -1119,3 +1134,268 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DisableSpotRequestValidationError{}
+
+// Validate checks the field values on SpotListRequest with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *SpotListRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SpotListRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SpotListRequestMultiError, or nil if none found.
+func (m *SpotListRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SpotListRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if val := m.GetPageSize(); val < 1 || val > 100 {
+		err := SpotListRequestValidationError{
+			field:  "PageSize",
+			reason: "value must be inside range [1, 100]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if m.Cursor != nil {
+		// no validation rules for Cursor
+	}
+
+	if m.Status != nil {
+		// no validation rules for Status
+	}
+
+	if m.BaseAsset != nil {
+		// no validation rules for BaseAsset
+	}
+
+	if m.QuoteAsset != nil {
+		// no validation rules for QuoteAsset
+	}
+
+	if len(errors) > 0 {
+		return SpotListRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// SpotListRequestMultiError is an error wrapping multiple validation errors
+// returned by SpotListRequest.ValidateAll() if the designated constraints
+// aren't met.
+type SpotListRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SpotListRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SpotListRequestMultiError) AllErrors() []error { return m }
+
+// SpotListRequestValidationError is the validation error returned by
+// SpotListRequest.Validate if the designated constraints aren't met.
+type SpotListRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SpotListRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SpotListRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SpotListRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SpotListRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SpotListRequestValidationError) ErrorName() string { return "SpotListRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SpotListRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSpotListRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SpotListRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SpotListRequestValidationError{}
+
+// Validate checks the field values on SpotListResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *SpotListResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on SpotListResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// SpotListResponseMultiError, or nil if none found.
+func (m *SpotListResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *SpotListResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetSpots() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, SpotListResponseValidationError{
+						field:  fmt.Sprintf("Spots[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, SpotListResponseValidationError{
+						field:  fmt.Sprintf("Spots[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return SpotListResponseValidationError{
+					field:  fmt.Sprintf("Spots[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for NextCursor
+
+	// no validation rules for HasMore
+
+	if len(errors) > 0 {
+		return SpotListResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// SpotListResponseMultiError is an error wrapping multiple validation errors
+// returned by SpotListResponse.ValidateAll() if the designated constraints
+// aren't met.
+type SpotListResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m SpotListResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m SpotListResponseMultiError) AllErrors() []error { return m }
+
+// SpotListResponseValidationError is the validation error returned by
+// SpotListResponse.Validate if the designated constraints aren't met.
+type SpotListResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SpotListResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SpotListResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SpotListResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SpotListResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SpotListResponseValidationError) ErrorName() string { return "SpotListResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SpotListResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSpotListResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SpotListResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SpotListResponseValidationError{}

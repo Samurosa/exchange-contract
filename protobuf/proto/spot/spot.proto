@@ -24,13 +24,28 @@ service SpotInstrumentService {
     rpc DisableSpot(DisableSpotRequest)
         returns (google.protobuf.Empty);
 
-    //listmarkets (просто споты из бд с пагинацией)
+    rpc ListSpots (SpotListRequest)
+        returns (SpotListResponse);
 }
 
 enum SpotStatus {
     SPOT_STATUS_UNSPECIFIED = 0;
     SPOT_STATUS_ACTIVE = 1;
     SPOT_STATUS_DISABLED = 2;
+}
+
+message SpotListItem {
+    string id = 1;
+
+    string symbol = 2;
+
+    string base_asset = 3;
+    string quote_asset = 4;
+
+    string name = 5;
+    string description = 6;
+
+    SpotStatus status = 7;
 }
 
 message CreateSpotRequest {
@@ -146,4 +161,29 @@ message DisableSpotRequest {
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
+}
+
+message SpotListRequest {
+    int32 page_size = 1 [
+        (validate.rules).int32 = {
+            gte: 1,
+            lte: 100
+        }
+    ];
+
+    optional string cursor = 2;
+
+    optional SpotStatus status = 3;
+
+    optional string base_asset = 4;
+
+    optional string quote_asset = 5;
+}
+
+message SpotListResponse {
+    repeated SpotListItem spots = 1;
+
+    string next_cursor = 2;
+
+    bool has_more = 3;
 }

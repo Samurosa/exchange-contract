@@ -66,8 +66,6 @@ func (m *SpotListItem) validate(all bool) error {
 
 	// no validation rules for Id
 
-	// no validation rules for Symbol
-
 	// no validation rules for BaseAsset
 
 	// no validation rules for QuoteAsset
@@ -77,6 +75,35 @@ func (m *SpotListItem) validate(all bool) error {
 	// no validation rules for Description
 
 	// no validation rules for Status
+
+	if all {
+		switch v := interface{}(m.GetCreatedAt()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, SpotListItemValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, SpotListItemValidationError{
+					field:  "CreatedAt",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetCreatedAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return SpotListItemValidationError{
+				field:  "CreatedAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return SpotListItemMultiError(errors)

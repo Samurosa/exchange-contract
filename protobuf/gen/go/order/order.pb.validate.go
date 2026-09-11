@@ -67,34 +67,7 @@ func (m *Order) validate(all bool) error {
 
 	// no validation rules for OrderSide
 
-	if all {
-		switch v := interface{}(m.GetPrice()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, OrderValidationError{
-					field:  "Price",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, OrderValidationError{
-					field:  "Price",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		}
-	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return OrderValidationError{
-				field:  "Price",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Price
 
 	// no validation rules for Quantity
 

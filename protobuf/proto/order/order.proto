@@ -48,7 +48,7 @@ message Order {
 
     OrderSide order_side = 4;
 
-    shared.Money price = 5;
+    string price = 5;
 
     string quantity = 6;
 

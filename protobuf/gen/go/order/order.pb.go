@@ -7,7 +7,7 @@
 package order
 
 import (
-	shared "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared"
+	_ "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -244,7 +244,7 @@ type CreateOrderRequest struct {
 	SpotId         string                 `protobuf:"bytes,1,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
 	OrderSide      OrderSide              `protobuf:"varint,2,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
 	IdempotencyKey string                 `protobuf:"bytes,3,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
-	Price          *shared.Money          `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
+	Price          string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
 	Quantity       string                 `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -301,11 +301,11 @@ func (x *CreateOrderRequest) GetIdempotencyKey() string {
 	return ""
 }
 
-func (x *CreateOrderRequest) GetPrice() *shared.Money {
+func (x *CreateOrderRequest) GetPrice() string {
 	if x != nil {
 		return x.Price
 	}
-	return nil
+	return ""
 }
 
 func (x *CreateOrderRequest) GetQuantity() string {
@@ -729,13 +729,13 @@ const file_order_order_proto_rawDesc = "" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8f\x02\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa4\x02\n" +
 	"\x12CreateOrderRequest\x12!\n" +
 	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\x129\n" +
 	"\n" +
 	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x122\n" +
-	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12-\n" +
-	"\x05price\x18\x04 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05price\x128\n" +
+	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12B\n" +
+	"\x05price\x18\x04 \x01(\tB,\xfaB)r'\x10\x01\x18\x142!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x05price\x128\n" +
 	"\bquantity\x18\x05 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
@@ -815,7 +815,6 @@ var file_order_order_proto_goTypes = []any{
 	(*ListOrdersRequest)(nil),         // 9: order.ListOrdersRequest
 	(*ListOrdersResponse)(nil),        // 10: order.ListOrdersResponse
 	(*timestamppb.Timestamp)(nil),     // 11: google.protobuf.Timestamp
-	(*shared.Money)(nil),              // 12: shared.Money
 }
 var file_order_order_proto_depIdxs = []int32{
 	0,  // 0: order.Order.order_side:type_name -> order.OrderSide
@@ -823,28 +822,27 @@ var file_order_order_proto_depIdxs = []int32{
 	11, // 2: order.Order.created_at:type_name -> google.protobuf.Timestamp
 	11, // 3: order.Order.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 4: order.CreateOrderRequest.order_side:type_name -> order.OrderSide
-	12, // 5: order.CreateOrderRequest.price:type_name -> shared.Money
-	1,  // 6: order.CreateOrderResponse.order_status:type_name -> order.OrderStatus
-	11, // 7: order.CreateOrderResponse.created_at:type_name -> google.protobuf.Timestamp
-	2,  // 8: order.GetOrderResponse.order:type_name -> order.Order
-	1,  // 9: order.StreamOrderUpdateResponse.order_status:type_name -> order.OrderStatus
-	11, // 10: order.StreamOrderUpdateResponse.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 11: order.ListOrdersRequest.status:type_name -> order.OrderStatus
-	0,  // 12: order.ListOrdersRequest.side:type_name -> order.OrderSide
-	2,  // 13: order.ListOrdersResponse.orders:type_name -> order.Order
-	3,  // 14: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5,  // 15: order.OrderService.GetOrder:input_type -> order.GetOrderRequest
-	7,  // 16: order.OrderService.StreamOrderUpdate:input_type -> order.StreamOrderUpdateRequest
-	9,  // 17: order.OrderService.ListOrders:input_type -> order.ListOrdersRequest
-	4,  // 18: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6,  // 19: order.OrderService.GetOrder:output_type -> order.GetOrderResponse
-	8,  // 20: order.OrderService.StreamOrderUpdate:output_type -> order.StreamOrderUpdateResponse
-	10, // 21: order.OrderService.ListOrders:output_type -> order.ListOrdersResponse
-	18, // [18:22] is the sub-list for method output_type
-	14, // [14:18] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	1,  // 5: order.CreateOrderResponse.order_status:type_name -> order.OrderStatus
+	11, // 6: order.CreateOrderResponse.created_at:type_name -> google.protobuf.Timestamp
+	2,  // 7: order.GetOrderResponse.order:type_name -> order.Order
+	1,  // 8: order.StreamOrderUpdateResponse.order_status:type_name -> order.OrderStatus
+	11, // 9: order.StreamOrderUpdateResponse.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 10: order.ListOrdersRequest.status:type_name -> order.OrderStatus
+	0,  // 11: order.ListOrdersRequest.side:type_name -> order.OrderSide
+	2,  // 12: order.ListOrdersResponse.orders:type_name -> order.Order
+	3,  // 13: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5,  // 14: order.OrderService.GetOrder:input_type -> order.GetOrderRequest
+	7,  // 15: order.OrderService.StreamOrderUpdate:input_type -> order.StreamOrderUpdateRequest
+	9,  // 16: order.OrderService.ListOrders:input_type -> order.ListOrdersRequest
+	4,  // 17: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	6,  // 18: order.OrderService.GetOrder:output_type -> order.GetOrderResponse
+	8,  // 19: order.OrderService.StreamOrderUpdate:output_type -> order.StreamOrderUpdateResponse
+	10, // 20: order.OrderService.ListOrders:output_type -> order.ListOrdersResponse
+	17, // [17:21] is the sub-list for method output_type
+	13, // [13:17] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_order_order_proto_init() }

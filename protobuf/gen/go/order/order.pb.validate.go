@@ -264,10 +264,10 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if m.GetPrice() == nil {
+	if l := utf8.RuneCountInString(m.GetPrice()); l < 1 || l > 20 {
 		err := CreateOrderRequestValidationError{
 			field:  "Price",
-			reason: "value is required",
+			reason: "value length must be between 1 and 20 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -275,33 +275,15 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if all {
-		switch v := interface{}(m.GetPrice()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, CreateOrderRequestValidationError{
-					field:  "Price",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
-		case interface{ Validate() error }:
-			if err := v.Validate(); err != nil {
-				errors = append(errors, CreateOrderRequestValidationError{
-					field:  "Price",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
-			}
+	if !_CreateOrderRequest_Price_Pattern.MatchString(m.GetPrice()) {
+		err := CreateOrderRequestValidationError{
+			field:  "Price",
+			reason: "value does not match regex pattern \"^(0|[1-9][0-9]*)(\\\\.[0-9]*[1-9])?$\"",
 		}
-	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return CreateOrderRequestValidationError{
-				field:  "Price",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
+		if !all {
+			return err
 		}
+		errors = append(errors, err)
 	}
 
 	if utf8.RuneCountInString(m.GetQuantity()) < 1 {
@@ -413,6 +395,8 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateOrderRequestValidationError{}
+
+var _CreateOrderRequest_Price_Pattern = regexp.MustCompile("^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$")
 
 var _CreateOrderRequest_Quantity_Pattern = regexp.MustCompile("^[0-9]+(\\.[0-9]+)?$")
 

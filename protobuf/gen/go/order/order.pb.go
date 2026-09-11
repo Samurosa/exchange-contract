@@ -76,13 +76,12 @@ func (OrderSide) EnumDescriptor() ([]byte, []int) {
 type OrderStatus int32
 
 const (
-	OrderStatus_ORDER_STATUS_UNSPECIFIED      OrderStatus = 0
-	OrderStatus_ORDER_STATUS_NEW              OrderStatus = 1
-	OrderStatus_ORDER_STATUS_OPEN             OrderStatus = 2
-	OrderStatus_ORDER_STATUS_PARTIALLY_FILLED OrderStatus = 3
-	OrderStatus_ORDER_STATUS_FILLED           OrderStatus = 4
-	OrderStatus_ORDER_STATUS_CANCELED         OrderStatus = 5
-	OrderStatus_ORDER_STATUS_REJECTED         OrderStatus = 6
+	OrderStatus_ORDER_STATUS_UNSPECIFIED OrderStatus = 0
+	OrderStatus_ORDER_STATUS_NEW         OrderStatus = 1
+	OrderStatus_ORDER_STATUS_OPEN        OrderStatus = 2
+	OrderStatus_ORDER_STATUS_FILLED      OrderStatus = 4
+	OrderStatus_ORDER_STATUS_CANCELED    OrderStatus = 5
+	OrderStatus_ORDER_STATUS_REJECTED    OrderStatus = 6
 )
 
 // Enum value maps for OrderStatus.
@@ -91,19 +90,17 @@ var (
 		0: "ORDER_STATUS_UNSPECIFIED",
 		1: "ORDER_STATUS_NEW",
 		2: "ORDER_STATUS_OPEN",
-		3: "ORDER_STATUS_PARTIALLY_FILLED",
 		4: "ORDER_STATUS_FILLED",
 		5: "ORDER_STATUS_CANCELED",
 		6: "ORDER_STATUS_REJECTED",
 	}
 	OrderStatus_value = map[string]int32{
-		"ORDER_STATUS_UNSPECIFIED":      0,
-		"ORDER_STATUS_NEW":              1,
-		"ORDER_STATUS_OPEN":             2,
-		"ORDER_STATUS_PARTIALLY_FILLED": 3,
-		"ORDER_STATUS_FILLED":           4,
-		"ORDER_STATUS_CANCELED":         5,
-		"ORDER_STATUS_REJECTED":         6,
+		"ORDER_STATUS_UNSPECIFIED": 0,
+		"ORDER_STATUS_NEW":         1,
+		"ORDER_STATUS_OPEN":        2,
+		"ORDER_STATUS_FILLED":      4,
+		"ORDER_STATUS_CANCELED":    5,
+		"ORDER_STATUS_REJECTED":    6,
 	}
 )
 
@@ -135,19 +132,18 @@ func (OrderStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type Order struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	OrderId        string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	MarketId       string                 `protobuf:"bytes,3,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`
-	OrderSide      OrderSide              `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
-	Price          *shared.Money          `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
-	Quantity       string                 `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	FilledQuantity string                 `protobuf:"bytes,7,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
-	OrderStatus    OrderStatus            `protobuf:"varint,8,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SpotId        string                 `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
+	OrderSide     OrderSide              `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
+	Price         *shared.Money          `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
+	Quantity      string                 `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	OrderStatus   OrderStatus            `protobuf:"varint,8,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Order) Reset() {
@@ -194,9 +190,9 @@ func (x *Order) GetUserId() string {
 	return ""
 }
 
-func (x *Order) GetMarketId() string {
+func (x *Order) GetSpotId() string {
 	if x != nil {
-		return x.MarketId
+		return x.SpotId
 	}
 	return ""
 }
@@ -218,13 +214,6 @@ func (x *Order) GetPrice() *shared.Money {
 func (x *Order) GetQuantity() string {
 	if x != nil {
 		return x.Quantity
-	}
-	return ""
-}
-
-func (x *Order) GetFilledQuantity() string {
-	if x != nil {
-		return x.FilledQuantity
 	}
 	return ""
 }
@@ -252,7 +241,7 @@ func (x *Order) GetUpdatedAt() *timestamppb.Timestamp {
 
 type CreateOrderRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	MarketId       string                 `protobuf:"bytes,1,opt,name=market_id,json=marketId,proto3" json:"market_id,omitempty"`
+	SpotId         string                 `protobuf:"bytes,1,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
 	OrderSide      OrderSide              `protobuf:"varint,2,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
 	IdempotencyKey string                 `protobuf:"bytes,3,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
 	Price          *shared.Money          `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
@@ -291,9 +280,9 @@ func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreateOrderRequest) GetMarketId() string {
+func (x *CreateOrderRequest) GetSpotId() string {
 	if x != nil {
-		return x.MarketId
+		return x.SpotId
 	}
 	return ""
 }
@@ -590,7 +579,7 @@ type ListOrdersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
-	MarketId      *string                `protobuf:"bytes,3,opt,name=market_id,json=marketId,proto3,oneof" json:"market_id,omitempty"`
+	SpotId        *string                `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3,oneof" json:"spot_id,omitempty"`
 	Status        *OrderStatus           `protobuf:"varint,4,opt,name=status,proto3,enum=order.OrderStatus,oneof" json:"status,omitempty"`
 	Side          *OrderSide             `protobuf:"varint,5,opt,name=side,proto3,enum=order.OrderSide,oneof" json:"side,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -641,9 +630,9 @@ func (x *ListOrdersRequest) GetCursor() string {
 	return ""
 }
 
-func (x *ListOrdersRequest) GetMarketId() string {
-	if x != nil && x.MarketId != nil {
-		return *x.MarketId
+func (x *ListOrdersRequest) GetSpotId() string {
+	if x != nil && x.SpotId != nil {
+		return *x.SpotId
 	}
 	return ""
 }
@@ -726,24 +715,23 @@ var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x13shared/shared.proto\"\xa0\x03\n" +
+	"\x11order/order.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x13shared/shared.proto\"\xf3\x02\n" +
 	"\x05Order\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tmarket_id\x18\x03 \x01(\tR\bmarketId\x12/\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
+	"\aspot_id\x18\x03 \x01(\tR\x06spotId\x12/\n" +
 	"\n" +
 	"order_side\x18\x04 \x01(\x0e2\x10.order.OrderSideR\torderSide\x12#\n" +
 	"\x05price\x18\x05 \x01(\v2\r.shared.MoneyR\x05price\x12\x1a\n" +
-	"\bquantity\x18\x06 \x01(\tR\bquantity\x12'\n" +
-	"\x0ffilled_quantity\x18\a \x01(\tR\x0efilledQuantity\x125\n" +
+	"\bquantity\x18\x06 \x01(\tR\bquantity\x125\n" +
 	"\forder_status\x18\b \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x129\n" +
 	"\n" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x93\x02\n" +
-	"\x12CreateOrderRequest\x12%\n" +
-	"\tmarket_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\bmarketId\x129\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8f\x02\n" +
+	"\x12CreateOrderRequest\x12!\n" +
+	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\x129\n" +
 	"\n" +
 	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x122\n" +
 	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12-\n" +
@@ -765,16 +753,16 @@ const file_order_order_proto_rawDesc = "" +
 	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12'\n" +
 	"\x0ffilled_quantity\x18\x03 \x01(\tR\x0efilledQuantity\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x83\x02\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xfd\x01\n" +
 	"\x11ListOrdersRequest\x12&\n" +
 	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
-	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12 \n" +
-	"\tmarket_id\x18\x03 \x01(\tH\x01R\bmarketId\x88\x01\x01\x12/\n" +
+	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12\x1c\n" +
+	"\aspot_id\x18\x03 \x01(\tH\x01R\x06spotId\x88\x01\x01\x12/\n" +
 	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusH\x02R\x06status\x88\x01\x01\x12)\n" +
 	"\x04side\x18\x05 \x01(\x0e2\x10.order.OrderSideH\x03R\x04side\x88\x01\x01B\t\n" +
-	"\a_cursorB\f\n" +
+	"\a_cursorB\n" +
 	"\n" +
-	"_market_idB\t\n" +
+	"\b_spot_idB\t\n" +
 	"\a_statusB\a\n" +
 	"\x05_side\"v\n" +
 	"\x12ListOrdersResponse\x12$\n" +
@@ -785,12 +773,11 @@ const file_order_order_proto_rawDesc = "" +
 	"\tOrderSide\x12\x1a\n" +
 	"\x16ORDER_SIDE_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eORDER_SIDE_BUY\x10\x01\x12\x13\n" +
-	"\x0fORDER_SIDE_SELL\x10\x02*\xca\x01\n" +
+	"\x0fORDER_SIDE_SELL\x10\x02*\xa7\x01\n" +
 	"\vOrderStatus\x12\x1c\n" +
 	"\x18ORDER_STATUS_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10ORDER_STATUS_NEW\x10\x01\x12\x15\n" +
-	"\x11ORDER_STATUS_OPEN\x10\x02\x12!\n" +
-	"\x1dORDER_STATUS_PARTIALLY_FILLED\x10\x03\x12\x17\n" +
+	"\x11ORDER_STATUS_OPEN\x10\x02\x12\x17\n" +
 	"\x13ORDER_STATUS_FILLED\x10\x04\x12\x19\n" +
 	"\x15ORDER_STATUS_CANCELED\x10\x05\x12\x19\n" +
 	"\x15ORDER_STATUS_REJECTED\x10\x062\xae\x02\n" +

@@ -33,7 +33,6 @@ enum OrderStatus {
     ORDER_STATUS_UNSPECIFIED = 0;
     ORDER_STATUS_NEW = 1;
     ORDER_STATUS_OPEN = 2;
-    ORDER_STATUS_PARTIALLY_FILLED = 3;
     ORDER_STATUS_FILLED = 4;
     ORDER_STATUS_CANCELED = 5;
     ORDER_STATUS_REJECTED = 6;
@@ -45,13 +44,13 @@ message Order {
 
     string user_id = 2;
 
-    string market_id = 3;
+    string spot_id = 3;
 
     OrderSide order_side = 4;
 
     shared.Money price = 5;
+
     string quantity = 6;
-    string filled_quantity = 7;
 
     OrderStatus order_status = 8;
 
@@ -62,7 +61,7 @@ message Order {
 
 message CreateOrderRequest {
 
-    string market_id = 1  [
+    string spot_id = 1  [
         (validate.rules).string.uuid = true
     ];
 
@@ -136,7 +135,7 @@ message ListOrdersRequest {
     ];
 
     optional string cursor = 2;
-    optional string market_id = 3;
+    optional string spot_id = 3;
     optional OrderStatus status = 4;
     optional OrderSide side = 5;
 }

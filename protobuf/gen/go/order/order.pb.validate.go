@@ -63,7 +63,7 @@ func (m *Order) validate(all bool) error {
 
 	// no validation rules for UserId
 
-	// no validation rules for MarketId
+	// no validation rules for SpotId
 
 	// no validation rules for OrderSide
 
@@ -97,8 +97,6 @@ func (m *Order) validate(all bool) error {
 	}
 
 	// no validation rules for Quantity
-
-	// no validation rules for FilledQuantity
 
 	// no validation rules for OrderStatus
 
@@ -259,9 +257,9 @@ func (m *CreateOrderRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetMarketId()); err != nil {
+	if err := m._validateUuid(m.GetSpotId()); err != nil {
 		err = CreateOrderRequestValidationError{
-			field:  "MarketId",
+			field:  "SpotId",
 			reason: "value must be a valid UUID",
 			cause:  err,
 		}
@@ -1125,8 +1123,8 @@ func (m *ListOrdersRequest) validate(all bool) error {
 		// no validation rules for Cursor
 	}
 
-	if m.MarketId != nil {
-		// no validation rules for MarketId
+	if m.SpotId != nil {
+		// no validation rules for SpotId
 	}
 
 	if m.Status != nil {

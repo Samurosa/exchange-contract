@@ -79,9 +79,9 @@ const (
 	OrderStatus_ORDER_STATUS_UNSPECIFIED OrderStatus = 0
 	OrderStatus_ORDER_STATUS_NEW         OrderStatus = 1
 	OrderStatus_ORDER_STATUS_OPEN        OrderStatus = 2
-	OrderStatus_ORDER_STATUS_FILLED      OrderStatus = 4
-	OrderStatus_ORDER_STATUS_CANCELED    OrderStatus = 5
-	OrderStatus_ORDER_STATUS_REJECTED    OrderStatus = 6
+	OrderStatus_ORDER_STATUS_FILLED      OrderStatus = 3
+	OrderStatus_ORDER_STATUS_CANCELED    OrderStatus = 4
+	OrderStatus_ORDER_STATUS_REJECTED    OrderStatus = 5
 )
 
 // Enum value maps for OrderStatus.
@@ -90,17 +90,17 @@ var (
 		0: "ORDER_STATUS_UNSPECIFIED",
 		1: "ORDER_STATUS_NEW",
 		2: "ORDER_STATUS_OPEN",
-		4: "ORDER_STATUS_FILLED",
-		5: "ORDER_STATUS_CANCELED",
-		6: "ORDER_STATUS_REJECTED",
+		3: "ORDER_STATUS_FILLED",
+		4: "ORDER_STATUS_CANCELED",
+		5: "ORDER_STATUS_REJECTED",
 	}
 	OrderStatus_value = map[string]int32{
 		"ORDER_STATUS_UNSPECIFIED": 0,
 		"ORDER_STATUS_NEW":         1,
 		"ORDER_STATUS_OPEN":        2,
-		"ORDER_STATUS_FILLED":      4,
-		"ORDER_STATUS_CANCELED":    5,
-		"ORDER_STATUS_REJECTED":    6,
+		"ORDER_STATUS_FILLED":      3,
+		"ORDER_STATUS_CANCELED":    4,
+		"ORDER_STATUS_REJECTED":    5,
 	}
 )
 
@@ -508,13 +508,13 @@ func (x *StreamOrderUpdateRequest) GetOrderId() string {
 }
 
 type StreamOrderUpdateResponse struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	OrderId        string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	OrderStatus    OrderStatus            `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
-	FilledQuantity string                 `protobuf:"bytes,3,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	OrderStatus   OrderStatus            `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	Quantity      string                 `protobuf:"bytes,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *StreamOrderUpdateResponse) Reset() {
@@ -561,9 +561,9 @@ func (x *StreamOrderUpdateResponse) GetOrderStatus() OrderStatus {
 	return OrderStatus_ORDER_STATUS_UNSPECIFIED
 }
 
-func (x *StreamOrderUpdateResponse) GetFilledQuantity() string {
+func (x *StreamOrderUpdateResponse) GetQuantity() string {
 	if x != nil {
-		return x.FilledQuantity
+		return x.Quantity
 	}
 	return ""
 }
@@ -747,11 +747,11 @@ const file_order_order_proto_rawDesc = "" +
 	"\x10GetOrderResponse\x12\"\n" +
 	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"?\n" +
 	"\x18StreamOrderUpdateRequest\x12#\n" +
-	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xd1\x01\n" +
+	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xc4\x01\n" +
 	"\x19StreamOrderUpdateResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
-	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12'\n" +
-	"\x0ffilled_quantity\x18\x03 \x01(\tR\x0efilledQuantity\x129\n" +
+	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12\x1a\n" +
+	"\bquantity\x18\x03 \x01(\tR\bquantity\x129\n" +
 	"\n" +
 	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xfd\x01\n" +
 	"\x11ListOrdersRequest\x12&\n" +
@@ -778,9 +778,9 @@ const file_order_order_proto_rawDesc = "" +
 	"\x18ORDER_STATUS_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10ORDER_STATUS_NEW\x10\x01\x12\x15\n" +
 	"\x11ORDER_STATUS_OPEN\x10\x02\x12\x17\n" +
-	"\x13ORDER_STATUS_FILLED\x10\x04\x12\x19\n" +
-	"\x15ORDER_STATUS_CANCELED\x10\x05\x12\x19\n" +
-	"\x15ORDER_STATUS_REJECTED\x10\x062\xae\x02\n" +
+	"\x13ORDER_STATUS_FILLED\x10\x03\x12\x19\n" +
+	"\x15ORDER_STATUS_CANCELED\x10\x04\x12\x19\n" +
+	"\x15ORDER_STATUS_REJECTED\x10\x052\xae\x02\n" +
 	"\fOrderService\x12D\n" +
 	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponse\x12;\n" +
 	"\bGetOrder\x12\x16.order.GetOrderRequest\x1a\x17.order.GetOrderResponse\x12X\n" +

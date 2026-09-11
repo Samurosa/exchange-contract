@@ -33,9 +33,9 @@ enum OrderStatus {
     ORDER_STATUS_UNSPECIFIED = 0;
     ORDER_STATUS_NEW = 1;
     ORDER_STATUS_OPEN = 2;
-    ORDER_STATUS_FILLED = 4;
-    ORDER_STATUS_CANCELED = 5;
-    ORDER_STATUS_REJECTED = 6;
+    ORDER_STATUS_FILLED = 3;
+    ORDER_STATUS_CANCELED = 4;
+    ORDER_STATUS_REJECTED = 5;
 }
 
 message Order {
@@ -121,7 +121,7 @@ message StreamOrderUpdateResponse {
 
     OrderStatus order_status = 2;
 
-    string filled_quantity = 3;
+    string quantity = 3;
 
     google.protobuf.Timestamp updated_at = 4;
 }

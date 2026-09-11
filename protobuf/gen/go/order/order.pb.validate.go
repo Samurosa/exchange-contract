@@ -975,7 +975,7 @@ func (m *StreamOrderUpdateResponse) validate(all bool) error {
 
 	// no validation rules for OrderStatus
 
-	// no validation rules for FilledQuantity
+	// no validation rules for Quantity
 
 	if all {
 		switch v := interface{}(m.GetUpdatedAt()).(type) {

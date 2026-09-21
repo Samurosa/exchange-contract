@@ -25,12 +25,12 @@ service UserService {
     rpc UpdateUserInfo(UpdateUserInfoRequest)
         returns (google.protobuf.Empty);
 
-    // Deletes the currently authenticated user account.
+    // Deletes the currently authenticated user.
     rpc DeleteUser(google.protobuf.Empty)
         returns (google.protobuf.Empty);
 
     // Changes the password of the currently authenticated user.
-    rpc ChangePassword(ChangeUserRequest)
+    rpc ChangePassword(ChangePasswordRequest)
         returns (google.protobuf.Empty);
 
 
@@ -55,7 +55,7 @@ service UserService {
 
     // Balance
 
-    // Deposits funds to a user account.
+    // Deposits funds to the currently authenticated user's balance.
     rpc Deposit(DepositRequest)
         returns (DepositResponse);
 
@@ -68,7 +68,7 @@ service UserService {
 // Balance represents the user's balance for a single asset.
 message Balance {
 
-    // Asset symbol, for example BTC, USDT or USD.
+    // Asset symbol, for example BTC or USDT.
     string asset = 1;
 
     // Amount available for spending or withdrawal.
@@ -88,6 +88,9 @@ message RegisterUserRequest {
     ];
 
     // User password.
+    //
+    // Length must be between 8 and 64 characters.
+    // Password complexity is validated by the application layer.
     string password = 2 [
         (validate.rules).string = {
             min_len: 8,
@@ -154,34 +157,16 @@ message UpdateUserInfoRequest {
 }
 
 
-// DepositRequest contains information required to deposit funds
-// to a user balance.
+// DepositRequest contains information required to deposit funds.
 message DepositRequest {
 
-    // Unique identifier of the user receiving the deposit.
-    string user_id = 1 [
-        (validate.rules).string.uuid = true
-    ];
-
-    // Asset symbol of the deposited funds.
-    string asset = 2 [
-        (validate.rules).string = {
-            min_len: 1,
-            max_len: 10,
-            pattern: "^[A-Z_]+$"
-        }
-    ];
-
-    // Amount of the deposited funds.
-    shared.Money amount = 3 [
+    // Asset and amount of the deposit.
+    shared.Money amount = 1 [
         (validate.rules).message.required = true
     ];
 
     // Unique key used to make the deposit operation idempotent.
-    //
-    // Reusing the same key for the same user must not create
-    // another deposit.
-    string idempotency_key = 4 [
+    string idempotency_key = 2 [
         (validate.rules).string = {
             min_len: 1,
             max_len: 50
@@ -194,7 +179,9 @@ message DepositRequest {
 message DepositResponse {
 
     // Updated balance of the deposited asset.
-    Balance balance = 1;
+    Balance balance = 1 [
+        (validate.rules).message.required = true
+    ];
 }
 
 
@@ -207,6 +194,8 @@ message LoginRequest {
     ];
 
     // User password.
+    //
+    // Length must be between 8 and 64 characters.
     string password = 2 [
         (validate.rules).string = {
             min_len: 8,
@@ -216,7 +205,7 @@ message LoginRequest {
 }
 
 
-// TokenPairResponse contains access and refresh tokens issued during authentication.
+// TokenPairResponse contains access and refresh tokens.
 message TokenPairResponse {
 
     // Short-lived access token used to authorize API requests.
@@ -251,7 +240,9 @@ message UserBalancesInfoResponse {
 message LogoutRequest {
 
     // Refresh token identifying the session to terminate.
-    string refresh_token = 1;
+    string refresh_token = 1 [
+        (validate.rules).string.min_len = 1
+    ];
 }
 
 
@@ -259,13 +250,15 @@ message LogoutRequest {
 // a new token pair.
 message RefreshTokenRequest {
 
-    // Refresh token used to issue a new access token.
-    string refresh_token = 1;
+    // Refresh token used to issue a new token pair.
+    string refresh_token = 1 [
+        (validate.rules).string.min_len = 1
+    ];
 }
 
 
-// ChangeUserRequest contains the old and new passwords.
-message ChangeUserRequest {
+// ChangePasswordRequest contains the current and new passwords.
+message ChangePasswordRequest {
 
     // Current user password.
     string old_password = 1 [
@@ -276,6 +269,9 @@ message ChangeUserRequest {
     ];
 
     // New user password.
+    //
+    // Length must be between 8 and 64 characters.
+    // Password complexity is validated by the application layer.
     string new_password = 2 [
         (validate.rules).string = {
             min_len: 8,

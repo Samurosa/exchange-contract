@@ -28,7 +28,7 @@ const (
 // Balance represents the user's balance for a single asset.
 type Balance struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Asset symbol, for example BTC, USDT or USD.
+	// Asset symbol, for example BTC or USDT.
 	Asset string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
 	// Amount available for spending or withdrawal.
 	Available string `protobuf:"bytes,2,opt,name=available,proto3" json:"available,omitempty"`
@@ -95,6 +95,9 @@ type RegisterUserRequest struct {
 	// User email address.
 	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	// User password.
+	//
+	// Length must be between 8 and 64 characters.
+	// Password complexity is validated by the application layer.
 	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	// User display name.
 	Name          string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
@@ -347,21 +350,13 @@ func (x *UpdateUserInfoRequest) GetName() string {
 	return ""
 }
 
-// DepositRequest contains information required to deposit funds
-// to a user balance.
+// DepositRequest contains information required to deposit funds.
 type DepositRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Unique identifier of the user receiving the deposit.
-	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// Asset symbol of the deposited funds.
-	Asset string `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
-	// Amount of the deposited funds.
-	Amount *shared.Money `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	// Asset and amount of the deposit.
+	Amount *shared.Money `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"`
 	// Unique key used to make the deposit operation idempotent.
-	//
-	// Reusing the same key for the same user must not create
-	// another deposit.
-	IdempotencyKey string `protobuf:"bytes,4,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
+	IdempotencyKey string `protobuf:"bytes,2,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -394,20 +389,6 @@ func (x *DepositRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DepositRequest.ProtoReflect.Descriptor instead.
 func (*DepositRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *DepositRequest) GetUserId() string {
-	if x != nil {
-		return x.UserId
-	}
-	return ""
-}
-
-func (x *DepositRequest) GetAsset() string {
-	if x != nil {
-		return x.Asset
-	}
-	return ""
 }
 
 func (x *DepositRequest) GetAmount() *shared.Money {
@@ -476,6 +457,8 @@ type LoginRequest struct {
 	// User email address.
 	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	// User password.
+	//
+	// Length must be between 8 and 64 characters.
 	Password      string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -525,7 +508,7 @@ func (x *LoginRequest) GetPassword() string {
 	return ""
 }
 
-// TokenPairResponse contains access and refresh tokens issued during authentication.
+// TokenPairResponse contains access and refresh tokens.
 type TokenPairResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Short-lived access token used to authorize API requests.
@@ -712,7 +695,7 @@ func (x *LogoutRequest) GetRefreshToken() string {
 // a new token pair.
 type RefreshTokenRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Refresh token used to issue a new access token.
+	// Refresh token used to issue a new token pair.
 	RefreshToken  string `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -755,31 +738,34 @@ func (x *RefreshTokenRequest) GetRefreshToken() string {
 	return ""
 }
 
-// ChangeUserRequest contains the old and new passwords.
-type ChangeUserRequest struct {
+// ChangePasswordRequest contains the current and new passwords.
+type ChangePasswordRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Current user password.
 	OldPassword string `protobuf:"bytes,1,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
 	// New user password.
+	//
+	// Length must be between 8 and 64 characters.
+	// Password complexity is validated by the application layer.
 	NewPassword   string `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChangeUserRequest) Reset() {
-	*x = ChangeUserRequest{}
+func (x *ChangePasswordRequest) Reset() {
+	*x = ChangePasswordRequest{}
 	mi := &file_user_user_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChangeUserRequest) String() string {
+func (x *ChangePasswordRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChangeUserRequest) ProtoMessage() {}
+func (*ChangePasswordRequest) ProtoMessage() {}
 
-func (x *ChangeUserRequest) ProtoReflect() protoreflect.Message {
+func (x *ChangePasswordRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_user_user_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -791,19 +777,19 @@ func (x *ChangeUserRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChangeUserRequest.ProtoReflect.Descriptor instead.
-func (*ChangeUserRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ChangePasswordRequest.ProtoReflect.Descriptor instead.
+func (*ChangePasswordRequest) Descriptor() ([]byte, []int) {
 	return file_user_user_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *ChangeUserRequest) GetOldPassword() string {
+func (x *ChangePasswordRequest) GetOldPassword() string {
 	if x != nil {
 		return x.OldPassword
 	}
 	return ""
 }
 
-func (x *ChangeUserRequest) GetNewPassword() string {
+func (x *ChangePasswordRequest) GetNewPassword() string {
 	if x != nil {
 		return x.NewPassword
 	}
@@ -838,15 +824,12 @@ const file_user_user_proto_rawDesc = "" +
 	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"D\n" +
 	"\x15UpdateUserInfoRequest\x12\"\n" +
 	"\x04name\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@H\x00R\x04name\x88\x01\x01B\a\n" +
-	"\x05_name\"\xc4\x01\n" +
-	"\x0eDepositRequest\x12!\n" +
-	"\auser_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06userId\x12*\n" +
-	"\x05asset\x18\x02 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\n" +
-	"2\t^[A-Z_]+$R\x05asset\x12/\n" +
-	"\x06amount\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\x122\n" +
-	"\x0fidempotency_key\x18\x04 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\":\n" +
-	"\x0fDepositResponse\x12'\n" +
-	"\abalance\x18\x01 \x01(\v2\r.user.BalanceR\abalance\"T\n" +
+	"\x05_name\"u\n" +
+	"\x0eDepositRequest\x12/\n" +
+	"\x06amount\x18\x01 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\x122\n" +
+	"\x0fidempotency_key\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\"D\n" +
+	"\x0fDepositResponse\x121\n" +
+	"\abalance\x18\x01 \x01(\v2\r.user.BalanceB\b\xfaB\x05\x8a\x01\x02\x10\x01R\abalance\"T\n" +
 	"\fLoginRequest\x12\x1d\n" +
 	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
 	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\bpassword\"\xfb\x02\n" +
@@ -858,21 +841,21 @@ const file_user_user_proto_rawDesc = "" +
 	"\x12refresh_expires_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x10refreshExpiresAt\x12F\n" +
 	"\x11refresh_issued_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0frefreshIssuedAt\"E\n" +
 	"\x18UserBalancesInfoResponse\x12)\n" +
-	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"4\n" +
-	"\rLogoutRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\":\n" +
-	"\x13RefreshTokenRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"o\n" +
-	"\x11ChangeUserRequest\x12,\n" +
+	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"=\n" +
+	"\rLogoutRequest\x12,\n" +
+	"\rrefresh_token\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\frefreshToken\"C\n" +
+	"\x13RefreshTokenRequest\x12,\n" +
+	"\rrefresh_token\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\frefreshToken\"s\n" +
+	"\x15ChangePasswordRequest\x12,\n" +
 	"\fold_password\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\voldPassword\x12,\n" +
-	"\fnew_password\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\vnewPassword2\xcb\x05\n" +
+	"\fnew_password\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\vnewPassword2\xcf\x05\n" +
 	"\vUserService\x12E\n" +
 	"\fRegistration\x12\x19.user.RegisterUserRequest\x1a\x1a.user.RegisterUserResponse\x129\n" +
 	"\aGetUser\x12\x16.google.protobuf.Empty\x1a\x16.user.UserInfoResponse\x12E\n" +
 	"\x0eUpdateUserInfo\x12\x1b.user.UpdateUserInfoRequest\x1a\x16.google.protobuf.Empty\x12<\n" +
 	"\n" +
-	"DeleteUser\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12A\n" +
-	"\x0eChangePassword\x12\x17.user.ChangeUserRequest\x1a\x16.google.protobuf.Empty\x124\n" +
+	"DeleteUser\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12E\n" +
+	"\x0eChangePassword\x12\x1b.user.ChangePasswordRequest\x1a\x16.google.protobuf.Empty\x124\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x17.user.TokenPairResponse\x125\n" +
 	"\x06Logout\x12\x13.user.LogoutRequest\x1a\x16.google.protobuf.Empty\x12B\n" +
 	"\x10LogoutAllDevices\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12B\n" +
@@ -906,7 +889,7 @@ var file_user_user_proto_goTypes = []any{
 	(*UserBalancesInfoResponse)(nil), // 9: user.UserBalancesInfoResponse
 	(*LogoutRequest)(nil),            // 10: user.LogoutRequest
 	(*RefreshTokenRequest)(nil),      // 11: user.RefreshTokenRequest
-	(*ChangeUserRequest)(nil),        // 12: user.ChangeUserRequest
+	(*ChangePasswordRequest)(nil),    // 12: user.ChangePasswordRequest
 	(*timestamppb.Timestamp)(nil),    // 13: google.protobuf.Timestamp
 	(shared.Role)(0),                 // 14: shared.Role
 	(*shared.Money)(nil),             // 15: shared.Money
@@ -928,7 +911,7 @@ var file_user_user_proto_depIdxs = []int32{
 	16, // 12: user.UserService.GetUser:input_type -> google.protobuf.Empty
 	4,  // 13: user.UserService.UpdateUserInfo:input_type -> user.UpdateUserInfoRequest
 	16, // 14: user.UserService.DeleteUser:input_type -> google.protobuf.Empty
-	12, // 15: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
+	12, // 15: user.UserService.ChangePassword:input_type -> user.ChangePasswordRequest
 	7,  // 16: user.UserService.Login:input_type -> user.LoginRequest
 	10, // 17: user.UserService.Logout:input_type -> user.LogoutRequest
 	16, // 18: user.UserService.LogoutAllDevices:input_type -> google.protobuf.Empty

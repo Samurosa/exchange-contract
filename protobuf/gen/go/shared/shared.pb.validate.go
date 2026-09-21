@@ -70,7 +70,7 @@ func (m *Money) validate(all bool) error {
 	if !_Money_Currency_Pattern.MatchString(m.GetCurrency()) {
 		err := MoneyValidationError{
 			field:  "Currency",
-			reason: "value does not match regex pattern \"^[A-Z_]+$\"",
+			reason: "value does not match regex pattern \"^[A-Z]+$\"",
 		}
 		if !all {
 			return err
@@ -92,7 +92,7 @@ func (m *Money) validate(all bool) error {
 	if !_Money_Amount_Pattern.MatchString(m.GetAmount()) {
 		err := MoneyValidationError{
 			field:  "Amount",
-			reason: "value does not match regex pattern \"^(0|[1-9][0-9]*)(\\\\.[0-9]*[1-9])?$\"",
+			reason: "value does not match regex pattern \"^(0|[1-9][0-9]*)(\\\\.[0-9]+)?$\"",
 		}
 		if !all {
 			return err
@@ -177,6 +177,6 @@ var _ interface {
 	ErrorName() string
 } = MoneyValidationError{}
 
-var _Money_Currency_Pattern = regexp.MustCompile("^[A-Z_]+$")
+var _Money_Currency_Pattern = regexp.MustCompile("^[A-Z]+$")
 
-var _Money_Amount_Pattern = regexp.MustCompile("^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$")
+var _Money_Amount_Pattern = regexp.MustCompile("^(0|[1-9][0-9]*)(\\.[0-9]+)?$")

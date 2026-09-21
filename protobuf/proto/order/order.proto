@@ -5,6 +5,7 @@ package order;
 option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/order;order";
 
 import "google/protobuf/timestamp.proto";
+import "shared/shared.proto";
 import "validate/validate.proto";
 
 
@@ -47,14 +48,16 @@ enum OrderSide {
 }
 
 
+// OrderStatus represents the current lifecycle state of an order.
 enum OrderStatus {
+
     // Default value. Must not be used as an actual order status.
     ORDER_STATUS_UNSPECIFIED = 0;
 
     // Order has been created and accepted for processing.
     ORDER_STATUS_NEW = 1;
 
-    // Order is active and waiting for execution or further matching.
+    // Order is active and waiting for execution.
     ORDER_STATUS_OPEN = 2;
 
     // Part of the requested quantity has been executed,
@@ -87,18 +90,36 @@ message Order {
     // Direction of the order.
     OrderSide order_side = 4;
 
-    // Order price expressed in the quote asset per one unit
-    // of the base asset.
+    // Price of one unit of the base asset.
     //
-    // Example: for BTC/USDT, price "65000.50" means
-    // 1 BTC costs 65000.50 USDT.
-    string price = 5;
+    // The currency must match the spot quote asset.
+    //
+    // Example for BTC/USDT:
+    //
+    // currency: "USDT"
+    // amount: "65000.50"
+    shared.Money price = 5 [
+        (validate.rules).message.required = true
+    ];
 
-    // Requested order quantity expressed in the base asset.
-    string quantity = 6;
+    // Requested quantity of the base asset.
+    //
+    // The currency must match the spot base asset.
+    //
+    // Example for BTC/USDT:
+    //
+    // currency: "BTC"
+    // amount: "0.5"
+    shared.Money quantity = 6 [
+        (validate.rules).message.required = true
+    ];
 
-    // Quantity that has already been executed.
-    string filled_quantity = 7;
+    // Total quantity executed so far.
+    //
+    // The currency must match the quantity currency.
+    shared.Money filled_quantity = 7 [
+        (validate.rules).message.required = true
+    ];
 
     // Current status of the order.
     OrderStatus order_status = 8;
@@ -137,22 +158,18 @@ message CreateOrderRequest {
         }
     ];
 
-    // Price of one unit of the base asset expressed in the quote asset.
-    string price = 4 [
-        (validate.rules).string = {
-            min_len: 1,
-            max_len: 30,
-            pattern: "^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$"
-        }
+    // Price of one unit of the base asset.
+    //
+    // The currency must match the quote asset of the selected spot.
+    shared.Money price = 4 [
+        (validate.rules).message.required = true
     ];
 
     // Requested quantity of the base asset.
-    string quantity = 5 [
-        (validate.rules).string = {
-            min_len: 1,
-            max_len: 30,
-            pattern: "^[0-9]+(\\.[0-9]+)?$"
-        }
+    //
+    // The currency must match the base asset of the selected spot.
+    shared.Money quantity = 5 [
+        (validate.rules).message.required = true
     ];
 }
 
@@ -211,7 +228,11 @@ message StreamOrderUpdateResponse {
     OrderStatus order_status = 2;
 
     // Total quantity executed so far.
-    string filled_quantity = 3;
+    //
+    // The currency must match the order base asset.
+    shared.Money filled_quantity = 3 [
+        (validate.rules).message.required = true
+    ];
 
     // Timestamp when this order state was updated.
     google.protobuf.Timestamp updated_at = 4;
@@ -240,10 +261,20 @@ message ListOrdersRequest {
     ];
 
     // Optional filter by order status.
-    optional OrderStatus status = 4;
+    optional OrderStatus status = 4 [
+        (validate.rules).enum = {
+            defined_only: true,
+            not_in: [0]
+        }
+    ];
 
     // Optional filter by order side.
-    optional OrderSide side = 5;
+    optional OrderSide side = 5 [
+        (validate.rules).enum = {
+            defined_only: true,
+            not_in: [0]
+        }
+    ];
 }
 
 

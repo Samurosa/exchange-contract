@@ -7,6 +7,7 @@
 package order
 
 import (
+	shared "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -76,6 +77,7 @@ func (OrderSide) EnumDescriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{0}
 }
 
+// OrderStatus represents the current lifecycle state of an order.
 type OrderStatus int32
 
 const (
@@ -83,7 +85,7 @@ const (
 	OrderStatus_ORDER_STATUS_UNSPECIFIED OrderStatus = 0
 	// Order has been created and accepted for processing.
 	OrderStatus_ORDER_STATUS_NEW OrderStatus = 1
-	// Order is active and waiting for execution or further matching.
+	// Order is active and waiting for execution.
 	OrderStatus_ORDER_STATUS_OPEN OrderStatus = 2
 	// Part of the requested quantity has been executed,
 	// but the order has not been completely filled.
@@ -156,16 +158,28 @@ type Order struct {
 	SpotId string `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
 	// Direction of the order.
 	OrderSide OrderSide `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
-	// Order price expressed in the quote asset per one unit
-	// of the base asset.
+	// Price of one unit of the base asset.
 	//
-	// Example: for BTC/USDT, price "65000.50" means
-	// 1 BTC costs 65000.50 USDT.
-	Price string `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
-	// Requested order quantity expressed in the base asset.
-	Quantity string `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	// Quantity that has already been executed.
-	FilledQuantity string `protobuf:"bytes,7,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
+	// The currency must match the spot quote asset.
+	//
+	// Example for BTC/USDT:
+	//
+	// currency: "USDT"
+	// amount: "65000.50"
+	Price *shared.Money `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
+	// Requested quantity of the base asset.
+	//
+	// The currency must match the spot base asset.
+	//
+	// Example for BTC/USDT:
+	//
+	// currency: "BTC"
+	// amount: "0.5"
+	Quantity *shared.Money `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	// Total quantity executed so far.
+	//
+	// The currency must match the quantity currency.
+	FilledQuantity *shared.Money `protobuf:"bytes,7,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
 	// Current status of the order.
 	OrderStatus OrderStatus `protobuf:"varint,8,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
 	// Timestamp when the order was created.
@@ -234,25 +248,25 @@ func (x *Order) GetOrderSide() OrderSide {
 	return OrderSide_ORDER_SIDE_UNSPECIFIED
 }
 
-func (x *Order) GetPrice() string {
+func (x *Order) GetPrice() *shared.Money {
 	if x != nil {
 		return x.Price
 	}
-	return ""
+	return nil
 }
 
-func (x *Order) GetQuantity() string {
+func (x *Order) GetQuantity() *shared.Money {
 	if x != nil {
 		return x.Quantity
 	}
-	return ""
+	return nil
 }
 
-func (x *Order) GetFilledQuantity() string {
+func (x *Order) GetFilledQuantity() *shared.Money {
 	if x != nil {
 		return x.FilledQuantity
 	}
-	return ""
+	return nil
 }
 
 func (x *Order) GetOrderStatus() OrderStatus {
@@ -287,10 +301,14 @@ type CreateOrderRequest struct {
 	//
 	// The same key must be reused when retrying the same operation.
 	IdempotencyKey string `protobuf:"bytes,3,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
-	// Price of one unit of the base asset expressed in the quote asset.
-	Price string `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
+	// Price of one unit of the base asset.
+	//
+	// The currency must match the quote asset of the selected spot.
+	Price *shared.Money `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
 	// Requested quantity of the base asset.
-	Quantity      string `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	//
+	// The currency must match the base asset of the selected spot.
+	Quantity      *shared.Money `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -346,18 +364,18 @@ func (x *CreateOrderRequest) GetIdempotencyKey() string {
 	return ""
 }
 
-func (x *CreateOrderRequest) GetPrice() string {
+func (x *CreateOrderRequest) GetPrice() *shared.Money {
 	if x != nil {
 		return x.Price
 	}
-	return ""
+	return nil
 }
 
-func (x *CreateOrderRequest) GetQuantity() string {
+func (x *CreateOrderRequest) GetQuantity() *shared.Money {
 	if x != nil {
 		return x.Quantity
 	}
-	return ""
+	return nil
 }
 
 // CreateOrderResponse contains information about the newly created order.
@@ -570,7 +588,9 @@ type StreamOrderUpdateResponse struct {
 	// New order status.
 	OrderStatus OrderStatus `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
 	// Total quantity executed so far.
-	FilledQuantity string `protobuf:"bytes,3,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
+	//
+	// The currency must match the order base asset.
+	FilledQuantity *shared.Money `protobuf:"bytes,3,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
 	// Timestamp when this order state was updated.
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -621,11 +641,11 @@ func (x *StreamOrderUpdateResponse) GetOrderStatus() OrderStatus {
 	return OrderStatus_ORDER_STATUS_UNSPECIFIED
 }
 
-func (x *StreamOrderUpdateResponse) GetFilledQuantity() string {
+func (x *StreamOrderUpdateResponse) GetFilledQuantity() *shared.Money {
 	if x != nil {
 		return x.FilledQuantity
 	}
-	return ""
+	return nil
 }
 
 func (x *StreamOrderUpdateResponse) GetUpdatedAt() *timestamppb.Timestamp {
@@ -789,30 +809,30 @@ var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\"\x8d\x03\n" +
+	"\x11order/order.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13shared/shared.proto\x1a\x17validate/validate.proto\"\xd8\x03\n" +
 	"\x05Order\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
 	"\aspot_id\x18\x03 \x01(\tR\x06spotId\x12/\n" +
 	"\n" +
-	"order_side\x18\x04 \x01(\x0e2\x10.order.OrderSideR\torderSide\x12\x14\n" +
-	"\x05price\x18\x05 \x01(\tR\x05price\x12\x1a\n" +
-	"\bquantity\x18\x06 \x01(\tR\bquantity\x12'\n" +
-	"\x0ffilled_quantity\x18\a \x01(\tR\x0efilledQuantity\x125\n" +
+	"order_side\x18\x04 \x01(\x0e2\x10.order.OrderSideR\torderSide\x12-\n" +
+	"\x05price\x18\x05 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05price\x123\n" +
+	"\bquantity\x18\x06 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\bquantity\x12@\n" +
+	"\x0ffilled_quantity\x18\a \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x0efilledQuantity\x125\n" +
 	"\forder_status\x18\b \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x129\n" +
 	"\n" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa8\x02\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x8c\x02\n" +
 	"\x12CreateOrderRequest\x12!\n" +
 	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\x12;\n" +
 	"\n" +
 	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\n" +
 	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\torderSide\x122\n" +
-	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12B\n" +
-	"\x05price\x18\x04 \x01(\tB,\xfaB)r'\x10\x01\x18\x1e2!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x05price\x12:\n" +
-	"\bquantity\x18\x05 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x1e2\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
+	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12-\n" +
+	"\x05price\x18\x04 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05price\x123\n" +
+	"\bquantity\x18\x05 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\bquantity\"\xa2\x01\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
 	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x129\n" +
@@ -823,19 +843,21 @@ const file_order_order_proto_rawDesc = "" +
 	"\x10GetOrderResponse\x12,\n" +
 	"\x05order\x18\x01 \x01(\v2\f.order.OrderB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05order\"?\n" +
 	"\x18StreamOrderUpdateRequest\x12#\n" +
-	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xd1\x01\n" +
+	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xea\x01\n" +
 	"\x19StreamOrderUpdateResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
-	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12'\n" +
-	"\x0ffilled_quantity\x18\x03 \x01(\tR\x0efilledQuantity\x129\n" +
+	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12@\n" +
+	"\x0ffilled_quantity\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x0efilledQuantity\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x87\x02\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9f\x02\n" +
 	"\x11ListOrdersRequest\x12&\n" +
 	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
 	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12&\n" +
-	"\aspot_id\x18\x03 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01H\x01R\x06spotId\x88\x01\x01\x12/\n" +
-	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusH\x02R\x06status\x88\x01\x01\x12)\n" +
-	"\x04side\x18\x05 \x01(\x0e2\x10.order.OrderSideH\x03R\x04side\x88\x01\x01B\t\n" +
+	"\aspot_id\x18\x03 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01H\x01R\x06spotId\x88\x01\x01\x12;\n" +
+	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x02R\x06status\x88\x01\x01\x125\n" +
+	"\x04side\x18\x05 \x01(\x0e2\x10.order.OrderSideB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x03R\x04side\x88\x01\x01B\t\n" +
 	"\a_cursorB\n" +
 	"\n" +
 	"\b_spot_idB\t\n" +
@@ -891,35 +913,42 @@ var file_order_order_proto_goTypes = []any{
 	(*StreamOrderUpdateResponse)(nil), // 8: order.StreamOrderUpdateResponse
 	(*ListOrdersRequest)(nil),         // 9: order.ListOrdersRequest
 	(*ListOrdersResponse)(nil),        // 10: order.ListOrdersResponse
-	(*timestamppb.Timestamp)(nil),     // 11: google.protobuf.Timestamp
+	(*shared.Money)(nil),              // 11: shared.Money
+	(*timestamppb.Timestamp)(nil),     // 12: google.protobuf.Timestamp
 }
 var file_order_order_proto_depIdxs = []int32{
 	0,  // 0: order.Order.order_side:type_name -> order.OrderSide
-	1,  // 1: order.Order.order_status:type_name -> order.OrderStatus
-	11, // 2: order.Order.created_at:type_name -> google.protobuf.Timestamp
-	11, // 3: order.Order.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: order.CreateOrderRequest.order_side:type_name -> order.OrderSide
-	1,  // 5: order.CreateOrderResponse.order_status:type_name -> order.OrderStatus
-	11, // 6: order.CreateOrderResponse.created_at:type_name -> google.protobuf.Timestamp
-	2,  // 7: order.GetOrderResponse.order:type_name -> order.Order
-	1,  // 8: order.StreamOrderUpdateResponse.order_status:type_name -> order.OrderStatus
-	11, // 9: order.StreamOrderUpdateResponse.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 10: order.ListOrdersRequest.status:type_name -> order.OrderStatus
-	0,  // 11: order.ListOrdersRequest.side:type_name -> order.OrderSide
-	2,  // 12: order.ListOrdersResponse.orders:type_name -> order.Order
-	3,  // 13: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
-	5,  // 14: order.OrderService.GetOrder:input_type -> order.GetOrderRequest
-	7,  // 15: order.OrderService.StreamOrderUpdate:input_type -> order.StreamOrderUpdateRequest
-	9,  // 16: order.OrderService.ListOrders:input_type -> order.ListOrdersRequest
-	4,  // 17: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
-	6,  // 18: order.OrderService.GetOrder:output_type -> order.GetOrderResponse
-	8,  // 19: order.OrderService.StreamOrderUpdate:output_type -> order.StreamOrderUpdateResponse
-	10, // 20: order.OrderService.ListOrders:output_type -> order.ListOrdersResponse
-	17, // [17:21] is the sub-list for method output_type
-	13, // [13:17] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	11, // 1: order.Order.price:type_name -> shared.Money
+	11, // 2: order.Order.quantity:type_name -> shared.Money
+	11, // 3: order.Order.filled_quantity:type_name -> shared.Money
+	1,  // 4: order.Order.order_status:type_name -> order.OrderStatus
+	12, // 5: order.Order.created_at:type_name -> google.protobuf.Timestamp
+	12, // 6: order.Order.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 7: order.CreateOrderRequest.order_side:type_name -> order.OrderSide
+	11, // 8: order.CreateOrderRequest.price:type_name -> shared.Money
+	11, // 9: order.CreateOrderRequest.quantity:type_name -> shared.Money
+	1,  // 10: order.CreateOrderResponse.order_status:type_name -> order.OrderStatus
+	12, // 11: order.CreateOrderResponse.created_at:type_name -> google.protobuf.Timestamp
+	2,  // 12: order.GetOrderResponse.order:type_name -> order.Order
+	1,  // 13: order.StreamOrderUpdateResponse.order_status:type_name -> order.OrderStatus
+	11, // 14: order.StreamOrderUpdateResponse.filled_quantity:type_name -> shared.Money
+	12, // 15: order.StreamOrderUpdateResponse.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 16: order.ListOrdersRequest.status:type_name -> order.OrderStatus
+	0,  // 17: order.ListOrdersRequest.side:type_name -> order.OrderSide
+	2,  // 18: order.ListOrdersResponse.orders:type_name -> order.Order
+	3,  // 19: order.OrderService.CreateOrder:input_type -> order.CreateOrderRequest
+	5,  // 20: order.OrderService.GetOrder:input_type -> order.GetOrderRequest
+	7,  // 21: order.OrderService.StreamOrderUpdate:input_type -> order.StreamOrderUpdateRequest
+	9,  // 22: order.OrderService.ListOrders:input_type -> order.ListOrdersRequest
+	4,  // 23: order.OrderService.CreateOrder:output_type -> order.CreateOrderResponse
+	6,  // 24: order.OrderService.GetOrder:output_type -> order.GetOrderResponse
+	8,  // 25: order.OrderService.StreamOrderUpdate:output_type -> order.StreamOrderUpdateResponse
+	10, // 26: order.OrderService.ListOrders:output_type -> order.ListOrdersResponse
+	23, // [23:27] is the sub-list for method output_type
+	19, // [19:23] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_order_order_proto_init() }

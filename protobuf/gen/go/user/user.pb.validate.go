@@ -39,9 +39,6 @@ var (
 	_ = shared.Role(0)
 )
 
-// define the regex for a UUID once up-front
-var _user_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-
 // Validate checks the field values on Balance with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -770,40 +767,6 @@ func (m *DepositRequest) validate(all bool) error {
 
 	var errors []error
 
-	if err := m._validateUuid(m.GetUserId()); err != nil {
-		err = DepositRequestValidationError{
-			field:  "UserId",
-			reason: "value must be a valid UUID",
-			cause:  err,
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if l := utf8.RuneCountInString(m.GetAsset()); l < 1 || l > 10 {
-		err := DepositRequestValidationError{
-			field:  "Asset",
-			reason: "value length must be between 1 and 10 runes, inclusive",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
-	if !_DepositRequest_Asset_Pattern.MatchString(m.GetAsset()) {
-		err := DepositRequestValidationError{
-			field:  "Asset",
-			reason: "value does not match regex pattern \"^[A-Z_]+$\"",
-		}
-		if !all {
-			return err
-		}
-		errors = append(errors, err)
-	}
-
 	if m.GetAmount() == nil {
 		err := DepositRequestValidationError{
 			field:  "Amount",
@@ -857,14 +820,6 @@ func (m *DepositRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return DepositRequestMultiError(errors)
-	}
-
-	return nil
-}
-
-func (m *DepositRequest) _validateUuid(uuid string) error {
-	if matched := _user_uuidPattern.MatchString(uuid); !matched {
-		return errors.New("invalid uuid format")
 	}
 
 	return nil
@@ -941,8 +896,6 @@ var _ interface {
 	ErrorName() string
 } = DepositRequestValidationError{}
 
-var _DepositRequest_Asset_Pattern = regexp.MustCompile("^[A-Z_]+$")
-
 // Validate checks the field values on DepositResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -964,6 +917,17 @@ func (m *DepositResponse) validate(all bool) error {
 	}
 
 	var errors []error
+
+	if m.GetBalance() == nil {
+		err := DepositResponseValidationError{
+			field:  "Balance",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if all {
 		switch v := interface{}(m.GetBalance()).(type) {
@@ -1624,7 +1588,16 @@ func (m *LogoutRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RefreshToken
+	if utf8.RuneCountInString(m.GetRefreshToken()) < 1 {
+		err := LogoutRequestValidationError{
+			field:  "RefreshToken",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return LogoutRequestMultiError(errors)
@@ -1726,7 +1699,16 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RefreshToken
+	if utf8.RuneCountInString(m.GetRefreshToken()) < 1 {
+		err := RefreshTokenRequestValidationError{
+			field:  "RefreshToken",
+			reason: "value length must be at least 1 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
 	if len(errors) > 0 {
 		return RefreshTokenRequestMultiError(errors)
@@ -1808,22 +1790,22 @@ var _ interface {
 	ErrorName() string
 } = RefreshTokenRequestValidationError{}
 
-// Validate checks the field values on ChangeUserRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *ChangeUserRequest) Validate() error {
+// Validate checks the field values on ChangePasswordRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ChangePasswordRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on ChangeUserRequest with the rules
+// ValidateAll checks the field values on ChangePasswordRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// ChangeUserRequestMultiError, or nil if none found.
-func (m *ChangeUserRequest) ValidateAll() error {
+// ChangePasswordRequestMultiError, or nil if none found.
+func (m *ChangePasswordRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *ChangeUserRequest) validate(all bool) error {
+func (m *ChangePasswordRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -1831,7 +1813,7 @@ func (m *ChangeUserRequest) validate(all bool) error {
 	var errors []error
 
 	if l := utf8.RuneCountInString(m.GetOldPassword()); l < 8 || l > 64 {
-		err := ChangeUserRequestValidationError{
+		err := ChangePasswordRequestValidationError{
 			field:  "OldPassword",
 			reason: "value length must be between 8 and 64 runes, inclusive",
 		}
@@ -1842,7 +1824,7 @@ func (m *ChangeUserRequest) validate(all bool) error {
 	}
 
 	if l := utf8.RuneCountInString(m.GetNewPassword()); l < 8 || l > 64 {
-		err := ChangeUserRequestValidationError{
+		err := ChangePasswordRequestValidationError{
 			field:  "NewPassword",
 			reason: "value length must be between 8 and 64 runes, inclusive",
 		}
@@ -1853,19 +1835,19 @@ func (m *ChangeUserRequest) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return ChangeUserRequestMultiError(errors)
+		return ChangePasswordRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// ChangeUserRequestMultiError is an error wrapping multiple validation errors
-// returned by ChangeUserRequest.ValidateAll() if the designated constraints
-// aren't met.
-type ChangeUserRequestMultiError []error
+// ChangePasswordRequestMultiError is an error wrapping multiple validation
+// errors returned by ChangePasswordRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ChangePasswordRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m ChangeUserRequestMultiError) Error() string {
+func (m ChangePasswordRequestMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -1874,11 +1856,11 @@ func (m ChangeUserRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m ChangeUserRequestMultiError) AllErrors() []error { return m }
+func (m ChangePasswordRequestMultiError) AllErrors() []error { return m }
 
-// ChangeUserRequestValidationError is the validation error returned by
-// ChangeUserRequest.Validate if the designated constraints aren't met.
-type ChangeUserRequestValidationError struct {
+// ChangePasswordRequestValidationError is the validation error returned by
+// ChangePasswordRequest.Validate if the designated constraints aren't met.
+type ChangePasswordRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -1886,24 +1868,24 @@ type ChangeUserRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e ChangeUserRequestValidationError) Field() string { return e.field }
+func (e ChangePasswordRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ChangeUserRequestValidationError) Reason() string { return e.reason }
+func (e ChangePasswordRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ChangeUserRequestValidationError) Cause() error { return e.cause }
+func (e ChangePasswordRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ChangeUserRequestValidationError) Key() bool { return e.key }
+func (e ChangePasswordRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ChangeUserRequestValidationError) ErrorName() string {
-	return "ChangeUserRequestValidationError"
+func (e ChangePasswordRequestValidationError) ErrorName() string {
+	return "ChangePasswordRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e ChangeUserRequestValidationError) Error() string {
+func (e ChangePasswordRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -1915,14 +1897,14 @@ func (e ChangeUserRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sChangeUserRequest.%s: %s%s",
+		"invalid %sChangePasswordRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ChangeUserRequestValidationError{}
+var _ error = ChangePasswordRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -1930,4 +1912,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ChangeUserRequestValidationError{}
+} = ChangePasswordRequestValidationError{}

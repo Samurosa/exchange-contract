@@ -105,6 +105,31 @@ func (m *SpotListItem) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for PricePrecision
+
+	// no validation rules for QuantityPrecision
+
+	_SpotListItem_AllowedRoles_Unique := make(map[shared.Role]struct{}, len(m.GetAllowedRoles()))
+
+	for idx, item := range m.GetAllowedRoles() {
+		_, _ = idx, item
+
+		if _, exists := _SpotListItem_AllowedRoles_Unique[item]; exists {
+			err := SpotListItemValidationError{
+				field:  fmt.Sprintf("AllowedRoles[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_SpotListItem_AllowedRoles_Unique[item] = struct{}{}
+		}
+
+		// no validation rules for AllowedRoles[idx]
+	}
+
 	if len(errors) > 0 {
 		return SpotListItemMultiError(errors)
 	}

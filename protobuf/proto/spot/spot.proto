@@ -52,20 +52,15 @@ enum SpotStatus {
 }
 
 
-// SpotListItem contains the fields returned when listing spot instruments.
 message SpotListItem {
 
     // Unique identifier of the spot instrument.
     string id = 1;
 
     // Base asset of the trading pair.
-    //
-    // Example: BTC in BTC/USDT.
     string base_asset = 2;
 
     // Quote asset of the trading pair.
-    //
-    // Example: USDT in BTC/USDT.
     string quote_asset = 3;
 
     // Human-readable name of the spot instrument.
@@ -79,8 +74,20 @@ message SpotListItem {
 
     // Timestamp when the spot instrument was created.
     google.protobuf.Timestamp created_at = 7;
-}
 
+    // Number of decimal places allowed for the order price.
+    int32 price_precision = 8;
+
+    // Number of decimal places allowed for the order quantity.
+    int32 quantity_precision = 9;
+
+    // Roles allowed to trade this spot instrument.
+    repeated shared.Role allowed_roles = 10 [
+        (validate.rules).repeated = {
+            unique: true
+        }
+    ];
+}
 
 // CreateSpotRequest contains configuration required to create
 // a new spot trading instrument.

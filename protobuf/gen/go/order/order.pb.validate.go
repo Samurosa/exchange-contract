@@ -67,11 +67,125 @@ func (m *Order) validate(all bool) error {
 
 	// no validation rules for OrderSide
 
-	// no validation rules for Price
+	if m.GetPrice() == nil {
+		err := OrderValidationError{
+			field:  "Price",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
 
-	// no validation rules for Quantity
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
-	// no validation rules for FilledQuantity
+	if m.GetQuantity() == nil {
+		err := OrderValidationError{
+			field:  "Quantity",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetQuantity()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderValidationError{
+					field:  "Quantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderValidationError{
+					field:  "Quantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetQuantity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderValidationError{
+				field:  "Quantity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if m.GetFilledQuantity() == nil {
+		err := OrderValidationError{
+			field:  "FilledQuantity",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetFilledQuantity()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, OrderValidationError{
+					field:  "FilledQuantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, OrderValidationError{
+					field:  "FilledQuantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilledQuantity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return OrderValidationError{
+				field:  "FilledQuantity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for OrderStatus
 
@@ -277,10 +391,10 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetPrice()); l < 1 || l > 30 {
+	if m.GetPrice() == nil {
 		err := CreateOrderRequestValidationError{
 			field:  "Price",
-			reason: "value length must be between 1 and 30 runes, inclusive",
+			reason: "value is required",
 		}
 		if !all {
 			return err
@@ -288,21 +402,39 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if !_CreateOrderRequest_Price_Pattern.MatchString(m.GetPrice()) {
-		err := CreateOrderRequestValidationError{
-			field:  "Price",
-			reason: "value does not match regex pattern \"^(0|[1-9][0-9]*)(\\\\.[0-9]*[1-9])?$\"",
+	if all {
+		switch v := interface{}(m.GetPrice()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateOrderRequestValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateOrderRequestValidationError{
+					field:  "Price",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
 		}
-		if !all {
-			return err
+	} else if v, ok := interface{}(m.GetPrice()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateOrderRequestValidationError{
+				field:  "Price",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
-		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetQuantity()); l < 1 || l > 30 {
+	if m.GetQuantity() == nil {
 		err := CreateOrderRequestValidationError{
 			field:  "Quantity",
-			reason: "value length must be between 1 and 30 runes, inclusive",
+			reason: "value is required",
 		}
 		if !all {
 			return err
@@ -310,15 +442,33 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if !_CreateOrderRequest_Quantity_Pattern.MatchString(m.GetQuantity()) {
-		err := CreateOrderRequestValidationError{
-			field:  "Quantity",
-			reason: "value does not match regex pattern \"^[0-9]+(\\\\.[0-9]+)?$\"",
+	if all {
+		switch v := interface{}(m.GetQuantity()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateOrderRequestValidationError{
+					field:  "Quantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateOrderRequestValidationError{
+					field:  "Quantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
 		}
-		if !all {
-			return err
+	} else if v, ok := interface{}(m.GetQuantity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateOrderRequestValidationError{
+				field:  "Quantity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
-		errors = append(errors, err)
 	}
 
 	if len(errors) > 0 {
@@ -412,10 +562,6 @@ var _ interface {
 var _CreateOrderRequest_OrderSide_NotInLookup = map[OrderSide]struct{}{
 	0: {},
 }
-
-var _CreateOrderRequest_Price_Pattern = regexp.MustCompile("^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$")
-
-var _CreateOrderRequest_Quantity_Pattern = regexp.MustCompile("^[0-9]+(\\.[0-9]+)?$")
 
 // Validate checks the field values on CreateOrderResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -960,7 +1106,45 @@ func (m *StreamOrderUpdateResponse) validate(all bool) error {
 
 	// no validation rules for OrderStatus
 
-	// no validation rules for FilledQuantity
+	if m.GetFilledQuantity() == nil {
+		err := StreamOrderUpdateResponseValidationError{
+			field:  "FilledQuantity",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if all {
+		switch v := interface{}(m.GetFilledQuantity()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, StreamOrderUpdateResponseValidationError{
+					field:  "FilledQuantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, StreamOrderUpdateResponseValidationError{
+					field:  "FilledQuantity",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetFilledQuantity()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return StreamOrderUpdateResponseValidationError{
+				field:  "FilledQuantity",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if all {
 		switch v := interface{}(m.GetUpdatedAt()).(type) {
@@ -1125,11 +1309,55 @@ func (m *ListOrdersRequest) validate(all bool) error {
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _ListOrdersRequest_Status_NotInLookup[m.GetStatus()]; ok {
+			err := ListOrdersRequestValidationError{
+				field:  "Status",
+				reason: "value must not be in list [ORDER_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := OrderStatus_name[int32(m.GetStatus())]; !ok {
+			err := ListOrdersRequestValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Side != nil {
-		// no validation rules for Side
+
+		if _, ok := _ListOrdersRequest_Side_NotInLookup[m.GetSide()]; ok {
+			err := ListOrdersRequestValidationError{
+				field:  "Side",
+				reason: "value must not be in list [ORDER_SIDE_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := OrderSide_name[int32(m.GetSide())]; !ok {
+			err := ListOrdersRequestValidationError{
+				field:  "Side",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -1219,6 +1447,14 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = ListOrdersRequestValidationError{}
+
+var _ListOrdersRequest_Status_NotInLookup = map[OrderStatus]struct{}{
+	0: {},
+}
+
+var _ListOrdersRequest_Side_NotInLookup = map[OrderSide]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on ListOrdersResponse with the rules
 // defined in the proto definition for this message. If any rules are

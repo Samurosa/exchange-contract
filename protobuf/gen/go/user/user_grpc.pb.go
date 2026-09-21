@@ -45,10 +45,10 @@ type UserServiceClient interface {
 	GetUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserInfoResponse, error)
 	// Updates information of the currently authenticated user.
 	UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// Deletes the currently authenticated user account.
+	// Deletes the currently authenticated user.
 	DeleteUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Changes the password of the currently authenticated user.
-	ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Authenticates a user and returns an access token and a refresh token.
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
 	// Invalidates the current user session.
@@ -57,7 +57,7 @@ type UserServiceClient interface {
 	LogoutAllDevices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Exchanges a valid refresh token for a new access and refresh token pair.
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
-	// Deposits funds to a user account.
+	// Deposits funds to the currently authenticated user's balance.
 	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
 	// Returns balances of the currently authenticated user.
 	GetBalances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
@@ -111,7 +111,7 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *emptypb.Empty, o
 	return out, nil
 }
 
-func (c *userServiceClient) ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *userServiceClient) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, UserService_ChangePassword_FullMethodName, in, out, cOpts...)
@@ -193,10 +193,10 @@ type UserServiceServer interface {
 	GetUser(context.Context, *emptypb.Empty) (*UserInfoResponse, error)
 	// Updates information of the currently authenticated user.
 	UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*emptypb.Empty, error)
-	// Deletes the currently authenticated user account.
+	// Deletes the currently authenticated user.
 	DeleteUser(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	// Changes the password of the currently authenticated user.
-	ChangePassword(context.Context, *ChangeUserRequest) (*emptypb.Empty, error)
+	ChangePassword(context.Context, *ChangePasswordRequest) (*emptypb.Empty, error)
 	// Authenticates a user and returns an access token and a refresh token.
 	Login(context.Context, *LoginRequest) (*TokenPairResponse, error)
 	// Invalidates the current user session.
@@ -205,7 +205,7 @@ type UserServiceServer interface {
 	LogoutAllDevices(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	// Exchanges a valid refresh token for a new access and refresh token pair.
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error)
-	// Deposits funds to a user account.
+	// Deposits funds to the currently authenticated user's balance.
 	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
 	// Returns balances of the currently authenticated user.
 	GetBalances(context.Context, *emptypb.Empty) (*UserBalancesInfoResponse, error)
@@ -231,7 +231,7 @@ func (UnimplementedUserServiceServer) UpdateUserInfo(context.Context, *UpdateUse
 func (UnimplementedUserServiceServer) DeleteUser(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteUser not implemented")
 }
-func (UnimplementedUserServiceServer) ChangePassword(context.Context, *ChangeUserRequest) (*emptypb.Empty, error) {
+func (UnimplementedUserServiceServer) ChangePassword(context.Context, *ChangePasswordRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChangePassword not implemented")
 }
 func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*TokenPairResponse, error) {
@@ -346,7 +346,7 @@ func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _UserService_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChangeUserRequest)
+	in := new(ChangePasswordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -358,7 +358,7 @@ func _UserService_ChangePassword_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: UserService_ChangePassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).ChangePassword(ctx, req.(*ChangeUserRequest))
+		return srv.(UserServiceServer).ChangePassword(ctx, req.(*ChangePasswordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

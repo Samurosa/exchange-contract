@@ -78,18 +78,13 @@ func (SpotStatus) EnumDescriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{0}
 }
 
-// SpotListItem contains the fields returned when listing spot instruments.
 type SpotListItem struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique identifier of the spot instrument.
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Base asset of the trading pair.
-	//
-	// Example: BTC in BTC/USDT.
 	BaseAsset string `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
 	// Quote asset of the trading pair.
-	//
-	// Example: USDT in BTC/USDT.
 	QuoteAsset string `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
 	// Human-readable name of the spot instrument.
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
@@ -98,7 +93,13 @@ type SpotListItem struct {
 	// Current status of the spot instrument.
 	Status SpotStatus `protobuf:"varint,6,opt,name=status,proto3,enum=spot.SpotStatus" json:"status,omitempty"`
 	// Timestamp when the spot instrument was created.
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// Number of decimal places allowed for the order price.
+	PricePrecision int32 `protobuf:"varint,8,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
+	// Number of decimal places allowed for the order quantity.
+	QuantityPrecision int32 `protobuf:"varint,9,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`
+	// Roles allowed to trade this spot instrument.
+	AllowedRoles  []shared.Role `protobuf:"varint,10,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=shared.Role" json:"allowed_roles,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -178,6 +179,27 @@ func (x *SpotListItem) GetStatus() SpotStatus {
 func (x *SpotListItem) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *SpotListItem) GetPricePrecision() int32 {
+	if x != nil {
+		return x.PricePrecision
+	}
+	return 0
+}
+
+func (x *SpotListItem) GetQuantityPrecision() int32 {
+	if x != nil {
+		return x.QuantityPrecision
+	}
+	return 0
+}
+
+func (x *SpotListItem) GetAllowedRoles() []shared.Role {
+	if x != nil {
+		return x.AllowedRoles
 	}
 	return nil
 }
@@ -833,7 +855,7 @@ var File_spot_spot_proto protoreflect.FileDescriptor
 
 const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
-	"\x0fspot/spot.proto\x12\x04spot\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13shared/shared.proto\x1a\x17validate/validate.proto\"\xf9\x01\n" +
+	"\x0fspot/spot.proto\x12\x04spot\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13shared/shared.proto\x1a\x17validate/validate.proto\"\x8e\x03\n" +
 	"\fSpotListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -844,7 +866,11 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\vdescription\x18\x05 \x01(\tR\vdescription\x12(\n" +
 	"\x06status\x18\x06 \x01(\x0e2\x10.spot.SpotStatusR\x06status\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\x81\x04\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12'\n" +
+	"\x0fprice_precision\x18\b \x01(\x05R\x0epricePrecision\x12-\n" +
+	"\x12quantity_precision\x18\t \x01(\x05R\x11quantityPrecision\x12;\n" +
+	"\rallowed_roles\x18\n" +
+	" \x03(\x0e2\f.shared.RoleB\b\xfaB\x05\x92\x01\x02\x18\x01R\fallowedRoles\"\x81\x04\n" +
 	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
 	"base_asset\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
@@ -956,30 +982,31 @@ var file_spot_spot_proto_goTypes = []any{
 var file_spot_spot_proto_depIdxs = []int32{
 	0,  // 0: spot.SpotListItem.status:type_name -> spot.SpotStatus
 	10, // 1: spot.SpotListItem.created_at:type_name -> google.protobuf.Timestamp
-	11, // 2: spot.CreateSpotRequest.allowed_roles:type_name -> shared.Role
-	10, // 3: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
-	0,  // 4: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
-	11, // 5: spot.GetSpotResponse.allowed_roles:type_name -> shared.Role
-	10, // 6: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
-	10, // 7: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
-	10, // 8: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
-	0,  // 9: spot.SpotListRequest.status:type_name -> spot.SpotStatus
-	1,  // 10: spot.SpotListResponse.spots:type_name -> spot.SpotListItem
-	2,  // 11: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
-	4,  // 12: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
-	6,  // 13: spot.SpotInstrumentService.EnableSpot:input_type -> spot.EnableSpotRequest
-	7,  // 14: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
-	8,  // 15: spot.SpotInstrumentService.ListSpots:input_type -> spot.SpotListRequest
-	3,  // 16: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
-	5,  // 17: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
-	12, // 18: spot.SpotInstrumentService.EnableSpot:output_type -> google.protobuf.Empty
-	12, // 19: spot.SpotInstrumentService.DisableSpot:output_type -> google.protobuf.Empty
-	9,  // 20: spot.SpotInstrumentService.ListSpots:output_type -> spot.SpotListResponse
-	16, // [16:21] is the sub-list for method output_type
-	11, // [11:16] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	11, // 2: spot.SpotListItem.allowed_roles:type_name -> shared.Role
+	11, // 3: spot.CreateSpotRequest.allowed_roles:type_name -> shared.Role
+	10, // 4: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	0,  // 5: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
+	11, // 6: spot.GetSpotResponse.allowed_roles:type_name -> shared.Role
+	10, // 7: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
+	10, // 8: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 9: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp
+	0,  // 10: spot.SpotListRequest.status:type_name -> spot.SpotStatus
+	1,  // 11: spot.SpotListResponse.spots:type_name -> spot.SpotListItem
+	2,  // 12: spot.SpotInstrumentService.CreateSpot:input_type -> spot.CreateSpotRequest
+	4,  // 13: spot.SpotInstrumentService.GetSpot:input_type -> spot.GetSpotRequest
+	6,  // 14: spot.SpotInstrumentService.EnableSpot:input_type -> spot.EnableSpotRequest
+	7,  // 15: spot.SpotInstrumentService.DisableSpot:input_type -> spot.DisableSpotRequest
+	8,  // 16: spot.SpotInstrumentService.ListSpots:input_type -> spot.SpotListRequest
+	3,  // 17: spot.SpotInstrumentService.CreateSpot:output_type -> spot.CreateSpotResponse
+	5,  // 18: spot.SpotInstrumentService.GetSpot:output_type -> spot.GetSpotResponse
+	12, // 19: spot.SpotInstrumentService.EnableSpot:output_type -> google.protobuf.Empty
+	12, // 20: spot.SpotInstrumentService.DisableSpot:output_type -> google.protobuf.Empty
+	9,  // 21: spot.SpotInstrumentService.ListSpots:output_type -> spot.SpotListResponse
+	17, // [17:22] is the sub-list for method output_type
+	12, // [12:17] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_spot_spot_proto_init() }

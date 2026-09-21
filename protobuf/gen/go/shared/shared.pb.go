@@ -26,16 +26,11 @@ const (
 type Role int32
 
 const (
-	// Default value. Must not be used as an actual user role.
 	Role_ROLE_UNSPECIFIED Role = 0
-	// Regular exchange user.
-	Role_ROLE_USER Role = 1
-	// Guest user with limited access.
-	Role_ROLE_GUEST Role = 2
-	// Premium user with additional privileges.
-	Role_ROLE_PREMIUM Role = 3
-	// Administrator with administrative privileges.
-	Role_ROLE_ADMIN Role = 4
+	Role_ROLE_USER        Role = 1
+	Role_ROLE_GUEST       Role = 2
+	Role_ROLE_PREMIUM     Role = 3
+	Role_ROLE_ADMIN       Role = 4
 )
 
 // Enum value maps for Role.
@@ -83,27 +78,22 @@ func (Role) EnumDescriptor() ([]byte, []int) {
 	return file_shared_shared_proto_rawDescGZIP(), []int{0}
 }
 
-// Money represents a decimal monetary or asset amount.
+// Money represents an amount of a specific asset.
 //
-// The amount is represented as a string to avoid floating-point precision
-// issues. The currency field identifies the asset to which the amount belongs.
-//
-// Examples:
-//
-//	currency: "USDT", amount: "100.50"
-//	currency: "BTC",  amount: "0.001"
+// The amount is represented as a decimal string to avoid
+// floating-point precision issues.
 type Money struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Currency or asset symbol.
+	// Asset or currency symbol.
 	//
-	// Examples: BTC, ETH, USDT, USD.
+	// Examples: BTC, USDT, ETH.
 	Currency string `protobuf:"bytes,1,opt,name=currency,proto3" json:"currency,omitempty"`
 	// Decimal amount of the asset.
 	//
-	// The value must be positive or zero and must not contain
-	// leading zeros unless the value is exactly zero.
+	// Examples: 0, 0.001, 1.5, 65000.50.
 	//
-	// Examples: "0", "1", "10.5", "100.25".
+	// The application layer validates whether zero or negative
+	// values are allowed for a particular operation.
 	Amount        string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -157,10 +147,10 @@ var File_shared_shared_proto protoreflect.FileDescriptor
 
 const file_shared_shared_proto_rawDesc = "" +
 	"\n" +
-	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"\x7f\n" +
-	"\x05Money\x120\n" +
-	"\bcurrency\x18\x01 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\x052\t^[A-Z_]+$R\bcurrency\x12D\n" +
-	"\x06amount\x18\x02 \x01(\tB,\xfaB)r'\x10\x01\x18\x142!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x06amount*]\n" +
+	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"y\n" +
+	"\x05Money\x12/\n" +
+	"\bcurrency\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x01\x18\x052\b^[A-Z]+$R\bcurrency\x12?\n" +
+	"\x06amount\x18\x02 \x01(\tB'\xfaB$r\"\x10\x01\x18\x142\x1c^(0|[1-9][0-9]*)(\\.[0-9]+)?$R\x06amount*]\n" +
 	"\x04Role\x12\x14\n" +
 	"\x10ROLE_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tROLE_USER\x10\x01\x12\x0e\n" +

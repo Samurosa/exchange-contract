@@ -7,38 +7,34 @@ option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/share
 import "validate/validate.proto";
 
 
-// Money represents a decimal monetary or asset amount.
+// Money represents an amount of a specific asset.
 //
-// The amount is represented as a string to avoid floating-point precision
-// issues. The currency field identifies the asset to which the amount belongs.
-//
-// Examples:
-//   currency: "USDT", amount: "100.50"
-//   currency: "BTC",  amount: "0.001"
+// The amount is represented as a decimal string to avoid
+// floating-point precision issues.
 message Money {
 
-  // Currency or asset symbol.
+  // Asset or currency symbol.
   //
-  // Examples: BTC, ETH, USDT, USD.
+  // Examples: BTC, USDT, ETH.
   string currency = 1 [
     (validate.rules).string = {
       min_len: 1,
       max_len: 5,
-      pattern: "^[A-Z_]+$"
+      pattern: "^[A-Z]+$"
     }
   ];
 
   // Decimal amount of the asset.
   //
-  // The value must be positive or zero and must not contain
-  // leading zeros unless the value is exactly zero.
+  // Examples: 0, 0.001, 1.5, 65000.50.
   //
-  // Examples: "0", "1", "10.5", "100.25".
+  // The application layer validates whether zero or negative
+  // values are allowed for a particular operation.
   string amount = 2 [
     (validate.rules).string = {
       min_len: 1,
       max_len: 20,
-      pattern: "^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$"
+      pattern: "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
     }
   ];
 }
@@ -47,18 +43,13 @@ message Money {
 // Role represents a user's access level within the exchange.
 enum Role {
 
-  // Default value. Must not be used as an actual user role.
   ROLE_UNSPECIFIED = 0;
 
-  // Regular exchange user.
   ROLE_USER = 1;
 
-  // Guest user with limited access.
   ROLE_GUEST = 2;
 
-  // Premium user with additional privileges.
   ROLE_PREMIUM = 3;
 
-  // Administrator with administrative privileges.
   ROLE_ADMIN = 4;
 }

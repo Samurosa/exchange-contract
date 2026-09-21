@@ -7,7 +7,7 @@
 package spot
 
 import (
-	user "github.com/Samurosa/exchange-contract/protobuf/gen/go/user"
+	shared "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -25,12 +25,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// SpotStatus represents the current status of a spot instrument.
 type SpotStatus int32
 
 const (
+	// Default value. Must not be used as an actual spot status.
 	SpotStatus_SPOT_STATUS_UNSPECIFIED SpotStatus = 0
-	SpotStatus_SPOT_STATUS_ACTIVE      SpotStatus = 1
-	SpotStatus_SPOT_STATUS_DISABLED    SpotStatus = 2
+	// The spot instrument is available for trading.
+	SpotStatus_SPOT_STATUS_ACTIVE SpotStatus = 1
+	// The spot instrument is disabled and cannot be used for trading.
+	SpotStatus_SPOT_STATUS_DISABLED SpotStatus = 2
 )
 
 // Enum value maps for SpotStatus.
@@ -74,14 +78,26 @@ func (SpotStatus) EnumDescriptor() ([]byte, []int) {
 	return file_spot_spot_proto_rawDescGZIP(), []int{0}
 }
 
+// SpotListItem contains the fields returned when listing spot instruments.
 type SpotListItem struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	BaseAsset     string                 `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
-	QuoteAsset    string                 `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Status        SpotStatus             `protobuf:"varint,6,opt,name=status,proto3,enum=spot.SpotStatus" json:"status,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the spot instrument.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Base asset of the trading pair.
+	//
+	// Example: BTC in BTC/USDT.
+	BaseAsset string `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
+	// Quote asset of the trading pair.
+	//
+	// Example: USDT in BTC/USDT.
+	QuoteAsset string `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
+	// Human-readable name of the spot instrument.
+	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// Human-readable description of the spot instrument.
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	// Current status of the spot instrument.
+	Status SpotStatus `protobuf:"varint,6,opt,name=status,proto3,enum=spot.SpotStatus" json:"status,omitempty"`
+	// Timestamp when the spot instrument was created.
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -166,19 +182,38 @@ func (x *SpotListItem) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// CreateSpotRequest contains configuration required to create
+// a new spot trading instrument.
 type CreateSpotRequest struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	BaseAsset         string                 `protobuf:"bytes,1,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
-	QuoteAsset        string                 `protobuf:"bytes,2,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
-	PricePrecision    int32                  `protobuf:"varint,3,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
-	QuantityPrecision int32                  `protobuf:"varint,4,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`
-	MinOrderSize      string                 `protobuf:"bytes,5,opt,name=min_order_size,json=minOrderSize,proto3" json:"min_order_size,omitempty"`
-	MaxOrderSize      string                 `protobuf:"bytes,6,opt,name=max_order_size,json=maxOrderSize,proto3" json:"max_order_size,omitempty"`
-	AllowedRoles      []user.Role            `protobuf:"varint,7,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=user.Role" json:"allowed_roles,omitempty"`
-	Name              string                 `protobuf:"bytes,8,opt,name=name,proto3" json:"name,omitempty"`
-	Description       string                 `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Base asset of the trading pair.
+	//
+	// Example: BTC in BTC/USDT.
+	BaseAsset string `protobuf:"bytes,1,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
+	// Quote asset of the trading pair.
+	//
+	// Example: USDT in BTC/USDT.
+	QuoteAsset string `protobuf:"bytes,2,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
+	// Number of decimal places allowed for the order price.
+	//
+	// Example: 2 means prices such as 100.25 are allowed.
+	PricePrecision int32 `protobuf:"varint,3,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
+	// Number of decimal places allowed for the order quantity.
+	QuantityPrecision int32 `protobuf:"varint,4,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`
+	// Minimum order quantity expressed in the base asset.
+	//
+	// Example: 0.001 BTC.
+	MinOrderSize string `protobuf:"bytes,5,opt,name=min_order_size,json=minOrderSize,proto3" json:"min_order_size,omitempty"`
+	// Maximum order quantity expressed in the base asset.
+	MaxOrderSize string `protobuf:"bytes,6,opt,name=max_order_size,json=maxOrderSize,proto3" json:"max_order_size,omitempty"`
+	// Roles allowed to trade this spot instrument.
+	AllowedRoles []shared.Role `protobuf:"varint,7,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=shared.Role" json:"allowed_roles,omitempty"`
+	// Human-readable name of the spot instrument.
+	Name string `protobuf:"bytes,8,opt,name=name,proto3" json:"name,omitempty"`
+	// Human-readable description of the spot instrument.
+	Description   string `protobuf:"bytes,9,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateSpotRequest) Reset() {
@@ -253,7 +288,7 @@ func (x *CreateSpotRequest) GetMaxOrderSize() string {
 	return ""
 }
 
-func (x *CreateSpotRequest) GetAllowedRoles() []user.Role {
+func (x *CreateSpotRequest) GetAllowedRoles() []shared.Role {
 	if x != nil {
 		return x.AllowedRoles
 	}
@@ -274,9 +309,12 @@ func (x *CreateSpotRequest) GetDescription() string {
 	return ""
 }
 
+// CreateSpotResponse contains information about the created spot instrument.
 type CreateSpotResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the created spot instrument.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Timestamp when the spot instrument was created.
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -326,9 +364,11 @@ func (x *CreateSpotResponse) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// GetSpotRequest contains the identifier of the requested spot instrument.
 type GetSpotRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the spot instrument.
+	Id            string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -370,24 +410,46 @@ func (x *GetSpotRequest) GetId() string {
 	return ""
 }
 
+// GetSpotResponse contains detailed information about a spot instrument.
 type GetSpotResponse struct {
-	state             protoimpl.MessageState `protogen:"open.v1"`
-	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                //уникальный идентификатор
-	BaseAsset         string                 `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`                                 //актив который продают или покупают
-	QuoteAsset        string                 `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`                              //в чем выражается цена
-	PricePrecision    int32                  `protobuf:"varint,4,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`                 // количество знаков после запятой у цены
-	QuantityPrecision int32                  `protobuf:"varint,5,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`        // количество знаков после запятой у актива
-	MinOrderSize      string                 `protobuf:"bytes,6,opt,name=min_order_size,json=minOrderSize,proto3" json:"min_order_size,omitempty"`                      // минимальное возможное количество покупки/продажи
-	MaxOrderSize      string                 `protobuf:"bytes,7,opt,name=max_order_size,json=maxOrderSize,proto3" json:"max_order_size,omitempty"`                      // максимальное количество покупки актива
-	Status            SpotStatus             `protobuf:"varint,8,opt,name=status,proto3,enum=spot.SpotStatus" json:"status,omitempty"`                                  // статус спота
-	AllowedRoles      []user.Role            `protobuf:"varint,9,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=user.Role" json:"allowed_roles,omitempty"` //разрешенные роли у пользователей
-	Name              string                 `protobuf:"bytes,10,opt,name=name,proto3" json:"name,omitempty"`                                                           // название спота
-	Description       string                 `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`                                             // описание спота
-	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                // время создания
-	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                // время обновления
-	DisableAt         *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=disable_at,json=disableAt,proto3" json:"disable_at,omitempty"`                                // время обновления
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the spot instrument.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Base asset of the trading pair.
+	//
+	// Example: BTC in BTC/USDT.
+	BaseAsset string `protobuf:"bytes,2,opt,name=base_asset,json=baseAsset,proto3" json:"base_asset,omitempty"`
+	// Quote asset of the trading pair.
+	//
+	// The price of the base asset is expressed in the quote asset.
+	// Example: in BTC/USDT, the BTC price is expressed in USDT.
+	QuoteAsset string `protobuf:"bytes,3,opt,name=quote_asset,json=quoteAsset,proto3" json:"quote_asset,omitempty"`
+	// Number of decimal places allowed for the order price.
+	PricePrecision int32 `protobuf:"varint,4,opt,name=price_precision,json=pricePrecision,proto3" json:"price_precision,omitempty"`
+	// Number of decimal places allowed for the order quantity.
+	QuantityPrecision int32 `protobuf:"varint,5,opt,name=quantity_precision,json=quantityPrecision,proto3" json:"quantity_precision,omitempty"`
+	// Minimum order quantity expressed in the base asset.
+	MinOrderSize string `protobuf:"bytes,6,opt,name=min_order_size,json=minOrderSize,proto3" json:"min_order_size,omitempty"`
+	// Maximum order quantity expressed in the base asset.
+	MaxOrderSize string `protobuf:"bytes,7,opt,name=max_order_size,json=maxOrderSize,proto3" json:"max_order_size,omitempty"`
+	// Current status of the spot instrument.
+	Status SpotStatus `protobuf:"varint,8,opt,name=status,proto3,enum=spot.SpotStatus" json:"status,omitempty"`
+	// Roles allowed to trade this spot instrument.
+	AllowedRoles []shared.Role `protobuf:"varint,9,rep,packed,name=allowed_roles,json=allowedRoles,proto3,enum=shared.Role" json:"allowed_roles,omitempty"`
+	// Human-readable name of the spot instrument.
+	Name string `protobuf:"bytes,10,opt,name=name,proto3" json:"name,omitempty"`
+	// Human-readable description of the spot instrument.
+	Description string `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
+	// Timestamp when the spot instrument was created.
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// Timestamp when the spot instrument was last updated.
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// Timestamp associated with disabling the spot instrument.
+	//
+	// The field is omitted when the spot instrument has never been disabled.
+	DisableAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=disable_at,json=disableAt,proto3" json:"disable_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetSpotResponse) Reset() {
@@ -476,7 +538,7 @@ func (x *GetSpotResponse) GetStatus() SpotStatus {
 	return SpotStatus_SPOT_STATUS_UNSPECIFIED
 }
 
-func (x *GetSpotResponse) GetAllowedRoles() []user.Role {
+func (x *GetSpotResponse) GetAllowedRoles() []shared.Role {
 	if x != nil {
 		return x.AllowedRoles
 	}
@@ -518,9 +580,12 @@ func (x *GetSpotResponse) GetDisableAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// EnableSpotRequest contains the identifier of the spot instrument
+// that should be enabled.
 type EnableSpotRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the spot instrument.
+	Id            string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -562,9 +627,12 @@ func (x *EnableSpotRequest) GetId() string {
 	return ""
 }
 
+// DisableSpotRequest contains the identifier of the spot instrument
+// that should be disabled.
 type DisableSpotRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the spot instrument.
+	Id            string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -606,13 +674,26 @@ func (x *DisableSpotRequest) GetId() string {
 	return ""
 }
 
+// SpotListRequest contains pagination and filtering parameters
+// for listing spot instruments.
 type SpotListRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
-	Status        *SpotStatus            `protobuf:"varint,3,opt,name=status,proto3,enum=spot.SpotStatus,oneof" json:"status,omitempty"`
-	BaseAsset     *string                `protobuf:"bytes,4,opt,name=base_asset,json=baseAsset,proto3,oneof" json:"base_asset,omitempty"`
-	QuoteAsset    *string                `protobuf:"bytes,5,opt,name=quote_asset,json=quoteAsset,proto3,oneof" json:"quote_asset,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Maximum number of spot instruments returned in a single page.
+	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Opaque cursor returned by the previous request.
+	//
+	// The client must not parse or modify the cursor.
+	Cursor *string `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
+	// Optional filter by spot status.
+	Status *SpotStatus `protobuf:"varint,3,opt,name=status,proto3,enum=spot.SpotStatus,oneof" json:"status,omitempty"`
+	// Optional filter by base asset.
+	//
+	// Example: BTC.
+	BaseAsset *string `protobuf:"bytes,4,opt,name=base_asset,json=baseAsset,proto3,oneof" json:"base_asset,omitempty"`
+	// Optional filter by quote asset.
+	//
+	// Example: USDT.
+	QuoteAsset    *string `protobuf:"bytes,5,opt,name=quote_asset,json=quoteAsset,proto3,oneof" json:"quote_asset,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -682,11 +763,17 @@ func (x *SpotListRequest) GetQuoteAsset() string {
 	return ""
 }
 
+// SpotListResponse contains one page of spot instruments.
 type SpotListResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Spots         []*SpotListItem        `protobuf:"bytes,1,rep,name=spots,proto3" json:"spots,omitempty"`
-	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
-	HasMore       bool                   `protobuf:"varint,3,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Spot instruments returned for the current page.
+	Spots []*SpotListItem `protobuf:"bytes,1,rep,name=spots,proto3" json:"spots,omitempty"`
+	// Opaque cursor used to request the next page.
+	//
+	// Empty when there are no more results.
+	NextCursor string `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	// Indicates whether another page of results is available.
+	HasMore       bool `protobuf:"varint,3,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -746,7 +833,7 @@ var File_spot_spot_proto protoreflect.FileDescriptor
 
 const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
-	"\x0fspot/spot.proto\x12\x04spot\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17validate/validate.proto\x1a\x0fuser/user.proto\"\xf9\x01\n" +
+	"\x0fspot/spot.proto\x12\x04spot\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13shared/shared.proto\x1a\x17validate/validate.proto\"\xf9\x01\n" +
 	"\fSpotListItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -757,7 +844,7 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\vdescription\x18\x05 \x01(\tR\vdescription\x12(\n" +
 	"\x06status\x18\x06 \x01(\x0e2\x10.spot.SpotStatusR\x06status\x129\n" +
 	"\n" +
-	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xfb\x03\n" +
+	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\x81\x04\n" +
 	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
 	"base_asset\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
@@ -768,11 +855,10 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x0fprice_precision\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
 	"(\x00R\x0epricePrecision\x128\n" +
 	"\x12quantity_precision\x18\x04 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
-	"(\x00R\x11quantityPrecision\x12B\n" +
-	"\x0emin_order_size\x18\x05 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\fminOrderSize\x12B\n" +
-	"\x0emax_order_size\x18\x06 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\fmaxOrderSize\x12;\n" +
-	"\rallowed_roles\x18\a \x03(\x0e2\n" +
-	".user.RoleB\n" +
+	"(\x00R\x11quantityPrecision\x12D\n" +
+	"\x0emin_order_size\x18\x05 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x1e2\x13^[0-9]+(\\.[0-9]+)?$R\fminOrderSize\x12D\n" +
+	"\x0emax_order_size\x18\x06 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x1e2\x13^[0-9]+(\\.[0-9]+)?$R\fmaxOrderSize\x12=\n" +
+	"\rallowed_roles\x18\a \x03(\x0e2\f.shared.RoleB\n" +
 	"\xfaB\a\x92\x01\x04\b\x01\x18\x01R\fallowedRoles\x12\x1d\n" +
 	"\x04name\x18\b \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x04name\x12*\n" +
 	"\vdescription\x18\t \x01(\tB\b\xfaB\x05r\x03\x18\xc8\x01R\vdescription\"_\n" +
@@ -781,7 +867,7 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"*\n" +
 	"\x0eGetSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\xc7\x04\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\xc9\x04\n" +
 	"\x0fGetSpotResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -792,9 +878,8 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x12quantity_precision\x18\x05 \x01(\x05R\x11quantityPrecision\x12$\n" +
 	"\x0emin_order_size\x18\x06 \x01(\tR\fminOrderSize\x12$\n" +
 	"\x0emax_order_size\x18\a \x01(\tR\fmaxOrderSize\x12(\n" +
-	"\x06status\x18\b \x01(\x0e2\x10.spot.SpotStatusR\x06status\x12/\n" +
-	"\rallowed_roles\x18\t \x03(\x0e2\n" +
-	".user.RoleR\fallowedRoles\x12\x12\n" +
+	"\x06status\x18\b \x01(\x0e2\x10.spot.SpotStatusR\x06status\x121\n" +
+	"\rallowed_roles\x18\t \x03(\x0e2\f.shared.RoleR\fallowedRoles\x12\x12\n" +
 	"\x04name\x18\n" +
 	" \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\v \x01(\tR\vdescription\x129\n" +
@@ -865,16 +950,16 @@ var file_spot_spot_proto_goTypes = []any{
 	(*SpotListRequest)(nil),       // 8: spot.SpotListRequest
 	(*SpotListResponse)(nil),      // 9: spot.SpotListResponse
 	(*timestamppb.Timestamp)(nil), // 10: google.protobuf.Timestamp
-	(user.Role)(0),                // 11: user.Role
+	(shared.Role)(0),              // 11: shared.Role
 	(*emptypb.Empty)(nil),         // 12: google.protobuf.Empty
 }
 var file_spot_spot_proto_depIdxs = []int32{
 	0,  // 0: spot.SpotListItem.status:type_name -> spot.SpotStatus
 	10, // 1: spot.SpotListItem.created_at:type_name -> google.protobuf.Timestamp
-	11, // 2: spot.CreateSpotRequest.allowed_roles:type_name -> user.Role
+	11, // 2: spot.CreateSpotRequest.allowed_roles:type_name -> shared.Role
 	10, // 3: spot.CreateSpotResponse.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 4: spot.GetSpotResponse.status:type_name -> spot.SpotStatus
-	11, // 5: spot.GetSpotResponse.allowed_roles:type_name -> user.Role
+	11, // 5: spot.GetSpotResponse.allowed_roles:type_name -> shared.Role
 	10, // 6: spot.GetSpotResponse.created_at:type_name -> google.protobuf.Timestamp
 	10, // 7: spot.GetSpotResponse.updated_at:type_name -> google.protobuf.Timestamp
 	10, // 8: spot.GetSpotResponse.disable_at:type_name -> google.protobuf.Timestamp

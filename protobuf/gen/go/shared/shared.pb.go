@@ -22,10 +22,89 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Role represents a user's access level within the exchange.
+type Role int32
+
+const (
+	// Default value. Must not be used as an actual user role.
+	Role_ROLE_UNSPECIFIED Role = 0
+	// Regular exchange user.
+	Role_ROLE_USER Role = 1
+	// Guest user with limited access.
+	Role_ROLE_GUEST Role = 2
+	// Premium user with additional privileges.
+	Role_ROLE_PREMIUM Role = 3
+	// Administrator with administrative privileges.
+	Role_ROLE_ADMIN Role = 4
+)
+
+// Enum value maps for Role.
+var (
+	Role_name = map[int32]string{
+		0: "ROLE_UNSPECIFIED",
+		1: "ROLE_USER",
+		2: "ROLE_GUEST",
+		3: "ROLE_PREMIUM",
+		4: "ROLE_ADMIN",
+	}
+	Role_value = map[string]int32{
+		"ROLE_UNSPECIFIED": 0,
+		"ROLE_USER":        1,
+		"ROLE_GUEST":       2,
+		"ROLE_PREMIUM":     3,
+		"ROLE_ADMIN":       4,
+	}
+)
+
+func (x Role) Enum() *Role {
+	p := new(Role)
+	*p = x
+	return p
+}
+
+func (x Role) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Role) Descriptor() protoreflect.EnumDescriptor {
+	return file_shared_shared_proto_enumTypes[0].Descriptor()
+}
+
+func (Role) Type() protoreflect.EnumType {
+	return &file_shared_shared_proto_enumTypes[0]
+}
+
+func (x Role) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Role.Descriptor instead.
+func (Role) EnumDescriptor() ([]byte, []int) {
+	return file_shared_shared_proto_rawDescGZIP(), []int{0}
+}
+
+// Money represents a decimal monetary or asset amount.
+//
+// The amount is represented as a string to avoid floating-point precision
+// issues. The currency field identifies the asset to which the amount belongs.
+//
+// Examples:
+//
+//	currency: "USDT", amount: "100.50"
+//	currency: "BTC",  amount: "0.001"
 type Money struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Currency      string                 `protobuf:"bytes,1,opt,name=currency,proto3" json:"currency,omitempty"`
-	Amount        string                 `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Currency or asset symbol.
+	//
+	// Examples: BTC, ETH, USDT, USD.
+	Currency string `protobuf:"bytes,1,opt,name=currency,proto3" json:"currency,omitempty"`
+	// Decimal amount of the asset.
+	//
+	// The value must be positive or zero and must not contain
+	// leading zeros unless the value is exactly zero.
+	//
+	// Examples: "0", "1", "10.5", "100.25".
+	Amount        string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -80,9 +159,16 @@ const file_shared_shared_proto_rawDesc = "" +
 	"\n" +
 	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"\x7f\n" +
 	"\x05Money\x120\n" +
-	"\bcurrency\x18\x01 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\n" +
-	"2\t^[A-Z_]+$R\bcurrency\x12D\n" +
-	"\x06amount\x18\x02 \x01(\tB,\xfaB)r'\x10\x01\x18\x142!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x06amountBEZCgithub.com/Samurosa/exchange-contract/protobuf/gen/go/shared;sharedb\x06proto3"
+	"\bcurrency\x18\x01 \x01(\tB\x14\xfaB\x11r\x0f\x10\x01\x18\x052\t^[A-Z_]+$R\bcurrency\x12D\n" +
+	"\x06amount\x18\x02 \x01(\tB,\xfaB)r'\x10\x01\x18\x142!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x06amount*]\n" +
+	"\x04Role\x12\x14\n" +
+	"\x10ROLE_UNSPECIFIED\x10\x00\x12\r\n" +
+	"\tROLE_USER\x10\x01\x12\x0e\n" +
+	"\n" +
+	"ROLE_GUEST\x10\x02\x12\x10\n" +
+	"\fROLE_PREMIUM\x10\x03\x12\x0e\n" +
+	"\n" +
+	"ROLE_ADMIN\x10\x04BEZCgithub.com/Samurosa/exchange-contract/protobuf/gen/go/shared;sharedb\x06proto3"
 
 var (
 	file_shared_shared_proto_rawDescOnce sync.Once
@@ -96,9 +182,11 @@ func file_shared_shared_proto_rawDescGZIP() []byte {
 	return file_shared_shared_proto_rawDescData
 }
 
+var file_shared_shared_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_shared_shared_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_shared_shared_proto_goTypes = []any{
-	(*Money)(nil), // 0: shared.Money
+	(Role)(0),     // 0: shared.Role
+	(*Money)(nil), // 1: shared.Money
 }
 var file_shared_shared_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -118,13 +206,14 @@ func file_shared_shared_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_shared_shared_proto_rawDesc), len(file_shared_shared_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_shared_shared_proto_goTypes,
 		DependencyIndexes: file_shared_shared_proto_depIdxs,
+		EnumInfos:         file_shared_shared_proto_enumTypes,
 		MessageInfos:      file_shared_shared_proto_msgTypes,
 	}.Build()
 	File_shared_shared_proto = out.File

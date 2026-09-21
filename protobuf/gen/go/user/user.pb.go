@@ -25,66 +25,15 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Role int32
-
-const (
-	Role_ROLE_UNSPECIFIED Role = 0
-	Role_ROLE_USER        Role = 1
-	Role_ROLE_GUEST       Role = 2
-	Role_ROLE_PREMIUM     Role = 3
-	Role_ROLE_ADMIN       Role = 4
-)
-
-// Enum value maps for Role.
-var (
-	Role_name = map[int32]string{
-		0: "ROLE_UNSPECIFIED",
-		1: "ROLE_USER",
-		2: "ROLE_GUEST",
-		3: "ROLE_PREMIUM",
-		4: "ROLE_ADMIN",
-	}
-	Role_value = map[string]int32{
-		"ROLE_UNSPECIFIED": 0,
-		"ROLE_USER":        1,
-		"ROLE_GUEST":       2,
-		"ROLE_PREMIUM":     3,
-		"ROLE_ADMIN":       4,
-	}
-)
-
-func (x Role) Enum() *Role {
-	p := new(Role)
-	*p = x
-	return p
-}
-
-func (x Role) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (Role) Descriptor() protoreflect.EnumDescriptor {
-	return file_user_user_proto_enumTypes[0].Descriptor()
-}
-
-func (Role) Type() protoreflect.EnumType {
-	return &file_user_user_proto_enumTypes[0]
-}
-
-func (x Role) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use Role.Descriptor instead.
-func (Role) EnumDescriptor() ([]byte, []int) {
-	return file_user_user_proto_rawDescGZIP(), []int{0}
-}
-
+// Balance represents the user's balance for a single asset.
 type Balance struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Asset         string                 `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
-	Available     string                 `protobuf:"bytes,2,opt,name=available,proto3" json:"available,omitempty"`
-	Locked        string                 `protobuf:"bytes,3,opt,name=locked,proto3" json:"locked,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Asset symbol, for example BTC, USDT or USD.
+	Asset string `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset,omitempty"`
+	// Amount available for spending or withdrawal.
+	Available string `protobuf:"bytes,2,opt,name=available,proto3" json:"available,omitempty"`
+	// Amount currently locked by active operations.
+	Locked        string `protobuf:"bytes,3,opt,name=locked,proto3" json:"locked,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -140,11 +89,15 @@ func (x *Balance) GetLocked() string {
 	return ""
 }
 
+// RegisterUserRequest contains information required to create a user account.
 type RegisterUserRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// User email address.
+	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	// User password.
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	// User display name.
+	Name          string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -200,9 +153,12 @@ func (x *RegisterUserRequest) GetName() string {
 	return ""
 }
 
+// RegisterUserResponse contains information about the newly created user.
 type RegisterUserResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the created user.
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Timestamp when the user account was created.
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -252,13 +208,20 @@ func (x *RegisterUserResponse) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// UserInfoResponse contains information about the currently authenticated user.
 type UserInfoResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
-	Role          Role                   `protobuf:"varint,5,opt,name=role,proto3,enum=user.Role" json:"role,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the user.
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// User display name.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// User email address.
+	Email string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	// User role.
+	Role shared.Role `protobuf:"varint,5,opt,name=role,proto3,enum=shared.Role" json:"role,omitempty"`
+	// Timestamp when the user account was created.
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// Timestamp when the user information was last updated.
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -315,11 +278,11 @@ func (x *UserInfoResponse) GetEmail() string {
 	return ""
 }
 
-func (x *UserInfoResponse) GetRole() Role {
+func (x *UserInfoResponse) GetRole() shared.Role {
 	if x != nil {
 		return x.Role
 	}
-	return Role_ROLE_UNSPECIFIED
+	return shared.Role(0)
 }
 
 func (x *UserInfoResponse) GetCreatedAt() *timestamppb.Timestamp {
@@ -336,9 +299,13 @@ func (x *UserInfoResponse) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// UpdateUserInfoRequest contains fields that can be updated by the user.
 type UpdateUserInfoRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// New user display name.
+	//
+	// The field is optional so that omitted fields are not changed.
+	Name          *string `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -380,12 +347,21 @@ func (x *UpdateUserInfoRequest) GetName() string {
 	return ""
 }
 
+// DepositRequest contains information required to deposit funds
+// to a user balance.
 type DepositRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	UserId         string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Asset          string                 `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
-	Amount         *shared.Money          `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
-	IdempotencyKey string                 `protobuf:"bytes,4,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the user receiving the deposit.
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Asset symbol of the deposited funds.
+	Asset string `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
+	// Amount of the deposited funds.
+	Amount *shared.Money `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	// Unique key used to make the deposit operation idempotent.
+	//
+	// Reusing the same key for the same user must not create
+	// another deposit.
+	IdempotencyKey string `protobuf:"bytes,4,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -448,9 +424,11 @@ func (x *DepositRequest) GetIdempotencyKey() string {
 	return ""
 }
 
+// DepositResponse contains the resulting balance after the deposit.
 type DepositResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Balance       *Balance               `protobuf:"bytes,1,opt,name=balance,proto3" json:"balance,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Updated balance of the deposited asset.
+	Balance       *Balance `protobuf:"bytes,1,opt,name=balance,proto3" json:"balance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -492,10 +470,13 @@ func (x *DepositResponse) GetBalance() *Balance {
 	return nil
 }
 
+// LoginRequest contains user credentials.
 type LoginRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// User email address.
+	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	// User password.
+	Password      string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -544,16 +525,23 @@ func (x *LoginRequest) GetPassword() string {
 	return ""
 }
 
+// TokenPairResponse contains access and refresh tokens issued during authentication.
 type TokenPairResponse struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	AccessToken      string                 `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
-	RefreshToken     string                 `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
-	AccessExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=access_expires_at,json=accessExpiresAt,proto3" json:"access_expires_at,omitempty"`
-	AccessIssuedAt   *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=access_issued_at,json=accessIssuedAt,proto3" json:"access_issued_at,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Short-lived access token used to authorize API requests.
+	AccessToken string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	// Long-lived refresh token used to obtain a new access token.
+	RefreshToken string `protobuf:"bytes,2,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	// Timestamp when the access token expires.
+	AccessExpiresAt *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=access_expires_at,json=accessExpiresAt,proto3" json:"access_expires_at,omitempty"`
+	// Timestamp when the access token was issued.
+	AccessIssuedAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=access_issued_at,json=accessIssuedAt,proto3" json:"access_issued_at,omitempty"`
+	// Timestamp when the refresh token expires.
 	RefreshExpiresAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=refresh_expires_at,json=refreshExpiresAt,proto3" json:"refresh_expires_at,omitempty"`
-	RefreshIssuedAt  *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=refresh_issued_at,json=refreshIssuedAt,proto3" json:"refresh_issued_at,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Timestamp when the refresh token was issued.
+	RefreshIssuedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=refresh_issued_at,json=refreshIssuedAt,proto3" json:"refresh_issued_at,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *TokenPairResponse) Reset() {
@@ -628,9 +616,11 @@ func (x *TokenPairResponse) GetRefreshIssuedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// UserBalancesInfoResponse contains balances of the authenticated user.
 type UserBalancesInfoResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Balances      []*Balance             `protobuf:"bytes,1,rep,name=balances,proto3" json:"balances,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// List of balances grouped by asset.
+	Balances      []*Balance `protobuf:"bytes,1,rep,name=balances,proto3" json:"balances,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -672,9 +662,11 @@ func (x *UserBalancesInfoResponse) GetBalances() []*Balance {
 	return nil
 }
 
+// LogoutRequest contains the refresh token of the session to invalidate.
 type LogoutRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Refresh token identifying the session to terminate.
+	RefreshToken  string `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -716,9 +708,12 @@ func (x *LogoutRequest) GetRefreshToken() string {
 	return ""
 }
 
+// RefreshTokenRequest contains a refresh token used to obtain
+// a new token pair.
 type RefreshTokenRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	RefreshToken  string                 `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Refresh token used to issue a new access token.
+	RefreshToken  string `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -760,10 +755,13 @@ func (x *RefreshTokenRequest) GetRefreshToken() string {
 	return ""
 }
 
+// ChangeUserRequest contains the old and new passwords.
 type ChangeUserRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OldPassword   string                 `protobuf:"bytes,1,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
-	NewPassword   string                 `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Current user password.
+	OldPassword string `protobuf:"bytes,1,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
+	// New user password.
+	NewPassword   string `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -816,7 +814,7 @@ var File_user_user_proto protoreflect.FileDescriptor
 
 const file_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x0fuser/user.proto\x12\x04user\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17validate/validate.proto\x1a\x13shared/shared.proto\"U\n" +
+	"\x0fuser/user.proto\x12\x04user\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13shared/shared.proto\x1a\x17validate/validate.proto\"U\n" +
 	"\aBalance\x12\x14\n" +
 	"\x05asset\x18\x01 \x01(\tR\x05asset\x12\x1c\n" +
 	"\tavailable\x18\x02 \x01(\tR\tavailable\x12\x16\n" +
@@ -828,13 +826,12 @@ const file_user_user_proto_rawDesc = "" +
 	"\x14RegisterUserResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x129\n" +
 	"\n" +
-	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xeb\x01\n" +
+	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"\xed\x01\n" +
 	"\x10UserInfoResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
-	"\x05email\x18\x03 \x01(\tR\x05email\x12\x1e\n" +
-	"\x04role\x18\x05 \x01(\x0e2\n" +
-	".user.RoleR\x04role\x129\n" +
+	"\x05email\x18\x03 \x01(\tR\x05email\x12 \n" +
+	"\x04role\x18\x05 \x01(\x0e2\f.shared.RoleR\x04role\x129\n" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
@@ -868,28 +865,20 @@ const file_user_user_proto_rawDesc = "" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"o\n" +
 	"\x11ChangeUserRequest\x12,\n" +
 	"\fold_password\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\voldPassword\x12,\n" +
-	"\fnew_password\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\vnewPassword*]\n" +
-	"\x04Role\x12\x14\n" +
-	"\x10ROLE_UNSPECIFIED\x10\x00\x12\r\n" +
-	"\tROLE_USER\x10\x01\x12\x0e\n" +
-	"\n" +
-	"ROLE_GUEST\x10\x02\x12\x10\n" +
-	"\fROLE_PREMIUM\x10\x03\x12\x0e\n" +
-	"\n" +
-	"ROLE_ADMIN\x10\x042\xcb\x05\n" +
+	"\fnew_password\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\vnewPassword2\xcb\x05\n" +
 	"\vUserService\x12E\n" +
 	"\fRegistration\x12\x19.user.RegisterUserRequest\x1a\x1a.user.RegisterUserResponse\x129\n" +
 	"\aGetUser\x12\x16.google.protobuf.Empty\x1a\x16.user.UserInfoResponse\x12E\n" +
 	"\x0eUpdateUserInfo\x12\x1b.user.UpdateUserInfoRequest\x1a\x16.google.protobuf.Empty\x12<\n" +
 	"\n" +
 	"DeleteUser\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12A\n" +
-	"\x0eChangePassword\x12\x17.user.ChangeUserRequest\x1a\x16.google.protobuf.Empty\x126\n" +
-	"\aDeposit\x12\x14.user.DepositRequest\x1a\x15.user.DepositResponse\x124\n" +
+	"\x0eChangePassword\x12\x17.user.ChangeUserRequest\x1a\x16.google.protobuf.Empty\x124\n" +
 	"\x05Login\x12\x12.user.LoginRequest\x1a\x17.user.TokenPairResponse\x125\n" +
 	"\x06Logout\x12\x13.user.LogoutRequest\x1a\x16.google.protobuf.Empty\x12B\n" +
-	"\x10LogoutAllDevices\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12E\n" +
-	"\vGetBalances\x12\x16.google.protobuf.Empty\x1a\x1e.user.UserBalancesInfoResponse\x12B\n" +
-	"\fRefreshToken\x12\x19.user.RefreshTokenRequest\x1a\x17.user.TokenPairResponseBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/user;userb\x06proto3"
+	"\x10LogoutAllDevices\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\x12B\n" +
+	"\fRefreshToken\x12\x19.user.RefreshTokenRequest\x1a\x17.user.TokenPairResponse\x126\n" +
+	"\aDeposit\x12\x14.user.DepositRequest\x1a\x15.user.DepositResponse\x12E\n" +
+	"\vGetBalances\x12\x16.google.protobuf.Empty\x1a\x1e.user.UserBalancesInfoResponseBAZ?github.com/Samurosa/exchange-contract/protobuf/gen/go/user;userb\x06proto3"
 
 var (
 	file_user_user_proto_rawDescOnce sync.Once
@@ -903,61 +892,60 @@ func file_user_user_proto_rawDescGZIP() []byte {
 	return file_user_user_proto_rawDescData
 }
 
-var file_user_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_user_user_proto_goTypes = []any{
-	(Role)(0),                        // 0: user.Role
-	(*Balance)(nil),                  // 1: user.Balance
-	(*RegisterUserRequest)(nil),      // 2: user.RegisterUserRequest
-	(*RegisterUserResponse)(nil),     // 3: user.RegisterUserResponse
-	(*UserInfoResponse)(nil),         // 4: user.UserInfoResponse
-	(*UpdateUserInfoRequest)(nil),    // 5: user.UpdateUserInfoRequest
-	(*DepositRequest)(nil),           // 6: user.DepositRequest
-	(*DepositResponse)(nil),          // 7: user.DepositResponse
-	(*LoginRequest)(nil),             // 8: user.LoginRequest
-	(*TokenPairResponse)(nil),        // 9: user.TokenPairResponse
-	(*UserBalancesInfoResponse)(nil), // 10: user.UserBalancesInfoResponse
-	(*LogoutRequest)(nil),            // 11: user.LogoutRequest
-	(*RefreshTokenRequest)(nil),      // 12: user.RefreshTokenRequest
-	(*ChangeUserRequest)(nil),        // 13: user.ChangeUserRequest
-	(*timestamppb.Timestamp)(nil),    // 14: google.protobuf.Timestamp
+	(*Balance)(nil),                  // 0: user.Balance
+	(*RegisterUserRequest)(nil),      // 1: user.RegisterUserRequest
+	(*RegisterUserResponse)(nil),     // 2: user.RegisterUserResponse
+	(*UserInfoResponse)(nil),         // 3: user.UserInfoResponse
+	(*UpdateUserInfoRequest)(nil),    // 4: user.UpdateUserInfoRequest
+	(*DepositRequest)(nil),           // 5: user.DepositRequest
+	(*DepositResponse)(nil),          // 6: user.DepositResponse
+	(*LoginRequest)(nil),             // 7: user.LoginRequest
+	(*TokenPairResponse)(nil),        // 8: user.TokenPairResponse
+	(*UserBalancesInfoResponse)(nil), // 9: user.UserBalancesInfoResponse
+	(*LogoutRequest)(nil),            // 10: user.LogoutRequest
+	(*RefreshTokenRequest)(nil),      // 11: user.RefreshTokenRequest
+	(*ChangeUserRequest)(nil),        // 12: user.ChangeUserRequest
+	(*timestamppb.Timestamp)(nil),    // 13: google.protobuf.Timestamp
+	(shared.Role)(0),                 // 14: shared.Role
 	(*shared.Money)(nil),             // 15: shared.Money
 	(*emptypb.Empty)(nil),            // 16: google.protobuf.Empty
 }
 var file_user_user_proto_depIdxs = []int32{
-	14, // 0: user.RegisterUserResponse.created_at:type_name -> google.protobuf.Timestamp
-	0,  // 1: user.UserInfoResponse.role:type_name -> user.Role
-	14, // 2: user.UserInfoResponse.created_at:type_name -> google.protobuf.Timestamp
-	14, // 3: user.UserInfoResponse.updated_at:type_name -> google.protobuf.Timestamp
+	13, // 0: user.RegisterUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	14, // 1: user.UserInfoResponse.role:type_name -> shared.Role
+	13, // 2: user.UserInfoResponse.created_at:type_name -> google.protobuf.Timestamp
+	13, // 3: user.UserInfoResponse.updated_at:type_name -> google.protobuf.Timestamp
 	15, // 4: user.DepositRequest.amount:type_name -> shared.Money
-	1,  // 5: user.DepositResponse.balance:type_name -> user.Balance
-	14, // 6: user.TokenPairResponse.access_expires_at:type_name -> google.protobuf.Timestamp
-	14, // 7: user.TokenPairResponse.access_issued_at:type_name -> google.protobuf.Timestamp
-	14, // 8: user.TokenPairResponse.refresh_expires_at:type_name -> google.protobuf.Timestamp
-	14, // 9: user.TokenPairResponse.refresh_issued_at:type_name -> google.protobuf.Timestamp
-	1,  // 10: user.UserBalancesInfoResponse.balances:type_name -> user.Balance
-	2,  // 11: user.UserService.Registration:input_type -> user.RegisterUserRequest
+	0,  // 5: user.DepositResponse.balance:type_name -> user.Balance
+	13, // 6: user.TokenPairResponse.access_expires_at:type_name -> google.protobuf.Timestamp
+	13, // 7: user.TokenPairResponse.access_issued_at:type_name -> google.protobuf.Timestamp
+	13, // 8: user.TokenPairResponse.refresh_expires_at:type_name -> google.protobuf.Timestamp
+	13, // 9: user.TokenPairResponse.refresh_issued_at:type_name -> google.protobuf.Timestamp
+	0,  // 10: user.UserBalancesInfoResponse.balances:type_name -> user.Balance
+	1,  // 11: user.UserService.Registration:input_type -> user.RegisterUserRequest
 	16, // 12: user.UserService.GetUser:input_type -> google.protobuf.Empty
-	5,  // 13: user.UserService.UpdateUserInfo:input_type -> user.UpdateUserInfoRequest
+	4,  // 13: user.UserService.UpdateUserInfo:input_type -> user.UpdateUserInfoRequest
 	16, // 14: user.UserService.DeleteUser:input_type -> google.protobuf.Empty
-	13, // 15: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
-	6,  // 16: user.UserService.Deposit:input_type -> user.DepositRequest
-	8,  // 17: user.UserService.Login:input_type -> user.LoginRequest
-	11, // 18: user.UserService.Logout:input_type -> user.LogoutRequest
-	16, // 19: user.UserService.LogoutAllDevices:input_type -> google.protobuf.Empty
-	16, // 20: user.UserService.GetBalances:input_type -> google.protobuf.Empty
-	12, // 21: user.UserService.RefreshToken:input_type -> user.RefreshTokenRequest
-	3,  // 22: user.UserService.Registration:output_type -> user.RegisterUserResponse
-	4,  // 23: user.UserService.GetUser:output_type -> user.UserInfoResponse
+	12, // 15: user.UserService.ChangePassword:input_type -> user.ChangeUserRequest
+	7,  // 16: user.UserService.Login:input_type -> user.LoginRequest
+	10, // 17: user.UserService.Logout:input_type -> user.LogoutRequest
+	16, // 18: user.UserService.LogoutAllDevices:input_type -> google.protobuf.Empty
+	11, // 19: user.UserService.RefreshToken:input_type -> user.RefreshTokenRequest
+	5,  // 20: user.UserService.Deposit:input_type -> user.DepositRequest
+	16, // 21: user.UserService.GetBalances:input_type -> google.protobuf.Empty
+	2,  // 22: user.UserService.Registration:output_type -> user.RegisterUserResponse
+	3,  // 23: user.UserService.GetUser:output_type -> user.UserInfoResponse
 	16, // 24: user.UserService.UpdateUserInfo:output_type -> google.protobuf.Empty
 	16, // 25: user.UserService.DeleteUser:output_type -> google.protobuf.Empty
 	16, // 26: user.UserService.ChangePassword:output_type -> google.protobuf.Empty
-	7,  // 27: user.UserService.Deposit:output_type -> user.DepositResponse
-	9,  // 28: user.UserService.Login:output_type -> user.TokenPairResponse
-	16, // 29: user.UserService.Logout:output_type -> google.protobuf.Empty
-	16, // 30: user.UserService.LogoutAllDevices:output_type -> google.protobuf.Empty
-	10, // 31: user.UserService.GetBalances:output_type -> user.UserBalancesInfoResponse
-	9,  // 32: user.UserService.RefreshToken:output_type -> user.TokenPairResponse
+	8,  // 27: user.UserService.Login:output_type -> user.TokenPairResponse
+	16, // 28: user.UserService.Logout:output_type -> google.protobuf.Empty
+	16, // 29: user.UserService.LogoutAllDevices:output_type -> google.protobuf.Empty
+	8,  // 30: user.UserService.RefreshToken:output_type -> user.TokenPairResponse
+	6,  // 31: user.UserService.Deposit:output_type -> user.DepositResponse
+	9,  // 32: user.UserService.GetBalances:output_type -> user.UserBalancesInfoResponse
 	22, // [22:33] is the sub-list for method output_type
 	11, // [11:22] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name
@@ -976,14 +964,13 @@ func file_user_user_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_user_proto_rawDesc), len(file_user_user_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      0,
 			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_user_user_proto_goTypes,
 		DependencyIndexes: file_user_user_proto_depIdxs,
-		EnumInfos:         file_user_user_proto_enumTypes,
 		MessageInfos:      file_user_user_proto_msgTypes,
 	}.Build()
 	File_user_user_proto = out.File

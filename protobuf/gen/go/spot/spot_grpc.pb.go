@@ -30,11 +30,21 @@ const (
 // SpotInstrumentServiceClient is the client API for SpotInstrumentService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// SpotInstrumentService manages spot trading instruments.
+//
+// A spot instrument represents a trading pair such as BTC/USDT,
+// where the base asset is BTC and the quote asset is USDT.
 type SpotInstrumentServiceClient interface {
+	// Creates a new spot trading instrument.
 	CreateSpot(ctx context.Context, in *CreateSpotRequest, opts ...grpc.CallOption) (*CreateSpotResponse, error)
+	// Returns detailed information about a spot instrument.
 	GetSpot(ctx context.Context, in *GetSpotRequest, opts ...grpc.CallOption) (*GetSpotResponse, error)
+	// Enables a disabled spot instrument.
 	EnableSpot(ctx context.Context, in *EnableSpotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Disables an active spot instrument.
 	DisableSpot(ctx context.Context, in *DisableSpotRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Returns a paginated list of spot instruments.
 	ListSpots(ctx context.Context, in *SpotListRequest, opts ...grpc.CallOption) (*SpotListResponse, error)
 }
 
@@ -99,11 +109,21 @@ func (c *spotInstrumentServiceClient) ListSpots(ctx context.Context, in *SpotLis
 // SpotInstrumentServiceServer is the server API for SpotInstrumentService service.
 // All implementations must embed UnimplementedSpotInstrumentServiceServer
 // for forward compatibility.
+//
+// SpotInstrumentService manages spot trading instruments.
+//
+// A spot instrument represents a trading pair such as BTC/USDT,
+// where the base asset is BTC and the quote asset is USDT.
 type SpotInstrumentServiceServer interface {
+	// Creates a new spot trading instrument.
 	CreateSpot(context.Context, *CreateSpotRequest) (*CreateSpotResponse, error)
+	// Returns detailed information about a spot instrument.
 	GetSpot(context.Context, *GetSpotRequest) (*GetSpotResponse, error)
+	// Enables a disabled spot instrument.
 	EnableSpot(context.Context, *EnableSpotRequest) (*emptypb.Empty, error)
+	// Disables an active spot instrument.
 	DisableSpot(context.Context, *DisableSpotRequest) (*emptypb.Empty, error)
+	// Returns a paginated list of spot instruments.
 	ListSpots(context.Context, *SpotListRequest) (*SpotListResponse, error)
 	mustEmbedUnimplementedSpotInstrumentServiceServer()
 }

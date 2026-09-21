@@ -18,7 +18,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	user "github.com/Samurosa/exchange-contract/protobuf/gen/go/user"
+	shared "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared"
 )
 
 // ensure the imports are used
@@ -36,7 +36,7 @@ var (
 	_ = anypb.Any{}
 	_ = sort.Sort
 
-	_ = user.Role(0)
+	_ = shared.Role(0)
 )
 
 // define the regex for a UUID once up-front
@@ -270,10 +270,10 @@ func (m *CreateSpotRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetMinOrderSize()) < 1 {
+	if l := utf8.RuneCountInString(m.GetMinOrderSize()); l < 1 || l > 30 {
 		err := CreateSpotRequestValidationError{
 			field:  "MinOrderSize",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 30 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -292,10 +292,10 @@ func (m *CreateSpotRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetMaxOrderSize()) < 1 {
+	if l := utf8.RuneCountInString(m.GetMaxOrderSize()); l < 1 || l > 30 {
 		err := CreateSpotRequestValidationError{
 			field:  "MaxOrderSize",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 30 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -325,7 +325,7 @@ func (m *CreateSpotRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	_CreateSpotRequest_AllowedRoles_Unique := make(map[user.Role]struct{}, len(m.GetAllowedRoles()))
+	_CreateSpotRequest_AllowedRoles_Unique := make(map[shared.Role]struct{}, len(m.GetAllowedRoles()))
 
 	for idx, item := range m.GetAllowedRoles() {
 		_, _ = idx, item

@@ -71,6 +71,8 @@ func (m *Order) validate(all bool) error {
 
 	// no validation rules for Quantity
 
+	// no validation rules for FilledQuantity
+
 	// no validation rules for OrderStatus
 
 	if all {
@@ -242,6 +244,17 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := _CreateOrderRequest_OrderSide_NotInLookup[m.GetOrderSide()]; ok {
+		err := CreateOrderRequestValidationError{
+			field:  "OrderSide",
+			reason: "value must not be in list [ORDER_SIDE_UNSPECIFIED]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if _, ok := OrderSide_name[int32(m.GetOrderSide())]; !ok {
 		err := CreateOrderRequestValidationError{
 			field:  "OrderSide",
@@ -264,10 +277,10 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetPrice()); l < 1 || l > 20 {
+	if l := utf8.RuneCountInString(m.GetPrice()); l < 1 || l > 30 {
 		err := CreateOrderRequestValidationError{
 			field:  "Price",
-			reason: "value length must be between 1 and 20 runes, inclusive",
+			reason: "value length must be between 1 and 30 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -286,10 +299,10 @@ func (m *CreateOrderRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if utf8.RuneCountInString(m.GetQuantity()) < 1 {
+	if l := utf8.RuneCountInString(m.GetQuantity()); l < 1 || l > 30 {
 		err := CreateOrderRequestValidationError{
 			field:  "Quantity",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 30 runes, inclusive",
 		}
 		if !all {
 			return err
@@ -395,6 +408,10 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateOrderRequestValidationError{}
+
+var _CreateOrderRequest_OrderSide_NotInLookup = map[OrderSide]struct{}{
+	0: {},
+}
 
 var _CreateOrderRequest_Price_Pattern = regexp.MustCompile("^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$")
 
@@ -677,6 +694,17 @@ func (m *GetOrderResponse) validate(all bool) error {
 
 	var errors []error
 
+	if m.GetOrder() == nil {
+		err := GetOrderResponseValidationError{
+			field:  "Order",
+			reason: "value is required",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if all {
 		switch v := interface{}(m.GetOrder()).(type) {
 		case interface{ ValidateAll() error }:
@@ -932,7 +960,7 @@ func (m *StreamOrderUpdateResponse) validate(all bool) error {
 
 	// no validation rules for OrderStatus
 
-	// no validation rules for Quantity
+	// no validation rules for FilledQuantity
 
 	if all {
 		switch v := interface{}(m.GetUpdatedAt()).(type) {
@@ -1081,7 +1109,19 @@ func (m *ListOrdersRequest) validate(all bool) error {
 	}
 
 	if m.SpotId != nil {
-		// no validation rules for SpotId
+
+		if err := m._validateUuid(m.GetSpotId()); err != nil {
+			err = ListOrdersRequestValidationError{
+				field:  "SpotId",
+				reason: "value must be a valid UUID",
+				cause:  err,
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Status != nil {
@@ -1094,6 +1134,14 @@ func (m *ListOrdersRequest) validate(all bool) error {
 
 	if len(errors) > 0 {
 		return ListOrdersRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+func (m *ListOrdersRequest) _validateUuid(uuid string) error {
+	if matched := _order_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil

@@ -4,52 +4,92 @@ package spot;
 
 option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/spot;spot";
 
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "shared/shared.proto";
 import "validate/validate.proto";
-import "user/user.proto";
 
 
+// SpotInstrumentService manages spot trading instruments.
+//
+// A spot instrument represents a trading pair such as BTC/USDT,
+// where the base asset is BTC and the quote asset is USDT.
 service SpotInstrumentService {
 
+    // Creates a new spot trading instrument.
     rpc CreateSpot(CreateSpotRequest)
         returns (CreateSpotResponse);
-        
+
+    // Returns detailed information about a spot instrument.
     rpc GetSpot(GetSpotRequest)
         returns (GetSpotResponse);
 
+    // Enables a disabled spot instrument.
     rpc EnableSpot(EnableSpotRequest)
         returns (google.protobuf.Empty);
 
+    // Disables an active spot instrument.
     rpc DisableSpot(DisableSpotRequest)
         returns (google.protobuf.Empty);
 
-    rpc ListSpots (SpotListRequest)
+    // Returns a paginated list of spot instruments.
+    rpc ListSpots(SpotListRequest)
         returns (SpotListResponse);
 }
 
+
+// SpotStatus represents the current status of a spot instrument.
 enum SpotStatus {
+
+    // Default value. Must not be used as an actual spot status.
     SPOT_STATUS_UNSPECIFIED = 0;
+
+    // The spot instrument is available for trading.
     SPOT_STATUS_ACTIVE = 1;
+
+    // The spot instrument is disabled and cannot be used for trading.
     SPOT_STATUS_DISABLED = 2;
 }
 
+
+// SpotListItem contains the fields returned when listing spot instruments.
 message SpotListItem {
+
+    // Unique identifier of the spot instrument.
     string id = 1;
 
+    // Base asset of the trading pair.
+    //
+    // Example: BTC in BTC/USDT.
     string base_asset = 2;
+
+    // Quote asset of the trading pair.
+    //
+    // Example: USDT in BTC/USDT.
     string quote_asset = 3;
 
+    // Human-readable name of the spot instrument.
     string name = 4;
+
+    // Human-readable description of the spot instrument.
     string description = 5;
 
+    // Current status of the spot instrument.
     SpotStatus status = 6;
 
+    // Timestamp when the spot instrument was created.
     google.protobuf.Timestamp created_at = 7;
 }
 
+
+// CreateSpotRequest contains configuration required to create
+// a new spot trading instrument.
 message CreateSpotRequest {
-    string base_asset  = 1 [
+
+    // Base asset of the trading pair.
+    //
+    // Example: BTC in BTC/USDT.
+    string base_asset = 1 [
         (validate.rules).string = {
             min_len: 2,
             max_len: 10,
@@ -57,6 +97,9 @@ message CreateSpotRequest {
         }
     ];
 
+    // Quote asset of the trading pair.
+    //
+    // Example: USDT in BTC/USDT.
     string quote_asset = 2 [
         (validate.rules).string = {
             min_len: 2,
@@ -65,104 +108,169 @@ message CreateSpotRequest {
         }
     ];
 
-    int32  price_precision = 3 [
+    // Number of decimal places allowed for the order price.
+    //
+    // Example: 2 means prices such as 100.25 are allowed.
+    int32 price_precision = 3 [
         (validate.rules).int32 = {
             gte: 0,
-            lte: 10,
+            lte: 10
         }
     ];
 
-    int32  quantity_precision = 4 [
-            (validate.rules).int32 = {
+    // Number of decimal places allowed for the order quantity.
+    int32 quantity_precision = 4 [
+        (validate.rules).int32 = {
             gte: 0,
-            lte: 10,
+            lte: 10
         }
     ];
 
+    // Minimum order quantity expressed in the base asset.
+    //
+    // Example: 0.001 BTC.
     string min_order_size = 5 [
         (validate.rules).string = {
             min_len: 1,
-            pattern: "^[0-9]+(\\.[0-9]+)?$",
+            max_len: 30,
+            pattern: "^[0-9]+(\\.[0-9]+)?$"
         }
     ];
 
+    // Maximum order quantity expressed in the base asset.
     string max_order_size = 6 [
         (validate.rules).string = {
             min_len: 1,
-            pattern: "^[0-9]+(\\.[0-9]+)?$",
+            max_len: 30,
+            pattern: "^[0-9]+(\\.[0-9]+)?$"
         }
     ];
 
-    repeated user.Role allowed_roles = 7 [
+    // Roles allowed to trade this spot instrument.
+    repeated shared.Role allowed_roles = 7 [
         (validate.rules).repeated = {
             min_items: 1,
-            unique: true,
+            unique: true
         }
     ];
 
+    // Human-readable name of the spot instrument.
     string name = 8 [
         (validate.rules).string = {
             min_len: 1,
-            max_len: 50,
+            max_len: 50
         }
     ];
 
+    // Human-readable description of the spot instrument.
     string description = 9 [
-        (validate.rules).string = {
-            max_len: 200,
-        }
+        (validate.rules).string.max_len = 200
     ];
-
 }
 
+
+// CreateSpotResponse contains information about the created spot instrument.
 message CreateSpotResponse {
+
+    // Unique identifier of the created spot instrument.
     string id = 1;
 
+    // Timestamp when the spot instrument was created.
     google.protobuf.Timestamp created_at = 2;
 }
 
 
-message GetSpotRequest{
+// GetSpotRequest contains the identifier of the requested spot instrument.
+message GetSpotRequest {
+
+    // Unique identifier of the spot instrument.
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
 }
 
-message GetSpotResponse{
-    string id     = 1; //уникальный идентификатор
 
-    string base_asset  = 2; //актив который продают или покупают
-    string quote_asset = 3; //в чем выражается цена
+// GetSpotResponse contains detailed information about a spot instrument.
+message GetSpotResponse {
 
-    int32  price_precision    = 4; // количество знаков после запятой у цены
-    int32  quantity_precision = 5; // количество знаков после запятой у актива
-    string min_order_size     = 6; // минимальное возможное количество покупки/продажи
-    string max_order_size     = 7; // максимальное количество покупки актива
+    // Unique identifier of the spot instrument.
+    string id = 1;
 
-    SpotStatus status = 8; // статус спота
-    repeated user.Role allowed_roles = 9; //разрешенные роли у пользователей
+    // Base asset of the trading pair.
+    //
+    // Example: BTC in BTC/USDT.
+    string base_asset = 2;
 
-    string name        = 10; // название спота
-    string description = 11; // описание спота
+    // Quote asset of the trading pair.
+    //
+    // The price of the base asset is expressed in the quote asset.
+    // Example: in BTC/USDT, the BTC price is expressed in USDT.
+    string quote_asset = 3;
 
-    google.protobuf.Timestamp created_at = 12; // время создания
-    google.protobuf.Timestamp updated_at = 13; // время обновления
-    google.protobuf.Timestamp disable_at = 14; // время обновления
+    // Number of decimal places allowed for the order price.
+    int32 price_precision = 4;
+
+    // Number of decimal places allowed for the order quantity.
+    int32 quantity_precision = 5;
+
+    // Minimum order quantity expressed in the base asset.
+    string min_order_size = 6;
+
+    // Maximum order quantity expressed in the base asset.
+    string max_order_size = 7;
+
+    // Current status of the spot instrument.
+    SpotStatus status = 8;
+
+    // Roles allowed to trade this spot instrument.
+    repeated shared.Role allowed_roles = 9;
+
+    // Human-readable name of the spot instrument.
+    string name = 10;
+
+    // Human-readable description of the spot instrument.
+    string description = 11;
+
+    // Timestamp when the spot instrument was created.
+    google.protobuf.Timestamp created_at = 12;
+
+    // Timestamp when the spot instrument was last updated.
+    google.protobuf.Timestamp updated_at = 13;
+
+    // Timestamp associated with disabling the spot instrument.
+    //
+    // The field is omitted when the spot instrument has never been disabled.
+    google.protobuf.Timestamp disable_at = 14;
 }
 
+
+// EnableSpotRequest contains the identifier of the spot instrument
+// that should be enabled.
 message EnableSpotRequest {
+
+    // Unique identifier of the spot instrument.
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
 }
 
+
+// DisableSpotRequest contains the identifier of the spot instrument
+// that should be disabled.
 message DisableSpotRequest {
+
+    // Unique identifier of the spot instrument.
     string id = 1 [
         (validate.rules).string.uuid = true
     ];
 }
 
+
+// SpotListRequest contains pagination and filtering parameters
+// for listing spot instruments.
 message SpotListRequest {
+
+    // Maximum number of spot instruments returned in a single page.
     int32 page_size = 1 [
         (validate.rules).int32 = {
             gte: 1,
@@ -170,19 +278,37 @@ message SpotListRequest {
         }
     ];
 
+    // Opaque cursor returned by the previous request.
+    //
+    // The client must not parse or modify the cursor.
     optional string cursor = 2;
 
+    // Optional filter by spot status.
     optional SpotStatus status = 3;
 
+    // Optional filter by base asset.
+    //
+    // Example: BTC.
     optional string base_asset = 4;
 
+    // Optional filter by quote asset.
+    //
+    // Example: USDT.
     optional string quote_asset = 5;
 }
 
+
+// SpotListResponse contains one page of spot instruments.
 message SpotListResponse {
+
+    // Spot instruments returned for the current page.
     repeated SpotListItem spots = 1;
 
+    // Opaque cursor used to request the next page.
+    //
+    // Empty when there are no more results.
     string next_cursor = 2;
 
+    // Indicates whether another page of results is available.
     bool has_more = 3;
 }

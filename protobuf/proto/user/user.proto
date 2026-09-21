@@ -4,187 +4,278 @@ package user;
 
 option go_package = "github.com/Samurosa/exchange-contract/protobuf/gen/go/user;user";
 
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
 import "shared/shared.proto";
+import "validate/validate.proto";
 
-enum Role {
 
-    ROLE_UNSPECIFIED = 0;
-
-    ROLE_USER = 1;
-    
-    ROLE_GUEST = 2;
-    
-    ROLE_PREMIUM = 3;
-
-    ROLE_ADMIN = 4;
-
-}
-
+// UserService provides user account, authentication and balance management.
 service UserService {
+
+    // Creates a new user account.
     rpc Registration(RegisterUserRequest)
         returns (RegisterUserResponse);
 
+    // Returns information about the currently authenticated user.
     rpc GetUser(google.protobuf.Empty)
         returns (UserInfoResponse);
 
+    // Updates information of the currently authenticated user.
     rpc UpdateUserInfo(UpdateUserInfoRequest)
         returns (google.protobuf.Empty);
 
+    // Deletes the currently authenticated user account.
     rpc DeleteUser(google.protobuf.Empty)
         returns (google.protobuf.Empty);
 
+    // Changes the password of the currently authenticated user.
     rpc ChangePassword(ChangeUserRequest)
         returns (google.protobuf.Empty);
 
-    rpc Deposit(DepositRequest)
-        returns (DepositResponse);
 
+    // Authentication
+
+    // Authenticates a user and returns an access token and a refresh token.
     rpc Login(LoginRequest)
         returns (TokenPairResponse);
 
+    // Invalidates the current user session.
     rpc Logout(LogoutRequest)
         returns (google.protobuf.Empty);
 
+    // Invalidates all active sessions of the currently authenticated user.
     rpc LogoutAllDevices(google.protobuf.Empty)
         returns (google.protobuf.Empty);
 
-    rpc GetBalances(google.protobuf.Empty)
-        returns(UserBalancesInfoResponse);
-    
+    // Exchanges a valid refresh token for a new access and refresh token pair.
     rpc RefreshToken(RefreshTokenRequest)
         returns (TokenPairResponse);
+
+
+    // Balance
+
+    // Deposits funds to a user account.
+    rpc Deposit(DepositRequest)
+        returns (DepositResponse);
+
+    // Returns balances of the currently authenticated user.
+    rpc GetBalances(google.protobuf.Empty)
+        returns (UserBalancesInfoResponse);
 }
 
+
+// Balance represents the user's balance for a single asset.
 message Balance {
 
+    // Asset symbol, for example BTC, USDT or USD.
     string asset = 1;
 
+    // Amount available for spending or withdrawal.
     string available = 2;
 
+    // Amount currently locked by active operations.
     string locked = 3;
-
 }
 
-message RegisterUserRequest  {
+
+// RegisterUserRequest contains information required to create a user account.
+message RegisterUserRequest {
+
+    // User email address.
     string email = 1 [
         (validate.rules).string.email = true
     ];
 
+    // User password.
     string password = 2 [
         (validate.rules).string = {
             min_len: 8,
-            max_len: 64,
+            max_len: 64
         }
     ];
+
+    // User display name.
     string name = 3 [
-    (validate.rules).string = {
+        (validate.rules).string = {
             min_len: 2,
-            max_len: 64,
+            max_len: 64
         }
     ];
 }
-message RegisterUserResponse { 
+
+
+// RegisterUserResponse contains information about the newly created user.
+message RegisterUserResponse {
+
+    // Unique identifier of the created user.
     string user_id = 1;
+
+    // Timestamp when the user account was created.
     google.protobuf.Timestamp created_at = 2;
 }
 
+
+// UserInfoResponse contains information about the currently authenticated user.
 message UserInfoResponse {
+
+    // Unique identifier of the user.
     string user_id = 1;
+
+    // User display name.
     string name = 2;
+
+    // User email address.
     string email = 3;
 
-    Role role = 5;
+    // User role.
+    shared.Role role = 5;
 
+    // Timestamp when the user account was created.
     google.protobuf.Timestamp created_at = 6;
+
+    // Timestamp when the user information was last updated.
     google.protobuf.Timestamp updated_at = 7;
 }
 
-message UpdateUserInfoRequest{
-    optional string name = 1  [
-    (validate.rules).string = {
+
+// UpdateUserInfoRequest contains fields that can be updated by the user.
+message UpdateUserInfoRequest {
+
+    // New user display name.
+    //
+    // The field is optional so that omitted fields are not changed.
+    optional string name = 1 [
+        (validate.rules).string = {
             min_len: 2,
-            max_len: 64,
+            max_len: 64
         }
     ];
 }
 
-message DepositRequest  {
-    string user_id = 1[
+
+// DepositRequest contains information required to deposit funds
+// to a user balance.
+message DepositRequest {
+
+    // Unique identifier of the user receiving the deposit.
+    string user_id = 1 [
         (validate.rules).string.uuid = true
     ];
 
-    string asset = 2[
+    // Asset symbol of the deposited funds.
+    string asset = 2 [
         (validate.rules).string = {
-        min_len: 1,
-        max_len: 10,
-        pattern: "^[A-Z_]+$"
+            min_len: 1,
+            max_len: 10,
+            pattern: "^[A-Z_]+$"
         }
     ];
 
+    // Amount of the deposited funds.
     shared.Money amount = 3 [
-    (validate.rules).message = {
-        required: true
-    }
+        (validate.rules).message.required = true
     ];
 
-    string idempotency_key = 4[
+    // Unique key used to make the deposit operation idempotent.
+    //
+    // Reusing the same key for the same user must not create
+    // another deposit.
+    string idempotency_key = 4 [
         (validate.rules).string = {
             min_len: 1,
-            max_len: 50,
+            max_len: 50
         }
     ];
 }
 
 
+// DepositResponse contains the resulting balance after the deposit.
 message DepositResponse {
+
+    // Updated balance of the deposited asset.
     Balance balance = 1;
 }
 
-message LoginRequest{
+
+// LoginRequest contains user credentials.
+message LoginRequest {
+
+    // User email address.
     string email = 1 [
         (validate.rules).string.email = true
     ];
 
+    // User password.
     string password = 2 [
         (validate.rules).string = {
             min_len: 8,
-            max_len: 64,
+            max_len: 64
         }
     ];
 }
 
+
+// TokenPairResponse contains access and refresh tokens issued during authentication.
 message TokenPairResponse {
+
+    // Short-lived access token used to authorize API requests.
     string access_token = 1;
+
+    // Long-lived refresh token used to obtain a new access token.
     string refresh_token = 2;
 
+    // Timestamp when the access token expires.
     google.protobuf.Timestamp access_expires_at = 3;
+
+    // Timestamp when the access token was issued.
     google.protobuf.Timestamp access_issued_at = 4;
+
+    // Timestamp when the refresh token expires.
     google.protobuf.Timestamp refresh_expires_at = 5;
+
+    // Timestamp when the refresh token was issued.
     google.protobuf.Timestamp refresh_issued_at = 6;
 }
 
-message UserBalancesInfoResponse{
+
+// UserBalancesInfoResponse contains balances of the authenticated user.
+message UserBalancesInfoResponse {
+
+    // List of balances grouped by asset.
     repeated Balance balances = 1;
 }
 
-message LogoutRequest{
+
+// LogoutRequest contains the refresh token of the session to invalidate.
+message LogoutRequest {
+
+    // Refresh token identifying the session to terminate.
     string refresh_token = 1;
 }
 
-message RefreshTokenRequest{
+
+// RefreshTokenRequest contains a refresh token used to obtain
+// a new token pair.
+message RefreshTokenRequest {
+
+    // Refresh token used to issue a new access token.
     string refresh_token = 1;
 }
 
+
+// ChangeUserRequest contains the old and new passwords.
 message ChangeUserRequest {
+
+    // Current user password.
     string old_password = 1 [
         (validate.rules).string = {
             min_len: 8,
             max_len: 64
         }
     ];
+
+    // New user password.
     string new_password = 2 [
         (validate.rules).string = {
             min_len: 8,

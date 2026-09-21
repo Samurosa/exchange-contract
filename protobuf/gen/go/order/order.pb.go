@@ -7,7 +7,6 @@
 package order
 
 import (
-	_ "github.com/Samurosa/exchange-contract/protobuf/gen/go/shared"
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -24,12 +23,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// OrderSide represents the direction of an order.
 type OrderSide int32
 
 const (
+	// Default value. Must not be used as an actual order side.
 	OrderSide_ORDER_SIDE_UNSPECIFIED OrderSide = 0
-	OrderSide_ORDER_SIDE_BUY         OrderSide = 1
-	OrderSide_ORDER_SIDE_SELL        OrderSide = 2
+	// Buy the base asset using the quote asset.
+	OrderSide_ORDER_SIDE_BUY OrderSide = 1
+	// Sell the base asset and receive the quote asset.
+	OrderSide_ORDER_SIDE_SELL OrderSide = 2
 )
 
 // Enum value maps for OrderSide.
@@ -76,12 +79,21 @@ func (OrderSide) EnumDescriptor() ([]byte, []int) {
 type OrderStatus int32
 
 const (
+	// Default value. Must not be used as an actual order status.
 	OrderStatus_ORDER_STATUS_UNSPECIFIED OrderStatus = 0
-	OrderStatus_ORDER_STATUS_NEW         OrderStatus = 1
-	OrderStatus_ORDER_STATUS_OPEN        OrderStatus = 2
-	OrderStatus_ORDER_STATUS_FILLED      OrderStatus = 3
-	OrderStatus_ORDER_STATUS_CANCELED    OrderStatus = 4
-	OrderStatus_ORDER_STATUS_REJECTED    OrderStatus = 5
+	// Order has been created and accepted for processing.
+	OrderStatus_ORDER_STATUS_NEW OrderStatus = 1
+	// Order is active and waiting for execution or further matching.
+	OrderStatus_ORDER_STATUS_OPEN OrderStatus = 2
+	// Part of the requested quantity has been executed,
+	// but the order has not been completely filled.
+	OrderStatus_ORDER_STATUS_PARTIALLY_FILLED OrderStatus = 3
+	// The entire requested quantity has been executed.
+	OrderStatus_ORDER_STATUS_FILLED OrderStatus = 4
+	// Order has been canceled before full execution.
+	OrderStatus_ORDER_STATUS_CANCELED OrderStatus = 5
+	// Order was rejected and was not executed.
+	OrderStatus_ORDER_STATUS_REJECTED OrderStatus = 6
 )
 
 // Enum value maps for OrderStatus.
@@ -90,17 +102,19 @@ var (
 		0: "ORDER_STATUS_UNSPECIFIED",
 		1: "ORDER_STATUS_NEW",
 		2: "ORDER_STATUS_OPEN",
-		3: "ORDER_STATUS_FILLED",
-		4: "ORDER_STATUS_CANCELED",
-		5: "ORDER_STATUS_REJECTED",
+		3: "ORDER_STATUS_PARTIALLY_FILLED",
+		4: "ORDER_STATUS_FILLED",
+		5: "ORDER_STATUS_CANCELED",
+		6: "ORDER_STATUS_REJECTED",
 	}
 	OrderStatus_value = map[string]int32{
-		"ORDER_STATUS_UNSPECIFIED": 0,
-		"ORDER_STATUS_NEW":         1,
-		"ORDER_STATUS_OPEN":        2,
-		"ORDER_STATUS_FILLED":      3,
-		"ORDER_STATUS_CANCELED":    4,
-		"ORDER_STATUS_REJECTED":    5,
+		"ORDER_STATUS_UNSPECIFIED":      0,
+		"ORDER_STATUS_NEW":              1,
+		"ORDER_STATUS_OPEN":             2,
+		"ORDER_STATUS_PARTIALLY_FILLED": 3,
+		"ORDER_STATUS_FILLED":           4,
+		"ORDER_STATUS_CANCELED":         5,
+		"ORDER_STATUS_REJECTED":         6,
 	}
 )
 
@@ -131,16 +145,32 @@ func (OrderStatus) EnumDescriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{1}
 }
 
+// Order contains complete information about an order.
 type Order struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	SpotId        string                 `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
-	OrderSide     OrderSide              `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
-	Price         string                 `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
-	Quantity      string                 `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	OrderStatus   OrderStatus            `protobuf:"varint,8,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the order.
+	OrderId string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	// Identifier of the user who created the order.
+	UserId string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Identifier of the spot trading instrument.
+	SpotId string `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
+	// Direction of the order.
+	OrderSide OrderSide `protobuf:"varint,4,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
+	// Order price expressed in the quote asset per one unit
+	// of the base asset.
+	//
+	// Example: for BTC/USDT, price "65000.50" means
+	// 1 BTC costs 65000.50 USDT.
+	Price string `protobuf:"bytes,5,opt,name=price,proto3" json:"price,omitempty"`
+	// Requested order quantity expressed in the base asset.
+	Quantity string `protobuf:"bytes,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	// Quantity that has already been executed.
+	FilledQuantity string `protobuf:"bytes,7,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
+	// Current status of the order.
+	OrderStatus OrderStatus `protobuf:"varint,8,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	// Timestamp when the order was created.
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	// Timestamp when the order was last updated.
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -218,6 +248,13 @@ func (x *Order) GetQuantity() string {
 	return ""
 }
 
+func (x *Order) GetFilledQuantity() string {
+	if x != nil {
+		return x.FilledQuantity
+	}
+	return ""
+}
+
 func (x *Order) GetOrderStatus() OrderStatus {
 	if x != nil {
 		return x.OrderStatus
@@ -239,15 +276,23 @@ func (x *Order) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// CreateOrderRequest contains information required to create an order.
 type CreateOrderRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	SpotId         string                 `protobuf:"bytes,1,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
-	OrderSide      OrderSide              `protobuf:"varint,2,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
-	IdempotencyKey string                 `protobuf:"bytes,3,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
-	Price          string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
-	Quantity       string                 `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Identifier of the spot trading instrument.
+	SpotId string `protobuf:"bytes,1,opt,name=spot_id,json=spotId,proto3" json:"spot_id,omitempty"`
+	// Direction of the order.
+	OrderSide OrderSide `protobuf:"varint,2,opt,name=order_side,json=orderSide,proto3,enum=order.OrderSide" json:"order_side,omitempty"`
+	// Unique key used to make order creation idempotent.
+	//
+	// The same key must be reused when retrying the same operation.
+	IdempotencyKey string `protobuf:"bytes,3,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`
+	// Price of one unit of the base asset expressed in the quote asset.
+	Price string `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`
+	// Requested quantity of the base asset.
+	Quantity      string `protobuf:"bytes,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateOrderRequest) Reset() {
@@ -315,10 +360,14 @@ func (x *CreateOrderRequest) GetQuantity() string {
 	return ""
 }
 
+// CreateOrderResponse contains information about the newly created order.
 type CreateOrderResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	OrderStatus   OrderStatus            `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the created order.
+	OrderId string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	// Initial status of the order.
+	OrderStatus OrderStatus `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	// Timestamp when the order was created.
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -375,9 +424,11 @@ func (x *CreateOrderResponse) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// GetOrderRequest contains the identifier of the requested order.
 type GetOrderRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the order.
+	OrderId       string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -419,9 +470,11 @@ func (x *GetOrderRequest) GetOrderId() string {
 	return ""
 }
 
+// GetOrderResponse contains the requested order.
 type GetOrderResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Order         *Order                 `protobuf:"bytes,1,opt,name=order,proto3" json:"order,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Requested order.
+	Order         *Order `protobuf:"bytes,1,opt,name=order,proto3" json:"order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -463,9 +516,11 @@ func (x *GetOrderResponse) GetOrder() *Order {
 	return nil
 }
 
+// StreamOrderUpdateRequest contains the order to subscribe to.
 type StreamOrderUpdateRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Unique identifier of the order whose updates should be streamed.
+	OrderId       string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -507,11 +562,16 @@ func (x *StreamOrderUpdateRequest) GetOrderId() string {
 	return ""
 }
 
+// StreamOrderUpdateResponse represents a single order state update.
 type StreamOrderUpdateResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	OrderStatus   OrderStatus            `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
-	Quantity      string                 `protobuf:"bytes,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Identifier of the updated order.
+	OrderId string `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	// New order status.
+	OrderStatus OrderStatus `protobuf:"varint,2,opt,name=order_status,json=orderStatus,proto3,enum=order.OrderStatus" json:"order_status,omitempty"`
+	// Total quantity executed so far.
+	FilledQuantity string `protobuf:"bytes,3,opt,name=filled_quantity,json=filledQuantity,proto3" json:"filled_quantity,omitempty"`
+	// Timestamp when this order state was updated.
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -561,9 +621,9 @@ func (x *StreamOrderUpdateResponse) GetOrderStatus() OrderStatus {
 	return OrderStatus_ORDER_STATUS_UNSPECIFIED
 }
 
-func (x *StreamOrderUpdateResponse) GetQuantity() string {
+func (x *StreamOrderUpdateResponse) GetFilledQuantity() string {
 	if x != nil {
-		return x.Quantity
+		return x.FilledQuantity
 	}
 	return ""
 }
@@ -575,13 +635,21 @@ func (x *StreamOrderUpdateResponse) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// ListOrdersRequest contains pagination and filtering parameters.
 type ListOrdersRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
-	SpotId        *string                `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3,oneof" json:"spot_id,omitempty"`
-	Status        *OrderStatus           `protobuf:"varint,4,opt,name=status,proto3,enum=order.OrderStatus,oneof" json:"status,omitempty"`
-	Side          *OrderSide             `protobuf:"varint,5,opt,name=side,proto3,enum=order.OrderSide,oneof" json:"side,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Maximum number of orders returned in a single page.
+	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Opaque cursor returned by the previous request.
+	//
+	// The client must not parse or modify the cursor.
+	Cursor *string `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
+	// Optional filter by spot instrument.
+	SpotId *string `protobuf:"bytes,3,opt,name=spot_id,json=spotId,proto3,oneof" json:"spot_id,omitempty"`
+	// Optional filter by order status.
+	Status *OrderStatus `protobuf:"varint,4,opt,name=status,proto3,enum=order.OrderStatus,oneof" json:"status,omitempty"`
+	// Optional filter by order side.
+	Side          *OrderSide `protobuf:"varint,5,opt,name=side,proto3,enum=order.OrderSide,oneof" json:"side,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -651,11 +719,17 @@ func (x *ListOrdersRequest) GetSide() OrderSide {
 	return OrderSide_ORDER_SIDE_UNSPECIFIED
 }
 
+// ListOrdersResponse contains one page of orders.
 type ListOrdersResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Orders        []*Order               `protobuf:"bytes,1,rep,name=orders,proto3" json:"orders,omitempty"`
-	NextCursor    string                 `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
-	HasMore       bool                   `protobuf:"varint,3,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Orders returned for the current page.
+	Orders []*Order `protobuf:"bytes,1,rep,name=orders,proto3" json:"orders,omitempty"`
+	// Opaque cursor used to request the next page.
+	//
+	// Empty when there are no more results.
+	NextCursor string `protobuf:"bytes,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	// Indicates whether another page of results is available.
+	HasMore       bool `protobuf:"varint,3,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -715,7 +789,7 @@ var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\x1a\x13shared/shared.proto\"\xe4\x02\n" +
+	"\x11order/order.proto\x12\x05order\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17validate/validate.proto\"\x8d\x03\n" +
 	"\x05Order\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
@@ -723,41 +797,43 @@ const file_order_order_proto_rawDesc = "" +
 	"\n" +
 	"order_side\x18\x04 \x01(\x0e2\x10.order.OrderSideR\torderSide\x12\x14\n" +
 	"\x05price\x18\x05 \x01(\tR\x05price\x12\x1a\n" +
-	"\bquantity\x18\x06 \x01(\tR\bquantity\x125\n" +
+	"\bquantity\x18\x06 \x01(\tR\bquantity\x12'\n" +
+	"\x0ffilled_quantity\x18\a \x01(\tR\x0efilledQuantity\x125\n" +
 	"\forder_status\x18\b \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x129\n" +
 	"\n" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa4\x02\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa8\x02\n" +
 	"\x12CreateOrderRequest\x12!\n" +
-	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\x129\n" +
+	"\aspot_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x06spotId\x12;\n" +
 	"\n" +
-	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\b\xfaB\x05\x82\x01\x02\x10\x01R\torderSide\x122\n" +
+	"order_side\x18\x02 \x01(\x0e2\x10.order.OrderSideB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00R\torderSide\x122\n" +
 	"\x0fidempotency_key\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\x12B\n" +
-	"\x05price\x18\x04 \x01(\tB,\xfaB)r'\x10\x01\x18\x142!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x05price\x128\n" +
-	"\bquantity\x18\x05 \x01(\tB\x1c\xfaB\x19r\x17\x10\x012\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
+	"\x05price\x18\x04 \x01(\tB,\xfaB)r'\x10\x01\x18\x1e2!^(0|[1-9][0-9]*)(\\.[0-9]*[1-9])?$R\x05price\x12:\n" +
+	"\bquantity\x18\x05 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x1e2\x13^[0-9]+(\\.[0-9]+)?$R\bquantity\"\xa2\x01\n" +
 	"\x13CreateOrderResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
 	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x129\n" +
 	"\n" +
 	"created_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"6\n" +
 	"\x0fGetOrderRequest\x12#\n" +
-	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"6\n" +
-	"\x10GetOrderResponse\x12\"\n" +
-	"\x05order\x18\x01 \x01(\v2\f.order.OrderR\x05order\"?\n" +
+	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"@\n" +
+	"\x10GetOrderResponse\x12,\n" +
+	"\x05order\x18\x01 \x01(\v2\f.order.OrderB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x05order\"?\n" +
 	"\x18StreamOrderUpdateRequest\x12#\n" +
-	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xc4\x01\n" +
+	"\border_id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\aorderId\"\xd1\x01\n" +
 	"\x19StreamOrderUpdateResponse\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x125\n" +
-	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12\x1a\n" +
-	"\bquantity\x18\x03 \x01(\tR\bquantity\x129\n" +
+	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12'\n" +
+	"\x0ffilled_quantity\x18\x03 \x01(\tR\x0efilledQuantity\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xfd\x01\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x87\x02\n" +
 	"\x11ListOrdersRequest\x12&\n" +
 	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
-	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12\x1c\n" +
-	"\aspot_id\x18\x03 \x01(\tH\x01R\x06spotId\x88\x01\x01\x12/\n" +
+	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12&\n" +
+	"\aspot_id\x18\x03 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01H\x01R\x06spotId\x88\x01\x01\x12/\n" +
 	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusH\x02R\x06status\x88\x01\x01\x12)\n" +
 	"\x04side\x18\x05 \x01(\x0e2\x10.order.OrderSideH\x03R\x04side\x88\x01\x01B\t\n" +
 	"\a_cursorB\n" +
@@ -773,14 +849,15 @@ const file_order_order_proto_rawDesc = "" +
 	"\tOrderSide\x12\x1a\n" +
 	"\x16ORDER_SIDE_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eORDER_SIDE_BUY\x10\x01\x12\x13\n" +
-	"\x0fORDER_SIDE_SELL\x10\x02*\xa7\x01\n" +
+	"\x0fORDER_SIDE_SELL\x10\x02*\xca\x01\n" +
 	"\vOrderStatus\x12\x1c\n" +
 	"\x18ORDER_STATUS_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10ORDER_STATUS_NEW\x10\x01\x12\x15\n" +
-	"\x11ORDER_STATUS_OPEN\x10\x02\x12\x17\n" +
-	"\x13ORDER_STATUS_FILLED\x10\x03\x12\x19\n" +
-	"\x15ORDER_STATUS_CANCELED\x10\x04\x12\x19\n" +
-	"\x15ORDER_STATUS_REJECTED\x10\x052\xae\x02\n" +
+	"\x11ORDER_STATUS_OPEN\x10\x02\x12!\n" +
+	"\x1dORDER_STATUS_PARTIALLY_FILLED\x10\x03\x12\x17\n" +
+	"\x13ORDER_STATUS_FILLED\x10\x04\x12\x19\n" +
+	"\x15ORDER_STATUS_CANCELED\x10\x05\x12\x19\n" +
+	"\x15ORDER_STATUS_REJECTED\x10\x062\xae\x02\n" +
 	"\fOrderService\x12D\n" +
 	"\vCreateOrder\x12\x19.order.CreateOrderRequest\x1a\x1a.order.CreateOrderResponse\x12;\n" +
 	"\bGetOrder\x12\x16.order.GetOrderRequest\x1a\x17.order.GetOrderResponse\x12X\n" +

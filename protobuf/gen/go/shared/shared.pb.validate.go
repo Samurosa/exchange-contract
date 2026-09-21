@@ -56,10 +56,10 @@ func (m *Money) validate(all bool) error {
 
 	var errors []error
 
-	if l := utf8.RuneCountInString(m.GetCurrency()); l < 1 || l > 10 {
+	if l := utf8.RuneCountInString(m.GetCurrency()); l < 1 || l > 5 {
 		err := MoneyValidationError{
 			field:  "Currency",
-			reason: "value length must be between 1 and 10 runes, inclusive",
+			reason: "value length must be between 1 and 5 runes, inclusive",
 		}
 		if !all {
 			return err

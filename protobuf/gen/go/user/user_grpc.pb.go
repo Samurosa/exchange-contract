@@ -25,29 +25,42 @@ const (
 	UserService_UpdateUserInfo_FullMethodName   = "/user.UserService/UpdateUserInfo"
 	UserService_DeleteUser_FullMethodName       = "/user.UserService/DeleteUser"
 	UserService_ChangePassword_FullMethodName   = "/user.UserService/ChangePassword"
-	UserService_Deposit_FullMethodName          = "/user.UserService/Deposit"
 	UserService_Login_FullMethodName            = "/user.UserService/Login"
 	UserService_Logout_FullMethodName           = "/user.UserService/Logout"
 	UserService_LogoutAllDevices_FullMethodName = "/user.UserService/LogoutAllDevices"
-	UserService_GetBalances_FullMethodName      = "/user.UserService/GetBalances"
 	UserService_RefreshToken_FullMethodName     = "/user.UserService/RefreshToken"
+	UserService_Deposit_FullMethodName          = "/user.UserService/Deposit"
+	UserService_GetBalances_FullMethodName      = "/user.UserService/GetBalances"
 )
 
 // UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// UserService provides user account, authentication and balance management.
 type UserServiceClient interface {
+	// Creates a new user account.
 	Registration(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error)
+	// Returns information about the currently authenticated user.
 	GetUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserInfoResponse, error)
+	// Updates information of the currently authenticated user.
 	UpdateUserInfo(ctx context.Context, in *UpdateUserInfoRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Deletes the currently authenticated user account.
 	DeleteUser(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Changes the password of the currently authenticated user.
 	ChangePassword(ctx context.Context, in *ChangeUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
+	// Authenticates a user and returns an access token and a refresh token.
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
+	// Invalidates the current user session.
 	Logout(ctx context.Context, in *LogoutRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Invalidates all active sessions of the currently authenticated user.
 	LogoutAllDevices(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	GetBalances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
+	// Exchanges a valid refresh token for a new access and refresh token pair.
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenPairResponse, error)
+	// Deposits funds to a user account.
+	Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error)
+	// Returns balances of the currently authenticated user.
+	GetBalances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error)
 }
 
 type userServiceClient struct {
@@ -108,16 +121,6 @@ func (c *userServiceClient) ChangePassword(ctx context.Context, in *ChangeUserRe
 	return out, nil
 }
 
-func (c *userServiceClient) Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DepositResponse)
-	err := c.cc.Invoke(ctx, UserService_Deposit_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *userServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*TokenPairResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TokenPairResponse)
@@ -148,16 +151,6 @@ func (c *userServiceClient) LogoutAllDevices(ctx context.Context, in *emptypb.Em
 	return out, nil
 }
 
-func (c *userServiceClient) GetBalances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UserBalancesInfoResponse)
-	err := c.cc.Invoke(ctx, UserService_GetBalances_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *userServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenPairResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TokenPairResponse)
@@ -168,21 +161,54 @@ func (c *userServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRe
 	return out, nil
 }
 
+func (c *userServiceClient) Deposit(ctx context.Context, in *DepositRequest, opts ...grpc.CallOption) (*DepositResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DepositResponse)
+	err := c.cc.Invoke(ctx, UserService_Deposit_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetBalances(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserBalancesInfoResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserBalancesInfoResponse)
+	err := c.cc.Invoke(ctx, UserService_GetBalances_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
+//
+// UserService provides user account, authentication and balance management.
 type UserServiceServer interface {
+	// Creates a new user account.
 	Registration(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error)
+	// Returns information about the currently authenticated user.
 	GetUser(context.Context, *emptypb.Empty) (*UserInfoResponse, error)
+	// Updates information of the currently authenticated user.
 	UpdateUserInfo(context.Context, *UpdateUserInfoRequest) (*emptypb.Empty, error)
+	// Deletes the currently authenticated user account.
 	DeleteUser(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	// Changes the password of the currently authenticated user.
 	ChangePassword(context.Context, *ChangeUserRequest) (*emptypb.Empty, error)
-	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
+	// Authenticates a user and returns an access token and a refresh token.
 	Login(context.Context, *LoginRequest) (*TokenPairResponse, error)
+	// Invalidates the current user session.
 	Logout(context.Context, *LogoutRequest) (*emptypb.Empty, error)
+	// Invalidates all active sessions of the currently authenticated user.
 	LogoutAllDevices(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	GetBalances(context.Context, *emptypb.Empty) (*UserBalancesInfoResponse, error)
+	// Exchanges a valid refresh token for a new access and refresh token pair.
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error)
+	// Deposits funds to a user account.
+	Deposit(context.Context, *DepositRequest) (*DepositResponse, error)
+	// Returns balances of the currently authenticated user.
+	GetBalances(context.Context, *emptypb.Empty) (*UserBalancesInfoResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -208,9 +234,6 @@ func (UnimplementedUserServiceServer) DeleteUser(context.Context, *emptypb.Empty
 func (UnimplementedUserServiceServer) ChangePassword(context.Context, *ChangeUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChangePassword not implemented")
 }
-func (UnimplementedUserServiceServer) Deposit(context.Context, *DepositRequest) (*DepositResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Deposit not implemented")
-}
 func (UnimplementedUserServiceServer) Login(context.Context, *LoginRequest) (*TokenPairResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Login not implemented")
 }
@@ -220,11 +243,14 @@ func (UnimplementedUserServiceServer) Logout(context.Context, *LogoutRequest) (*
 func (UnimplementedUserServiceServer) LogoutAllDevices(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method LogoutAllDevices not implemented")
 }
-func (UnimplementedUserServiceServer) GetBalances(context.Context, *emptypb.Empty) (*UserBalancesInfoResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetBalances not implemented")
-}
 func (UnimplementedUserServiceServer) RefreshToken(context.Context, *RefreshTokenRequest) (*TokenPairResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RefreshToken not implemented")
+}
+func (UnimplementedUserServiceServer) Deposit(context.Context, *DepositRequest) (*DepositResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Deposit not implemented")
+}
+func (UnimplementedUserServiceServer) GetBalances(context.Context, *emptypb.Empty) (*UserBalancesInfoResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetBalances not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -337,24 +363,6 @@ func _UserService_ChangePassword_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DepositRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).Deposit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_Deposit_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).Deposit(ctx, req.(*DepositRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _UserService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)
 	if err := dec(in); err != nil {
@@ -409,24 +417,6 @@ func _UserService_LogoutAllDevices_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_GetBalances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).GetBalances(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: UserService_GetBalances_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetBalances(ctx, req.(*emptypb.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _UserService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RefreshTokenRequest)
 	if err := dec(in); err != nil {
@@ -441,6 +431,42 @@ func _UserService_RefreshToken_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).RefreshToken(ctx, req.(*RefreshTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_Deposit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DepositRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Deposit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_Deposit_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Deposit(ctx, req.(*DepositRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetBalances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetBalances(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetBalances_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetBalances(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -473,10 +499,6 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_ChangePassword_Handler,
 		},
 		{
-			MethodName: "Deposit",
-			Handler:    _UserService_Deposit_Handler,
-		},
-		{
 			MethodName: "Login",
 			Handler:    _UserService_Login_Handler,
 		},
@@ -489,12 +511,16 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_LogoutAllDevices_Handler,
 		},
 		{
-			MethodName: "GetBalances",
-			Handler:    _UserService_GetBalances_Handler,
-		},
-		{
 			MethodName: "RefreshToken",
 			Handler:    _UserService_RefreshToken_Handler,
+		},
+		{
+			MethodName: "Deposit",
+			Handler:    _UserService_Deposit_Handler,
+		},
+		{
+			MethodName: "GetBalances",
+			Handler:    _UserService_GetBalances_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

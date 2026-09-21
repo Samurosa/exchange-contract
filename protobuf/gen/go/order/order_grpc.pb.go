@@ -28,10 +28,20 @@ const (
 // OrderServiceClient is the client API for OrderService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// OrderService manages spot orders and provides order status updates.
 type OrderServiceClient interface {
+	// Creates a new order for the currently authenticated user.
 	CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...grpc.CallOption) (*CreateOrderResponse, error)
+	// Returns a single order by its identifier.
 	GetOrder(ctx context.Context, in *GetOrderRequest, opts ...grpc.CallOption) (*GetOrderResponse, error)
+	// Subscribes to updates of a specific order.
+	//
+	// The stream remains open until the client cancels the request,
+	// the server closes the stream, or an unrecoverable error occurs.
 	StreamOrderUpdate(ctx context.Context, in *StreamOrderUpdateRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[StreamOrderUpdateResponse], error)
+	// Returns a paginated list of orders belonging to the currently
+	// authenticated user.
 	ListOrders(ctx context.Context, in *ListOrdersRequest, opts ...grpc.CallOption) (*ListOrdersResponse, error)
 }
 
@@ -95,10 +105,20 @@ func (c *orderServiceClient) ListOrders(ctx context.Context, in *ListOrdersReque
 // OrderServiceServer is the server API for OrderService service.
 // All implementations must embed UnimplementedOrderServiceServer
 // for forward compatibility.
+//
+// OrderService manages spot orders and provides order status updates.
 type OrderServiceServer interface {
+	// Creates a new order for the currently authenticated user.
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
+	// Returns a single order by its identifier.
 	GetOrder(context.Context, *GetOrderRequest) (*GetOrderResponse, error)
+	// Subscribes to updates of a specific order.
+	//
+	// The stream remains open until the client cancels the request,
+	// the server closes the stream, or an unrecoverable error occurs.
 	StreamOrderUpdate(*StreamOrderUpdateRequest, grpc.ServerStreamingServer[StreamOrderUpdateResponse]) error
+	// Returns a paginated list of orders belonging to the currently
+	// authenticated user.
 	ListOrders(context.Context, *ListOrdersRequest) (*ListOrdersResponse, error)
 	mustEmbedUnimplementedOrderServiceServer()
 }

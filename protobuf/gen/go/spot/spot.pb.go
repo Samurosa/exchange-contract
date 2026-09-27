@@ -700,7 +700,7 @@ func (x *DisableSpotRequest) GetId() string {
 // for listing spot instruments.
 type SpotListRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Maximum number of spot instruments returned in a single page.
+	// Maximum number of spot instruments returned in a single page. Zero uses the default of 20.
 	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	// Opaque cursor returned by the previous request.
 	//
@@ -920,7 +920,7 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x12DisableSpotRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\x84\x02\n" +
 	"\x0fSpotListRequest\x12&\n" +
-	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x00R\bpageSize\x12\x1b\n" +
 	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12-\n" +
 	"\x06status\x18\x03 \x01(\x0e2\x10.spot.SpotStatusH\x01R\x06status\x88\x01\x01\x12\"\n" +
 	"\n" +

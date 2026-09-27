@@ -277,10 +277,10 @@ message DisableSpotRequest {
 // for listing spot instruments.
 message SpotListRequest {
 
-    // Maximum number of spot instruments returned in a single page.
+    // Maximum number of spot instruments returned in a single page. Zero uses the default of 20.
     int32 page_size = 1 [
         (validate.rules).int32 = {
-            gte: 1,
+            gte: 0,
             lte: 100
         }
     ];

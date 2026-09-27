@@ -658,7 +658,7 @@ func (x *StreamOrderUpdateResponse) GetUpdatedAt() *timestamppb.Timestamp {
 // ListOrdersRequest contains pagination and filtering parameters.
 type ListOrdersRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Maximum number of orders returned in a single page.
+	// Maximum number of orders returned in a single page. Zero uses the default of 20.
 	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	// Opaque cursor returned by the previous request.
 	//
@@ -851,7 +851,7 @@ const file_order_order_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9f\x02\n" +
 	"\x11ListOrdersRequest\x12&\n" +
-	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x00R\bpageSize\x12\x1b\n" +
 	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12&\n" +
 	"\aspot_id\x18\x03 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01H\x01R\x06spotId\x88\x01\x01\x12;\n" +
 	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusB\n" +

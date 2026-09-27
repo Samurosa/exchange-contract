@@ -242,10 +242,10 @@ message StreamOrderUpdateResponse {
 // ListOrdersRequest contains pagination and filtering parameters.
 message ListOrdersRequest {
 
-    // Maximum number of orders returned in a single page.
+    // Maximum number of orders returned in a single page. Zero uses the default of 20.
     int32 page_size = 1 [
         (validate.rules).int32 = {
-            gte: 1,
+            gte: 0,
             lte: 100
         }
     ];

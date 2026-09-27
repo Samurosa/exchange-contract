@@ -1207,10 +1207,10 @@ func (m *SpotListRequest) validate(all bool) error {
 
 	var errors []error
 
-	if val := m.GetPageSize(); val < 1 || val > 100 {
+	if val := m.GetPageSize(); val < 0 || val > 100 {
 		err := SpotListRequestValidationError{
 			field:  "PageSize",
-			reason: "value must be inside range [1, 100]",
+			reason: "value must be inside range [0, 100]",
 		}
 		if !all {
 			return err

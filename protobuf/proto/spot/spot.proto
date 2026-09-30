@@ -139,8 +139,8 @@ message CreateSpotRequest {
     string min_order_size = 5 [
         (validate.rules).string = {
             min_len: 1,
-            max_len: 30,
-            pattern: "^[0-9]+(\\.[0-9]+)?$"
+            max_len: 20,
+            pattern: "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
         }
     ];
 
@@ -148,8 +148,8 @@ message CreateSpotRequest {
     string max_order_size = 6 [
         (validate.rules).string = {
             min_len: 1,
-            max_len: 30,
-            pattern: "^[0-9]+(\\.[0-9]+)?$"
+            max_len: 20,
+            pattern: "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
         }
     ];
 
@@ -247,7 +247,7 @@ message GetSpotResponse {
     // Timestamp associated with disabling the spot instrument.
     //
     // The field is omitted when the spot instrument has never been disabled.
-    google.protobuf.Timestamp disable_at = 14;
+    optional google.protobuf.Timestamp disable_at = 14;
 }
 
 
@@ -277,10 +277,10 @@ message DisableSpotRequest {
 // for listing spot instruments.
 message SpotListRequest {
 
-    // Maximum number of spot instruments returned in a single page. Zero uses the default of 20.
+    // Maximum number of spot instruments returned in a single page.
     int32 page_size = 1 [
         (validate.rules).int32 = {
-            gte: 0,
+            gte: 1,
             lte: 100
         }
     ];

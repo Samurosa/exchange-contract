@@ -209,6 +209,7 @@ message GetOrderResponse {
 
 
 // StreamOrderUpdateRequest contains the order to subscribe to.
+//сопосотавление с юзер айди
 message StreamOrderUpdateRequest {
 
     // Unique identifier of the order whose updates should be streamed.
@@ -242,10 +243,10 @@ message StreamOrderUpdateResponse {
 // ListOrdersRequest contains pagination and filtering parameters.
 message ListOrdersRequest {
 
-    // Maximum number of orders returned in a single page. Zero uses the default of 20.
+    // Maximum number of orders returned in a single page.
     int32 page_size = 1 [
         (validate.rules).int32 = {
-            gte: 0,
+            gte: 1,
             lte: 100
         }
     ];

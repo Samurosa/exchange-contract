@@ -1277,10 +1277,10 @@ func (m *ListOrdersRequest) validate(all bool) error {
 
 	var errors []error
 
-	if val := m.GetPageSize(); val < 0 || val > 100 {
+	if val := m.GetPageSize(); val < 1 || val > 100 {
 		err := ListOrdersRequestValidationError{
 			field:  "PageSize",
-			reason: "value must be inside range [0, 100]",
+			reason: "value must be inside range [1, 100]",
 		}
 		if !all {
 			return err
@@ -1289,7 +1289,18 @@ func (m *ListOrdersRequest) validate(all bool) error {
 	}
 
 	if m.Cursor != nil {
-		// no validation rules for Cursor
+
+		if len(m.GetCursor()) > 256 {
+			err := ListOrdersRequestValidationError{
+				field:  "Cursor",
+				reason: "value length must be at most 256 bytes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.SpotId != nil {

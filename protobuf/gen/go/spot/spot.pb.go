@@ -469,7 +469,7 @@ type GetSpotResponse struct {
 	// Timestamp associated with disabling the spot instrument.
 	//
 	// The field is omitted when the spot instrument has never been disabled.
-	DisableAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=disable_at,json=disableAt,proto3" json:"disable_at,omitempty"`
+	DisableAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=disable_at,json=disableAt,proto3,oneof" json:"disable_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -700,7 +700,7 @@ func (x *DisableSpotRequest) GetId() string {
 // for listing spot instruments.
 type SpotListRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Maximum number of spot instruments returned in a single page. Zero uses the default of 20.
+	// Maximum number of spot instruments returned in a single page.
 	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	// Opaque cursor returned by the previous request.
 	//
@@ -870,7 +870,7 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x0fprice_precision\x18\b \x01(\x05R\x0epricePrecision\x12-\n" +
 	"\x12quantity_precision\x18\t \x01(\x05R\x11quantityPrecision\x12;\n" +
 	"\rallowed_roles\x18\n" +
-	" \x03(\x0e2\f.shared.RoleB\b\xfaB\x05\x92\x01\x02\x18\x01R\fallowedRoles\"\x81\x04\n" +
+	" \x03(\x0e2\f.shared.RoleB\b\xfaB\x05\x92\x01\x02\x18\x01R\fallowedRoles\"\xa2\x04\n" +
 	"\x11CreateSpotRequest\x122\n" +
 	"\n" +
 	"base_asset\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
@@ -881,11 +881,10 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\x0fprice_precision\x18\x03 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
 	"(\x00R\x0epricePrecision\x128\n" +
 	"\x12quantity_precision\x18\x04 \x01(\x05B\t\xfaB\x06\x1a\x04\x18\n" +
-	"(\x00R\x11quantityPrecision\x12D\n" +
-	"\x0emin_order_size\x18\x05 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x1e2\x13^[0-9]+(\\.[0-9]+)?$R\fminOrderSize\x12D\n" +
-	"\x0emax_order_size\x18\x06 \x01(\tB\x1e\xfaB\x1br\x19\x10\x01\x18\x1e2\x13^[0-9]+(\\.[0-9]+)?$R\fmaxOrderSize\x12=\n" +
-	"\rallowed_roles\x18\a \x03(\x0e2\f.shared.RoleB\n" +
-	"\xfaB\a\x92\x01\x04\b\x01\x18\x01R\fallowedRoles\x12\x1d\n" +
+	"(\x00R\x11quantityPrecision\x12P\n" +
+	"\x0emin_order_size\x18\x05 \x01(\tB*\xfaB'r%\x18\x142!^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$R\fminOrderSize\x12P\n" +
+	"\x0emax_order_size\x18\x06 \x01(\tB*\xfaB'r%\x18\x142!^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$R\fmaxOrderSize\x12F\n" +
+	"\rallowed_roles\x18\a \x03(\x0e2\f.shared.RoleB\x13\xfaB\x10\x92\x01\r\b\x01\x18\x01\"\a\x82\x01\x04\x10\x01 \x00R\fallowedRoles\x12\x1d\n" +
 	"\x04name\x18\b \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x04name\x12*\n" +
 	"\vdescription\x18\t \x01(\tB\b\xfaB\x05r\x03\x18\xc8\x01R\vdescription\"_\n" +
 	"\x12CreateSpotResponse\x12\x0e\n" +
@@ -893,7 +892,7 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"*\n" +
 	"\x0eGetSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\xc9\x04\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\xdd\x04\n" +
 	"\x0fGetSpotResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -912,20 +911,24 @@ const file_spot_spot_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
+	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12>\n" +
 	"\n" +
-	"disable_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tdisableAt\"-\n" +
+	"disable_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampH\x00R\tdisableAt\x88\x01\x01B\r\n" +
+	"\v_disable_at\"-\n" +
 	"\x11EnableSpotRequest\x12\x18\n" +
 	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\".\n" +
 	"\x12DisableSpotRequest\x12\x18\n" +
-	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\x84\x02\n" +
+	"\x02id\x18\x01 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01R\x02id\"\xc4\x02\n" +
 	"\x0fSpotListRequest\x12&\n" +
-	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x00R\bpageSize\x12\x1b\n" +
-	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12-\n" +
-	"\x06status\x18\x03 \x01(\x0e2\x10.spot.SpotStatusH\x01R\x06status\x88\x01\x01\x12\"\n" +
+	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12%\n" +
+	"\x06cursor\x18\x02 \x01(\tB\b\xfaB\x05r\x03(\x80\x02H\x00R\x06cursor\x88\x01\x01\x129\n" +
+	"\x06status\x18\x03 \x01(\x0e2\x10.spot.SpotStatusB\n" +
+	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x01R\x06status\x88\x01\x01\x127\n" +
 	"\n" +
-	"base_asset\x18\x04 \x01(\tH\x02R\tbaseAsset\x88\x01\x01\x12$\n" +
-	"\vquote_asset\x18\x05 \x01(\tH\x03R\n" +
+	"base_asset\x18\x04 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
+	"2\b^[A-Z]+$H\x02R\tbaseAsset\x88\x01\x01\x129\n" +
+	"\vquote_asset\x18\x05 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
+	"2\b^[A-Z]+$H\x03R\n" +
 	"quoteAsset\x88\x01\x01B\t\n" +
 	"\a_cursorB\t\n" +
 	"\a_statusB\r\n" +
@@ -1014,6 +1017,7 @@ func file_spot_spot_proto_init() {
 	if File_spot_spot_proto != nil {
 		return
 	}
+	file_spot_spot_proto_msgTypes[4].OneofWrappers = []any{}
 	file_spot_spot_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

@@ -254,7 +254,7 @@ message ListOrdersRequest {
     // Opaque cursor returned by the previous request.
     //
     // The client must not parse or modify the cursor.
-    optional string cursor = 2;
+    optional string cursor = 2 [(validate.rules).string.max_bytes = 256];
 
     // Optional filter by spot instrument.
     optional string spot_id = 3 [

@@ -96,7 +96,8 @@ type RegisterUserRequest struct {
 	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	// User password.
 	//
-	// Length must be between 8 and 64 characters.
+	// Length must be between 8 and 64 characters and at most 72 UTF-8 bytes
+	// to fit bcrypt's password limit.
 	// Password complexity is validated by the application layer.
 	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	// User display name.
@@ -221,11 +222,11 @@ type UserInfoResponse struct {
 	// User email address.
 	Email string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
 	// User role.
-	Role shared.Role `protobuf:"varint,5,opt,name=role,proto3,enum=shared.Role" json:"role,omitempty"`
+	Role shared.Role `protobuf:"varint,4,opt,name=role,proto3,enum=shared.Role" json:"role,omitempty"`
 	// Timestamp when the user account was created.
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	// Timestamp when the user information was last updated.
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -458,7 +459,7 @@ type LoginRequest struct {
 	Email string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	// User password.
 	//
-	// Length must be between 8 and 64 characters.
+	// Length must be between 8 and 64 characters and at most 72 UTF-8 bytes.
 	Password      string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -745,7 +746,7 @@ type ChangePasswordRequest struct {
 	OldPassword string `protobuf:"bytes,1,opt,name=old_password,json=oldPassword,proto3" json:"old_password,omitempty"`
 	// New user password.
 	//
-	// Length must be between 8 and 64 characters.
+	// Length must be between 8 and 64 characters and at most 72 UTF-8 bytes.
 	// Password complexity is validated by the application layer.
 	NewPassword   string `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3" json:"new_password,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -804,10 +805,10 @@ const file_user_user_proto_rawDesc = "" +
 	"\aBalance\x12\x14\n" +
 	"\x05asset\x18\x01 \x01(\tR\x05asset\x12\x1c\n" +
 	"\tavailable\x18\x02 \x01(\tR\tavailable\x12\x16\n" +
-	"\x06locked\x18\x03 \x01(\tR\x06locked\"z\n" +
+	"\x06locked\x18\x03 \x01(\tR\x06locked\"|\n" +
 	"\x13RegisterUserRequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
-	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\bpassword\x12\x1d\n" +
+	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12'\n" +
+	"\bpassword\x18\x02 \x01(\tB\v\xfaB\br\x06\x10\b\x18@(HR\bpassword\x12\x1d\n" +
 	"\x04name\x18\x03 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@R\x04name\"j\n" +
 	"\x14RegisterUserResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x129\n" +
@@ -817,11 +818,11 @@ const file_user_user_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12 \n" +
-	"\x04role\x18\x05 \x01(\x0e2\f.shared.RoleR\x04role\x129\n" +
+	"\x04role\x18\x04 \x01(\x0e2\f.shared.RoleR\x04role\x129\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"D\n" +
+	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"D\n" +
 	"\x15UpdateUserInfoRequest\x12\"\n" +
 	"\x04name\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\x02\x18@H\x00R\x04name\x88\x01\x01B\a\n" +
 	"\x05_name\"u\n" +
@@ -829,10 +830,10 @@ const file_user_user_proto_rawDesc = "" +
 	"\x06amount\x18\x01 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x06amount\x122\n" +
 	"\x0fidempotency_key\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\x01\x182R\x0eidempotencyKey\"D\n" +
 	"\x0fDepositResponse\x121\n" +
-	"\abalance\x18\x01 \x01(\v2\r.user.BalanceB\b\xfaB\x05\x8a\x01\x02\x10\x01R\abalance\"T\n" +
+	"\abalance\x18\x01 \x01(\v2\r.user.BalanceB\b\xfaB\x05\x8a\x01\x02\x10\x01R\abalance\"V\n" +
 	"\fLoginRequest\x12\x1d\n" +
-	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12%\n" +
-	"\bpassword\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\bpassword\"\xfb\x02\n" +
+	"\x05email\x18\x01 \x01(\tB\a\xfaB\x04r\x02`\x01R\x05email\x12'\n" +
+	"\bpassword\x18\x02 \x01(\tB\v\xfaB\br\x06\x10\b\x18@(HR\bpassword\"\xfb\x02\n" +
 	"\x11TokenPairResponse\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\x12F\n" +
@@ -841,14 +842,16 @@ const file_user_user_proto_rawDesc = "" +
 	"\x12refresh_expires_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x10refreshExpiresAt\x12F\n" +
 	"\x11refresh_issued_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x0frefreshIssuedAt\"E\n" +
 	"\x18UserBalancesInfoResponse\x12)\n" +
-	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"=\n" +
-	"\rLogoutRequest\x12,\n" +
-	"\rrefresh_token\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\frefreshToken\"C\n" +
-	"\x13RefreshTokenRequest\x12,\n" +
-	"\rrefresh_token\x18\x01 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\frefreshToken\"s\n" +
-	"\x15ChangePasswordRequest\x12,\n" +
-	"\fold_password\x18\x01 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\voldPassword\x12,\n" +
-	"\fnew_password\x18\x02 \x01(\tB\t\xfaB\x06r\x04\x10\b\x18@R\vnewPassword2\xcf\x05\n" +
+	"\bbalances\x18\x01 \x03(\v2\r.user.BalanceR\bbalances\"@\n" +
+	"\rLogoutRequest\x12/\n" +
+	"\rrefresh_token\x18\x01 \x01(\tB\n" +
+	"\xfaB\ar\x05\x10 (\x80 R\frefreshToken\"F\n" +
+	"\x13RefreshTokenRequest\x12/\n" +
+	"\rrefresh_token\x18\x01 \x01(\tB\n" +
+	"\xfaB\ar\x05\x10 (\x80 R\frefreshToken\"w\n" +
+	"\x15ChangePasswordRequest\x12.\n" +
+	"\fold_password\x18\x01 \x01(\tB\v\xfaB\br\x06\x10\b\x18@(HR\voldPassword\x12.\n" +
+	"\fnew_password\x18\x02 \x01(\tB\v\xfaB\br\x06\x10\b\x18@(HR\vnewPassword2\xcf\x05\n" +
 	"\vUserService\x12E\n" +
 	"\fRegistration\x12\x19.user.RegisterUserRequest\x1a\x1a.user.RegisterUserResponse\x129\n" +
 	"\aGetUser\x12\x16.google.protobuf.Empty\x1a\x16.user.UserInfoResponse\x12E\n" +

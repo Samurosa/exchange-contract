@@ -188,6 +188,17 @@ func (m *RegisterUserRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetPassword()) > 72 {
+		err := RegisterUserRequestValidationError{
+			field:  "Password",
+			reason: "value length must be at most 72 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if l := utf8.RuneCountInString(m.GetName()); l < 2 || l > 64 {
 		err := RegisterUserRequestValidationError{
 			field:  "Name",
@@ -1081,6 +1092,17 @@ func (m *LoginRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetPassword()) > 72 {
+		err := LoginRequestValidationError{
+			field:  "Password",
+			reason: "value length must be at most 72 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return LoginRequestMultiError(errors)
 	}
@@ -1588,10 +1610,21 @@ func (m *LogoutRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetRefreshToken()) < 1 {
+	if utf8.RuneCountInString(m.GetRefreshToken()) < 32 {
 		err := LogoutRequestValidationError{
 			field:  "RefreshToken",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be at least 32 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetRefreshToken()) > 4096 {
+		err := LogoutRequestValidationError{
+			field:  "RefreshToken",
+			reason: "value length must be at most 4096 bytes",
 		}
 		if !all {
 			return err
@@ -1699,10 +1732,21 @@ func (m *RefreshTokenRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetRefreshToken()) < 1 {
+	if utf8.RuneCountInString(m.GetRefreshToken()) < 32 {
 		err := RefreshTokenRequestValidationError{
 			field:  "RefreshToken",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be at least 32 runes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetRefreshToken()) > 4096 {
+		err := RefreshTokenRequestValidationError{
+			field:  "RefreshToken",
+			reason: "value length must be at most 4096 bytes",
 		}
 		if !all {
 			return err
@@ -1823,10 +1867,32 @@ func (m *ChangePasswordRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if len(m.GetOldPassword()) > 72 {
+		err := ChangePasswordRequestValidationError{
+			field:  "OldPassword",
+			reason: "value length must be at most 72 bytes",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if l := utf8.RuneCountInString(m.GetNewPassword()); l < 8 || l > 64 {
 		err := ChangePasswordRequestValidationError{
 			field:  "NewPassword",
 			reason: "value length must be between 8 and 64 runes, inclusive",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(m.GetNewPassword()) > 72 {
+		err := ChangePasswordRequestValidationError{
+			field:  "NewPassword",
+			reason: "value length must be at most 72 bytes",
 		}
 		if !all {
 			return err

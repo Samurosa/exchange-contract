@@ -295,10 +295,10 @@ func (m *CreateSpotRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetMinOrderSize()); l < 1 || l > 30 {
+	if utf8.RuneCountInString(m.GetMinOrderSize()) > 20 {
 		err := CreateSpotRequestValidationError{
 			field:  "MinOrderSize",
-			reason: "value length must be between 1 and 30 runes, inclusive",
+			reason: "value length must be at most 20 runes",
 		}
 		if !all {
 			return err
@@ -309,7 +309,7 @@ func (m *CreateSpotRequest) validate(all bool) error {
 	if !_CreateSpotRequest_MinOrderSize_Pattern.MatchString(m.GetMinOrderSize()) {
 		err := CreateSpotRequestValidationError{
 			field:  "MinOrderSize",
-			reason: "value does not match regex pattern \"^[0-9]+(\\\\.[0-9]+)?$\"",
+			reason: "value does not match regex pattern \"^(0|[1-9][0-9]{0,11})(\\\\.[0-9]+)?$\"",
 		}
 		if !all {
 			return err
@@ -317,10 +317,10 @@ func (m *CreateSpotRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
-	if l := utf8.RuneCountInString(m.GetMaxOrderSize()); l < 1 || l > 30 {
+	if utf8.RuneCountInString(m.GetMaxOrderSize()) > 20 {
 		err := CreateSpotRequestValidationError{
 			field:  "MaxOrderSize",
-			reason: "value length must be between 1 and 30 runes, inclusive",
+			reason: "value length must be at most 20 runes",
 		}
 		if !all {
 			return err
@@ -331,7 +331,7 @@ func (m *CreateSpotRequest) validate(all bool) error {
 	if !_CreateSpotRequest_MaxOrderSize_Pattern.MatchString(m.GetMaxOrderSize()) {
 		err := CreateSpotRequestValidationError{
 			field:  "MaxOrderSize",
-			reason: "value does not match regex pattern \"^[0-9]+(\\\\.[0-9]+)?$\"",
+			reason: "value does not match regex pattern \"^(0|[1-9][0-9]{0,11})(\\\\.[0-9]+)?$\"",
 		}
 		if !all {
 			return err
@@ -368,7 +368,28 @@ func (m *CreateSpotRequest) validate(all bool) error {
 			_CreateSpotRequest_AllowedRoles_Unique[item] = struct{}{}
 		}
 
-		// no validation rules for AllowedRoles[idx]
+		if _, ok := _CreateSpotRequest_AllowedRoles_NotInLookup[item]; ok {
+			err := CreateSpotRequestValidationError{
+				field:  fmt.Sprintf("AllowedRoles[%v]", idx),
+				reason: "value must not be in list [0]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := shared.Role_name[int32(item)]; !ok {
+			err := CreateSpotRequestValidationError{
+				field:  fmt.Sprintf("AllowedRoles[%v]", idx),
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 50 {
@@ -477,9 +498,13 @@ var _CreateSpotRequest_BaseAsset_Pattern = regexp.MustCompile("^[A-Z]+$")
 
 var _CreateSpotRequest_QuoteAsset_Pattern = regexp.MustCompile("^[A-Z]+$")
 
-var _CreateSpotRequest_MinOrderSize_Pattern = regexp.MustCompile("^[0-9]+(\\.[0-9]+)?$")
+var _CreateSpotRequest_MinOrderSize_Pattern = regexp.MustCompile("^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$")
 
-var _CreateSpotRequest_MaxOrderSize_Pattern = regexp.MustCompile("^[0-9]+(\\.[0-9]+)?$")
+var _CreateSpotRequest_MaxOrderSize_Pattern = regexp.MustCompile("^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$")
+
+var _CreateSpotRequest_AllowedRoles_NotInLookup = map[shared.Role]struct{}{
+	0: {},
+}
 
 // Validate checks the field values on CreateSpotResponse with the rules
 // defined in the proto definition for this message. If any rules are
@@ -834,33 +859,37 @@ func (m *GetSpotResponse) validate(all bool) error {
 		}
 	}
 
-	if all {
-		switch v := interface{}(m.GetDisableAt()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, GetSpotResponseValidationError{
-					field:  "DisableAt",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	if m.DisableAt != nil {
+
+		if all {
+			switch v := interface{}(m.GetDisableAt()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, GetSpotResponseValidationError{
+						field:  "DisableAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, GetSpotResponseValidationError{
+						field:  "DisableAt",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(m.GetDisableAt()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, GetSpotResponseValidationError{
+				return GetSpotResponseValidationError{
 					field:  "DisableAt",
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetDisableAt()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return GetSpotResponseValidationError{
-				field:  "DisableAt",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
@@ -1207,10 +1236,10 @@ func (m *SpotListRequest) validate(all bool) error {
 
 	var errors []error
 
-	if val := m.GetPageSize(); val < 0 || val > 100 {
+	if val := m.GetPageSize(); val < 1 || val > 100 {
 		err := SpotListRequestValidationError{
 			field:  "PageSize",
-			reason: "value must be inside range [0, 100]",
+			reason: "value must be inside range [1, 100]",
 		}
 		if !all {
 			return err
@@ -1219,19 +1248,96 @@ func (m *SpotListRequest) validate(all bool) error {
 	}
 
 	if m.Cursor != nil {
-		// no validation rules for Cursor
+
+		if len(m.GetCursor()) > 256 {
+			err := SpotListRequestValidationError{
+				field:  "Cursor",
+				reason: "value length must be at most 256 bytes",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.Status != nil {
-		// no validation rules for Status
+
+		if _, ok := _SpotListRequest_Status_NotInLookup[m.GetStatus()]; ok {
+			err := SpotListRequestValidationError{
+				field:  "Status",
+				reason: "value must not be in list [SPOT_STATUS_UNSPECIFIED]",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if _, ok := SpotStatus_name[int32(m.GetStatus())]; !ok {
+			err := SpotListRequestValidationError{
+				field:  "Status",
+				reason: "value must be one of the defined enum values",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.BaseAsset != nil {
-		// no validation rules for BaseAsset
+
+		if l := utf8.RuneCountInString(m.GetBaseAsset()); l < 2 || l > 10 {
+			err := SpotListRequestValidationError{
+				field:  "BaseAsset",
+				reason: "value length must be between 2 and 10 runes, inclusive",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if !_SpotListRequest_BaseAsset_Pattern.MatchString(m.GetBaseAsset()) {
+			err := SpotListRequestValidationError{
+				field:  "BaseAsset",
+				reason: "value does not match regex pattern \"^[A-Z]+$\"",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if m.QuoteAsset != nil {
-		// no validation rules for QuoteAsset
+
+		if l := utf8.RuneCountInString(m.GetQuoteAsset()); l < 2 || l > 10 {
+			err := SpotListRequestValidationError{
+				field:  "QuoteAsset",
+				reason: "value length must be between 2 and 10 runes, inclusive",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if !_SpotListRequest_QuoteAsset_Pattern.MatchString(m.GetQuoteAsset()) {
+			err := SpotListRequestValidationError{
+				field:  "QuoteAsset",
+				reason: "value does not match regex pattern \"^[A-Z]+$\"",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
 	}
 
 	if len(errors) > 0 {
@@ -1311,6 +1417,14 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = SpotListRequestValidationError{}
+
+var _SpotListRequest_Status_NotInLookup = map[SpotStatus]struct{}{
+	0: {},
+}
+
+var _SpotListRequest_BaseAsset_Pattern = regexp.MustCompile("^[A-Z]+$")
+
+var _SpotListRequest_QuoteAsset_Pattern = regexp.MustCompile("^[A-Z]+$")
 
 // Validate checks the field values on SpotListResponse with the rules defined
 // in the proto definition for this message. If any rules are violated, the

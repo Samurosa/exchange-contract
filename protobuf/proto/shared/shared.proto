@@ -18,8 +18,8 @@ message Money {
   // Examples: BTC, USDT, ETH.
   string currency = 1 [
     (validate.rules).string = {
-      min_len: 1,
-      max_len: 5,
+      min_len: 2,
+      max_len: 10,
       pattern: "^[A-Z]+$"
     }
   ];
@@ -28,13 +28,12 @@ message Money {
   //
   // Examples: 0, 0.001, 1.5, 65000.50.
   //
-  // The application layer validates whether zero or negative
-  // values are allowed for a particular operation.
+  // The application layer validates operation-specific constraints,
+  // such as whether zero is allowed.
   string amount = 2 [
     (validate.rules).string = {
-      min_len: 1,
       max_len: 20,
-      pattern: "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+      pattern: "^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$"
     }
   ];
 }

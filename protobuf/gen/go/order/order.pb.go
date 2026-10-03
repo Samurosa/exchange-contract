@@ -535,6 +535,7 @@ func (x *GetOrderResponse) GetOrder() *Order {
 }
 
 // StreamOrderUpdateRequest contains the order to subscribe to.
+// сопосотавление с юзер айди
 type StreamOrderUpdateRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique identifier of the order whose updates should be streamed.
@@ -658,7 +659,7 @@ func (x *StreamOrderUpdateResponse) GetUpdatedAt() *timestamppb.Timestamp {
 // ListOrdersRequest contains pagination and filtering parameters.
 type ListOrdersRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// Maximum number of orders returned in a single page. Zero uses the default of 20.
+	// Maximum number of orders returned in a single page.
 	PageSize int32 `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	// Opaque cursor returned by the previous request.
 	//
@@ -849,10 +850,10 @@ const file_order_order_proto_rawDesc = "" +
 	"\forder_status\x18\x02 \x01(\x0e2\x12.order.OrderStatusR\vorderStatus\x12@\n" +
 	"\x0ffilled_quantity\x18\x03 \x01(\v2\r.shared.MoneyB\b\xfaB\x05\x8a\x01\x02\x10\x01R\x0efilledQuantity\x129\n" +
 	"\n" +
-	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x9f\x02\n" +
+	"updated_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xa9\x02\n" +
 	"\x11ListOrdersRequest\x12&\n" +
-	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x00R\bpageSize\x12\x1b\n" +
-	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12&\n" +
+	"\tpage_size\x18\x01 \x01(\x05B\t\xfaB\x06\x1a\x04\x18d(\x01R\bpageSize\x12%\n" +
+	"\x06cursor\x18\x02 \x01(\tB\b\xfaB\x05r\x03(\x80\x02H\x00R\x06cursor\x88\x01\x01\x12&\n" +
 	"\aspot_id\x18\x03 \x01(\tB\b\xfaB\x05r\x03\xb0\x01\x01H\x01R\x06spotId\x88\x01\x01\x12;\n" +
 	"\x06status\x18\x04 \x01(\x0e2\x12.order.OrderStatusB\n" +
 	"\xfaB\a\x82\x01\x04\x10\x01 \x00H\x02R\x06status\x88\x01\x01\x125\n" +

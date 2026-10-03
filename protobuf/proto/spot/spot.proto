@@ -138,18 +138,16 @@ message CreateSpotRequest {
     // Example: 0.001 BTC.
     string min_order_size = 5 [
         (validate.rules).string = {
-            min_len: 1,
             max_len: 20,
-            pattern: "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            pattern: "^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$"
         }
     ];
 
     // Maximum order quantity expressed in the base asset.
     string max_order_size = 6 [
         (validate.rules).string = {
-            min_len: 1,
             max_len: 20,
-            pattern: "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            pattern: "^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$"
         }
     ];
 
@@ -157,7 +155,13 @@ message CreateSpotRequest {
     repeated shared.Role allowed_roles = 7 [
         (validate.rules).repeated = {
             min_items: 1,
-            unique: true
+            unique: true,
+            items: {
+                enum: {
+                    defined_only: true,
+                    not_in: [0]
+                }
+            }
         }
     ];
 
@@ -288,20 +292,36 @@ message SpotListRequest {
     // Opaque cursor returned by the previous request.
     //
     // The client must not parse or modify the cursor.
-    optional string cursor = 2;
+    optional string cursor = 2 [(validate.rules).string.max_bytes = 256];
 
     // Optional filter by spot status.
-    optional SpotStatus status = 3;
+    optional SpotStatus status = 3 [
+        (validate.rules).enum = {
+            defined_only: true,
+            not_in: [0]
+        }
+    ];
 
     // Optional filter by base asset.
     //
     // Example: BTC.
-    optional string base_asset = 4;
+    optional string base_asset = 4 [
+        (validate.rules).string = {
+            min_len: 2,
+            max_len: 10,
+            pattern: "^[A-Z]+$"
+        }
+    ];
 
     // Optional filter by quote asset.
     //
     // Example: USDT.
-    optional string quote_asset = 5;
+    optional string quote_asset = 5 [
+        (validate.rules).string = {min_len: 2,
+            max_len: 10,
+            pattern: "^[A-Z]+$"
+        }
+    ];
 }
 
 

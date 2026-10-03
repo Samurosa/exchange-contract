@@ -89,12 +89,14 @@ message RegisterUserRequest {
 
     // User password.
     //
-    // Length must be between 8 and 64 characters.
+    // Length must be between 8 and 64 characters and at most 72 UTF-8 bytes
+    // to fit bcrypt's password limit.
     // Password complexity is validated by the application layer.
     string password = 2 [
         (validate.rules).string = {
             min_len: 8,
-            max_len: 64
+            max_len: 64,
+            max_bytes: 72
         }
     ];
 
@@ -195,11 +197,12 @@ message LoginRequest {
 
     // User password.
     //
-    // Length must be between 8 and 64 characters.
+    // Length must be between 8 and 64 characters and at most 72 UTF-8 bytes.
     string password = 2 [
         (validate.rules).string = {
             min_len: 8,
-            max_len: 64
+            max_len: 64,
+            max_bytes: 72
         }
     ];
 }
@@ -241,7 +244,7 @@ message LogoutRequest {
 
     // Refresh token identifying the session to terminate.
     string refresh_token = 1 [
-        (validate.rules).string.min_len = 32
+        (validate.rules).string = {min_len: 32, max_bytes: 4096}
     ];
 }
 
@@ -252,7 +255,10 @@ message RefreshTokenRequest {
 
     // Refresh token used to issue a new token pair.
     string refresh_token = 1 [
-        (validate.rules).string.min_len = 32
+        (validate.rules).string = {
+            min_len: 32,
+            max_bytes: 4096
+        }
     ];
 }
 
@@ -264,18 +270,20 @@ message ChangePasswordRequest {
     string old_password = 1 [
         (validate.rules).string = {
             min_len: 8,
-            max_len: 64
+            max_len: 64,
+            max_bytes: 72
         }
     ];
 
     // New user password.
     //
-    // Length must be between 8 and 64 characters.
+    // Length must be between 8 and 64 characters and at most 72 UTF-8 bytes.
     // Password complexity is validated by the application layer.
     string new_password = 2 [
         (validate.rules).string = {
             min_len: 8,
-            max_len: 64
+            max_len: 64,
+            max_bytes: 72
         }
     ];
 }

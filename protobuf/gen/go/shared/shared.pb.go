@@ -92,8 +92,8 @@ type Money struct {
 	//
 	// Examples: 0, 0.001, 1.5, 65000.50.
 	//
-	// The application layer validates whether zero or negative
-	// values are allowed for a particular operation.
+	// The application layer validates operation-specific constraints,
+	// such as whether zero is allowed.
 	Amount        string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -147,10 +147,11 @@ var File_shared_shared_proto protoreflect.FileDescriptor
 
 const file_shared_shared_proto_rawDesc = "" +
 	"\n" +
-	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"y\n" +
+	"\x13shared/shared.proto\x12\x06shared\x1a\x17validate/validate.proto\"|\n" +
 	"\x05Money\x12/\n" +
-	"\bcurrency\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x01\x18\x052\b^[A-Z]+$R\bcurrency\x12?\n" +
-	"\x06amount\x18\x02 \x01(\tB'\xfaB$r\"\x10\x01\x18\x142\x1c^(0|[1-9][0-9]*)(\\.[0-9]+)?$R\x06amount*]\n" +
+	"\bcurrency\x18\x01 \x01(\tB\x13\xfaB\x10r\x0e\x10\x02\x18\n" +
+	"2\b^[A-Z]+$R\bcurrency\x12B\n" +
+	"\x06amount\x18\x02 \x01(\tB*\xfaB'r%\x18\x142!^(0|[1-9][0-9]{0,11})(\\.[0-9]+)?$R\x06amount*]\n" +
 	"\x04Role\x12\x14\n" +
 	"\x10ROLE_UNSPECIFIED\x10\x00\x12\r\n" +
 	"\tROLE_USER\x10\x01\x12\x0e\n" +
